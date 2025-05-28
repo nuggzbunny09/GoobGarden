@@ -143,18 +143,21 @@ function loadGameState() {
 }
 
 
+// ... (rest of your script.js code above this point) ...
+
 // --- 8. The Game Loop Functions ---
-let lastFrameTime = 0;
-let lastGameTimeUpdate = 0; // Timestamp for the last game time update
-const gameTimeFactor = 1000 * 60; // 1 second real-time = 1 game minute (adjust for faster testing)
-                                  // For real 5 minute interval, this means 5 real minutes = 5 game minutes
-                                  // If you want 5 real seconds = 5 game minutes for quick testing, set to 1000
-const saveIntervalSeconds = 10; // Save game state every 10 real seconds for robustness
-let lastSaveTime = 0;
+let lastFrameTime = 0; // Initialize outside to maintain state across calls
+let lastSaveTime = 0;  // Initialize for auto-saving
+const gameTimeFactor = 1000 * 60; // 1000ms * 60 = 1 minute real-time = 1 game minute.
+                                  // For testing: 1 second real-time = 1 game minute.
+                                  // If you want real-time minutes, set gameTimeFactor = 1.
+                                  // If you want 5 real seconds = 5 game minutes for quick testing, keep it this way.
+const saveIntervalSeconds = 10; // Save game state every 10 real seconds
 
 function update(deltaTime) {
-    // Advance game time
-    gameTimeInMinutes += deltaTime / gameTimeFactor;
+    // deltaTime is in milliseconds from requestAnimationFrame
+    // Convert deltaTime to game minutes
+    gameTimeInMinutes += deltaTime / gameTimeFactor; // deltaTime in ms, gameTimeFactor is ms per game minute
 
     // Check for Goob movement time
     if (gameTimeInMinutes - lastGoobMoveTime >= goobMoveIntervalMinutes) {
@@ -164,11 +167,12 @@ function update(deltaTime) {
         saveGameState(); // Save state after movement
     }
 
-    // Auto-save game state periodically (e.g., every 10 real seconds)
-    const currentRealTimeSeconds = performance.now() / 1000;
+    // Auto-save game state periodically (using real time)
+    // performance.now() gives high-resolution time in milliseconds
+    const currentRealTimeSeconds = performance.now() / 1000; // Convert to seconds
     if (currentRealTimeSeconds - lastSaveTime >= saveIntervalSeconds) {
         saveGameState();
-        lastSaveTime = currentRealTimeSeconds;
+        lastSaveTime = currentRealTimeSeconds; // Update the last save time
     }
 
     // Add other game logic here (e.g., Goob interactions, environmental changes)
@@ -201,10 +205,16 @@ function draw() {
     document.getElementById('gameTime').textContent = `${Math.floor(gameTimeInMinutes)}m`;
 }
 
+
 function gameLoop(currentTime) {
-    if (!lastFrameTime) lastFrameTime = currentTime;
+    // Initialize lastFrameTime on the very first call
+    if (lastFrameTime === 0) {
+        lastFrameTime = currentTime;
+        lastSaveTime = performance.now() / 1000; // Initialize lastSaveTime here too
+    }
+
     const deltaTime = currentTime - lastFrameTime; // Time in milliseconds since last frame
-    lastFrameTime = currentTime;
+    lastFrameTime = currentTime; // *** Crucial: Update lastFrameTime for the next frame ***
 
     update(deltaTime); // Update game state based on time
     draw();            // Redraw the scene
@@ -213,8 +223,12 @@ function gameLoop(currentTime) {
 }
 
 function startGameLoop() {
+    // Calling requestAnimationFrame starts the loop.
+    // The browser will pass the first timestamp to gameLoop.
     requestAnimationFrame(gameLoop);
 }
+
+// ... (rest of your script.js code below this point) ...
 
 // --- 9. Initial UI Update (just in case) ---
 // This ensures the counts are correct even before the first full game loop
