@@ -10,9 +10,8 @@ body {
 
 header, footer, main {
     width: 100%;
-    /* Remove or adjust max-width here if you want wider content than the canvas */
-    /* For now, let's make it match the canvas for cleaner centering of everything */
-    max-width: 504px; /* Canvas width (500px) + border (2px left + 2px right = 4px) = 504px */
+    /* UPDATE THIS LINE! */
+    max-width: 604px; /* Canvas width (600px) + border (2px left + 2px right = 4px) = 604px */
     text-align: center;
     margin-bottom: 20px;
 }
@@ -21,10 +20,6 @@ canvas {
     border: 2px solid #333; /* A border around your garden */
     background-color: #e0ffe0; /* A light green for the garden background */
     display: block; /* Removes extra space below canvas */
-    /*
-        NEW: Add margin-left and margin-right auto to center the canvas itself
-        within its parent if its parent is wider than the canvas.
-    */
     margin-left: auto;
     margin-right: auto;
 }
