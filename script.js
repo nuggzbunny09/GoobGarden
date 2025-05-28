@@ -6,68 +6,181 @@ const ctx = canvas.getContext('2d');
 const gridSize = 50; // Your 50x50 logical grid
 const cellSize = canvas.width / gridSize; // Each cell is 20x20 pixels
 
-// --- 3. Goob Definition (Initial State) ---
-// We'll define a Goob as an object with its properties
-const goob = {
-    gridX: 5, // Goob's current grid X position (top-left corner of its 2x2 area)
-    gridY: 5, // Goob's current grid Y position
-    displaySizeCells: 2, // How many grid cells it occupies (e.g., 2 for a 2x2 block)
-    // Add other properties later, like health, hunger, etc.
-};
+// --- 3. Goob Definition (Initial State and Structure) ---
+// Goob Class/Constructor (better for managing multiple Goobs)
+class Goob {
+    constructor(gridX, gridY) {
+        this.gridX = gridX;
+        this.gridY = gridY;
+        this.displaySizeCells = 2; // Each Goob occupies a 2x2 block of grid cells
+        this.color = `hsl(${Math.random() * 360}, 70%, 50%)`; // A random color for differentiation
+        // Add other Goob properties here (e.g., health, hunger, age, personality)
+    }
 
-// Calculate Goob's pixel display size
-const goobDisplayWidth = goob.displaySizeCells * cellSize; // 2 * 20 = 40 pixels
-const goobDisplayHeight = goob.displaySizeCells * cellSize; // 2 * 20 = 40 pixels
+    // Method to move the Goob in a random direction
+    moveRandomly() {
+        const directions = [
+            { dx: 0, dy: -1 }, // Up
+            { dx: 0, dy: 1 },  // Down
+            { dx: -1, dy: 0 }, // Left
+            { dx: 1, dy: 0 }   // Right
+        ];
+        const randomDir = directions[Math.floor(Math.random() * directions.length)];
 
-// --- 4. Goob Image Loading ---
+        let newX = this.gridX + randomDir.dx;
+        let newY = this.gridY + randomDir.dy;
+
+        // Basic boundary checking: ensure Goob stays within the grid
+        // Remember displaySizeCells means it occupies an area, so its max position is gridSize - displaySizeCells
+        if (newX >= 0 && newX <= (gridSize - this.displaySizeCells) &&
+            newY >= 0 && newY <= (gridSize - this.displaySizeCells)) {
+            this.gridX = newX;
+            this.gridY = newY;
+        } else {
+            // If it hits a boundary, try moving in the opposite direction or stay put
+            // For now, let's make it stay put if it tries to move out of bounds
+            // console.log(`Goob tried to move out of bounds at (${newX}, ${newY})`);
+        }
+    }
+
+    // Method to draw the Goob
+    draw(ctx, goobImage, cellSize) {
+        const pixelX = this.gridX * cellSize;
+        const pixelY = this.gridY * cellSize;
+        const goobDisplayWidth = this.displaySizeCells * cellSize;
+        const goobDisplayHeight = this.displaySizeCells * cellSize;
+
+        // Draw the Goob image
+        ctx.drawImage(goobImage, pixelX, pixelY, goobDisplayWidth, goobDisplayHeight);
+
+        // Optional: Draw a unique color square behind or next to it for debugging multiple Goobs
+        // ctx.fillStyle = this.color;
+        // ctx.fillRect(pixelX, pixelY, 10, 10); // Small square to show individual goob color
+    }
+}
+
+// Array to hold all your Goob instances
+const goobs = [];
+
+// --- 4. Game State Variables ---
+let gameTimeInMinutes = 0; // Tracks game time in minutes
+let lastGoobMoveTime = 0; // Timestamp of the last Goob movement (in game minutes)
+const goobMoveIntervalMinutes = 5; // Goobs move every 5 game minutes
+
+// --- 5. Goob Image Loading ---
 const goobImage = new Image();
 goobImage.src = 'Goob.png'; // Path to your Goob.png file
 
-// --- 5. Game Loop Initialization (once image is loaded) ---
+// --- 6. Game Initialization (once image is loaded) ---
 goobImage.onload = () => {
-    console.log("Goob image loaded. Starting GoobGarden!");
-    // Start the game loop only after all assets are loaded
-    startGameLoop();
+    console.log("Goob image loaded. Initializing GoobGarden!");
+
+    // Initialize Goobs if not loaded from saved state
+    loadGameState(); // Attempt to load previous state
+    if (goobs.length === 0) { // If no saved state, create new Goobs
+        console.log("No saved state found, creating new Goobs.");
+        // Goob 1: (5,5)
+        goobs.push(new Goob(5, 5));
+        // Goob 2: Equivalent bottom-right (gridSize - displaySizeCells - 5, gridSize - displaySizeCells - 5)
+        // This places its top-left at (50 - 2 - 5, 50 - 2 - 5) = (43, 43)
+        goobs.push(new Goob(gridSize - goobs[0].displaySizeCells - 5, gridSize - goobs[0].displaySizeCells - 5));
+        saveGameState(); // Save initial state
+    } else {
+        console.log("Loaded game state with", goobs.length, "Goobs.");
+    }
+
+
+    startGameLoop(); // Start the game loop
 };
 
 goobImage.onerror = () => {
     console.error("Error loading Goob.png! Check the file path.");
 };
 
-// Ensure canvas is found before starting
 document.addEventListener('DOMContentLoaded', () => {
     if (!canvas) {
         console.error("Canvas element not found!");
     }
 });
 
-// --- 6. The Game Loop Functions ---
-
-// Main update function: Handles all game logic
-function update() {
-    // --- Goob Movement Logic (Example: Move Goob randomly or based on input) ---
-    // For now, let's just make it move one step to the right every second for demonstration
-    // In a real game, you'd integrate user input, AI, pathfinding, etc.
-
-    // Simple example: move one grid cell to the right if not at the edge
-    // if (goob.gridX < gridSize - goob.displaySizeCells) {
-    //     goob.gridX += 1;
-    // } else {
-    //     goob.gridX = 0; // Wrap around
-    // }
-
-    // More realistic: Only update position on a timer or input
-    // We'll refine movement in future steps.
+// --- 7. Game State Management (Saving and Loading) ---
+function saveGameState() {
+    const gameState = {
+        goobs: goobs.map(goob => ({ gridX: goob.gridX, gridY: goob.gridY, color: goob.color })),
+        gameTimeInMinutes: gameTimeInMinutes,
+        lastGoobMoveTime: lastGoobMoveTime
+        // Add any other game state variables here
+    };
+    try {
+        localStorage.setItem('goobGardenState', JSON.stringify(gameState));
+        console.log("Game state saved.");
+    } catch (e) {
+        console.error("Failed to save game state to localStorage:", e);
+    }
 }
 
-// Main draw function: Renders everything on the canvas
+function loadGameState() {
+    try {
+        const savedState = localStorage.getItem('goobGardenState');
+        if (savedState) {
+            const gameState = JSON.parse(savedState);
+            // Recreate Goob objects from saved data
+            goobs.length = 0; // Clear existing goobs
+            gameState.goobs.forEach(g => {
+                const newGoob = new Goob(g.gridX, g.gridY);
+                newGoob.color = g.color; // Restore color
+                goobs.push(newGoob);
+            });
+            gameTimeInMinutes = gameState.gameTimeInMinutes || 0;
+            lastGoobMoveTime = gameState.lastGoobMoveTime || 0;
+            console.log("Game state loaded.");
+            return true;
+        }
+    } catch (e) {
+        console.error("Failed to load game state from localStorage:", e);
+    }
+    return false;
+}
+
+
+// --- 8. The Game Loop Functions ---
+let lastFrameTime = 0;
+let lastGameTimeUpdate = 0; // Timestamp for the last game time update
+const gameTimeFactor = 1000 * 60; // 1 second real-time = 1 game minute (adjust for faster testing)
+                                  // For real 5 minute interval, this means 5 real minutes = 5 game minutes
+                                  // If you want 5 real seconds = 5 game minutes for quick testing, set to 1000
+const saveIntervalSeconds = 10; // Save game state every 10 real seconds for robustness
+let lastSaveTime = 0;
+
+function update(deltaTime) {
+    // Advance game time
+    gameTimeInMinutes += deltaTime / gameTimeFactor;
+
+    // Check for Goob movement time
+    if (gameTimeInMinutes - lastGoobMoveTime >= goobMoveIntervalMinutes) {
+        console.log(`It's been ${goobMoveIntervalMinutes} game minutes! Goobs are moving.`);
+        goobs.forEach(goob => goob.moveRandomly());
+        lastGoobMoveTime = gameTimeInMinutes; // Update the last move time
+        saveGameState(); // Save state after movement
+    }
+
+    // Auto-save game state periodically (e.g., every 10 real seconds)
+    const currentRealTimeSeconds = performance.now() / 1000;
+    if (currentRealTimeSeconds - lastSaveTime >= saveIntervalSeconds) {
+        saveGameState();
+        lastSaveTime = currentRealTimeSeconds;
+    }
+
+    // Add other game logic here (e.g., Goob interactions, environmental changes)
+}
+
 function draw() {
     // 1. Clear the entire canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 2. Draw the grid (Optional: can be optimized to only draw once or only on empty cells)
-    ctx.strokeStyle = '#ccc'; // Light grey lines
-    ctx.lineWidth = 0.5; // Thin lines
+    // 2. Draw the grid
+    ctx.strokeStyle = '#ccc';
+    ctx.lineWidth = 0.5;
     for (let i = 0; i < gridSize; i++) {
         ctx.beginPath();
         ctx.moveTo(i * cellSize, 0);
@@ -80,53 +193,32 @@ function draw() {
         ctx.stroke();
     }
 
-    // 3. Draw the Goob(s)
-    // Calculate Goob's current pixel position based on its grid position
-    const pixelX = goob.gridX * cellSize;
-    const pixelY = goob.gridY * cellSize;
+    // 3. Draw all Goobs
+    goobs.forEach(goob => goob.draw(ctx, goobImage, cellSize));
 
-    // Draw the Goob image
-    ctx.drawImage(goobImage, pixelX, pixelY, goobDisplayWidth, goobDisplayHeight);
+    // 4. Display game time on the UI (optional, but good for feedback)
+    document.getElementById('goobCount').textContent = goobs.length;
+    document.getElementById('gameTime').textContent = `${Math.floor(gameTimeInMinutes)}m`;
 }
-
-// The core game loop function using requestAnimationFrame for smooth animation
-let lastTime = 0;
-const frameRate = 1000 / 60; // Aim for 60 frames per second (ms per frame)
-let accumulatedTime = 0;
 
 function gameLoop(currentTime) {
-    if (!lastTime) lastTime = currentTime; // Initialize lastTime on first call
-    const deltaTime = currentTime - lastTime; // Time elapsed since last frame
-    lastTime = currentTime;
+    if (!lastFrameTime) lastFrameTime = currentTime;
+    const deltaTime = currentTime - lastFrameTime; // Time in milliseconds since last frame
+    lastFrameTime = currentTime;
 
-    accumulatedTime += deltaTime;
+    update(deltaTime); // Update game state based on time
+    draw();            // Redraw the scene
 
-    // We can run 'update' less frequently than 'draw' for game logic if needed
-    // For now, we'll keep it simple
-    update(); // Update game state
-
-    draw(); // Redraw everything
-
-    // Request the next frame. This is crucial for the loop!
-    requestAnimationFrame(gameLoop);
+    requestAnimationFrame(gameLoop); // Request the next frame
 }
 
-// Function to start the game loop
 function startGameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
-// --- 7. Event Listeners for User Input (Future Step) ---
-// You'll add these later to control Goob movement
-// Example:
-// document.addEventListener('keydown', (event) => {
-//     switch (event.key) {
-//         case 'ArrowUp':
-//             // goob.gridY--; // Move Goob up
-//             break;
-//         case 'ArrowDown':
-//             // goob.gridY++; // Move Goob down
-//             break;
-//         // etc.
-//     }
-// });
+// --- 9. Initial UI Update (just in case) ---
+// This ensures the counts are correct even before the first full game loop
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('goobCount').textContent = goobs.length; // Will be 0 initially or loaded
+    document.getElementById('gameTime').textContent = `${Math.floor(gameTimeInMinutes)}m`;
+});
