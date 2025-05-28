@@ -201,7 +201,7 @@ window.addEventListener('click', (e) => {
 saveGoobBtn.addEventListener('click', () => {
   if (selectedGoob) {
     selectedGoob.name = editGoobName.value;
-    saveGoobsToStorage(goobData);
+    saveGoobsToLocalStorage();
     goobModal.style.display = 'none';
   }
 });
