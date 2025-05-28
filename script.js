@@ -164,3 +164,27 @@ canvas.addEventListener('mouseleave', () => {
   tooltip.style.display = 'none';
 });
 
+canvas.addEventListener('click', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  const gridX = Math.floor(mouseX / cellSize);
+  const gridY = Math.floor(mouseY / cellSize);
+
+  for (const goob of goobData) {
+    const { x, y } = goob.position;
+    if (
+      gridX >= x && gridX < x + 2 &&
+      gridY >= y && gridY < y + 2
+    ) {
+      selectedGoob = goob;
+      editGoobName.value = goob.name;
+      goobAge.textContent = goob.age;
+      goobHunger.textContent = goob.hunger;
+      goobModal.style.display = 'block';
+      break;
+    }
+  }
+});
+
