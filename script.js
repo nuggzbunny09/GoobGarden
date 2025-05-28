@@ -1,115 +1,74 @@
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
-const tileSize = 20;
-const gridWidth = 50;
-const gridHeight = 50;
-canvas.width = tileSize * gridWidth;
-canvas.height = tileSize * gridHeight;
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
 
-let goobs = [];
+const gridSize = 50;
+const cellSize = canvas.width / gridSize;
 
-// Time Handling
-function getGameStartTime() {
-  return parseInt(localStorage.getItem("gameStartTime"), 10);
+class Goob {
+    constructor(gridX, gridY) {
+        this.gridX = gridX;
+        this.gridY = gridY;
+        this.displaySizeCells = 2;
+        this.color = `hsl(${Math.random() * 360}, 70%, 50%)`;
+    }
+
+    moveRandomly() {
+        const directions = [
+            { dx: 0, dy: -1 },
+            { dx: 0, dy: 1 },
+            { dx: -1, dy: 0 },
+            { dx: 1, dy: 0 }
+        ];
+        const randomDir = directions[Math.floor(Math.random() * directions.length)];
+        let newX = this.gridX + randomDir.dx;
+        let newY = this.gridY + randomDir.dy;
+
+        if (newX >= 0 && newX <= (gridSize - this.displaySizeCells) &&
+            newY >= 0 && newY <= (gridSize - this.displaySizeCells)) {
+            this.gridX = newX;
+            this.gridY = newY;
+        }
+    }
+
+    draw(ctx, goobImage) {
+        const pixelX = this.gridX * cellSize;
+        const pixelY = this.gridY * cellSize;
+        ctx.drawImage(goobImage, pixelX, pixelY, cellSize * 2, cellSize * 2);
+    }
 }
 
-function setGameStartTime(timestamp) {
-  localStorage.setItem("gameStartTime", timestamp.toString());
+const goobs = [];
+let gameTimeInMinutes = 0;
+let lastGoobMoveTime = 0;
+const goobMoveIntervalMinutes = 5;
+
+const goobImage = new Image();
+goobImage.src = 'Goob.png';
+
+goobImage.onload = () => {
+    loadGameState();
+    if (goobs.length === 0) {
+        goobs.push(new Goob(5, 5));
+        goobs.push(new Goob(43, 43));
+        saveGameState();
+    }
+    startGameLoop();
+};
+
+function saveGameState() {
+    const gameState = {
+        goobs: goobs.map(g => ({ gridX: g.gridX, gridY: g.gridY, color: g.color })),
+        startTimestamp: startTimestamp,
+        gameTimeInMinutes: gameTimeInMinutes,
+        lastGoobMoveTime: lastGoobMoveTime
+    };
+    localStorage.setItem('goobGardenState', JSON.stringify(gameState));
 }
 
-function resetGameClock() {
-  const now = Date.now();
-  setGameStartTime(now);
-}
-
-function updateGameClock() {
-  const gameTimeDisplay = document.getElementById("gameTime");
-  const startTime = getGameStartTime();
-  if (!startTime) return;
-
-  const elapsed = Math.floor((Date.now() - startTime) / 1000);
-  const hours = Math.floor(elapsed / 3600);
-  const minutes = Math.floor((elapsed % 3600) / 60);
-  const seconds = elapsed % 60;
-  gameTimeDisplay.textContent = `${hours}h ${minutes}m ${seconds}s`;
-}
-
-// Goobs
-function drawGrid() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.strokeStyle = "#ccc";
-
-  for (let x = 0; x <= canvas.width; x += tileSize) {
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, canvas.height);
-    ctx.stroke();
-  }
-  for (let y = 0; y <= canvas.height; y += tileSize) {
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(canvas.width, y);
-    ctx.stroke();
-  }
-}
-
-function drawGoobs() {
-  for (const goob of goobs) {
-    ctx.fillStyle = "purple";
-    ctx.beginPath();
-    ctx.arc(
-      goob.x * tileSize + tileSize / 2,
-      goob.y * tileSize + tileSize / 2,
-      tileSize / 2 - 2,
-      0,
-      Math.PI * 2
-    );
-    ctx.fill();
-  }
-}
-
-function updateGoobCount() {
-  document.getElementById("goobCount").textContent = goobs.length;
-}
-
-function saveGoobs() {
-  localStorage.setItem("goobs", JSON.stringify(goobs));
-}
-
-function loadGoobs() {
-  const data = localStorage.getItem("goobs");
-  return data ? JSON.parse(data) : [];
-}
-
-function resetGarden() {
-  goobs = [
-    { x: 5, y: 5 },
-    { x: 43, y: 43 }
-  ];
-  saveGoobs();
-  resetGameClock();
-  updateGoobCount();
-  render();
-}
-
-function render() {
-  drawGrid();
-  drawGoobs();
-}
-
-function startGame() {
-  goobs = loadGoobs();
-  if (!getGameStartTime()) {
-    resetGarden(); // Initializes clock and goobs
-  } else {
-    updateGoobCount();
-    render();
-  }
-
-  setInterval(updateGameClock, 1000);
-  updateGameClock();
-}
-
-document.getElementById("resetBtn").addEventListener("click", resetGarden);
-
-startGame();
+function loadGameState() {
+    const saved = localStorage.getItem('goobGardenState');
+    if (saved) {
+        const data = JSON.parse(saved);
+        goobs.length = 0;
+        data.goobs.forEach(g => {
+            const newGoob = new Goob(g.gridX, g.gr
