@@ -3,9 +3,8 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
 // Define your grid properties
-const gridSize = 50; // *** CHANGED: Your new 50x50 logical grid ***
-// Calculate pixel size of each cell: 1000 pixels / 50 grid cells = 20 pixels
-const cellSize = canvas.width / gridSize; // *** CHANGED: This will now be 20 ***
+const gridSize = 50; // Your 50x50 logical grid
+const cellSize = canvas.width / gridSize; // Calculate pixel size of each cell (1000 / 50 = 20 pixels)
 
 // --- Goob Image Loading ---
 const goobImage = new Image();
@@ -20,16 +19,21 @@ goobImage.onload = () => {
 
     // --- Drawing the Goob ---
     // Let's place one Goob at a specific grid position, for example, (5, 5) on the 50x50 grid
+    // IMPORTANT: This (goobGridX, goobGridY) will be the TOP-LEFT cell of your 2x2 Goob
     const goobGridX = 5; // Grid X-coordinate (0 to 49)
     const goobGridY = 5; // Grid Y-coordinate (0 to 49)
 
-    // Calculate the pixel position on the canvas for the top-left corner of this grid cell
+    // Calculate the pixel position on the canvas for the top-left corner of this Goob
     const pixelX = goobGridX * cellSize; // 5 * 20 = 100 pixels
     const pixelY = goobGridY * cellSize; // 5 * 20 = 100 pixels
 
-    // Draw the Goob image to fill the 20x20 pixel slot
+    // Define the Goob's display size (2x2 grid cells)
+    const goobDisplayWidth = 2 * cellSize;  // 2 * 20 = 40 pixels
+    const goobDisplayHeight = 2 * cellSize; // 2 * 20 = 40 pixels
+
+    // Draw the Goob image to fill the 2x2 grid slot (40x40 pixels)
     // ctx.drawImage(image, dx, dy, dWidth, dHeight);
-    ctx.drawImage(goobImage, pixelX, pixelY, cellSize, cellSize); // Draw at (100, 100) with 20x20 size
+    ctx.drawImage(goobImage, pixelX, pixelY, goobDisplayWidth, goobDisplayHeight);
 
     // Optional: Draw a grid for visualization (useful for development)
     ctx.strokeStyle = '#ccc'; // Light grey lines
