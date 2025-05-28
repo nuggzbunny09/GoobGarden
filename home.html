@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Goob Garden</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -11,21 +12,25 @@
   </header>
 
   <main>
-  <canvas id="gardenCanvas" width="1000" height="1000"></canvas>
-  <div id="controls">
-    <button id="newGardenButton" class="green-button">New Garden</button>
-    <button id="resetGardenButton" class="green-button">Reset Garden</button>
-    <p>Goobs: <span id="goobCount">0</span></p>
-    <p>Game Timer: <span id="gameClock">00:00:00</span></p>
-  </div>
-</main>
+    <canvas id="gardenCanvas" width="1000" height="1000"></canvas>
 
+    <section id="controls">
+      <h2>Garden Controls</h2>
+      <button id="newGardenBtn" class="green-button">New Garden</button>
+      <button id="resetGardenBtn" class="green-button">Reset Garden</button>
+    </section>
+
+    <section id="status">
+      <p>Goobs Count: <span id="goobCount">0</span></p>
+      <p>Game Time: <span id="gameTime">0m</span></p>
+      <p>Clock: <span id="clock">--:--:--</span></p>
+    </section>
+  </main>
 
   <footer>
-    <p>&copy; 2025 Goob Co.</p>
+    <p>© 2025 Goob Garden</p>
   </footer>
 
   <script src="script.js"></script>
 </body>
 </html>
-
