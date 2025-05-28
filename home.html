@@ -1,36 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoobGarden</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Goob Garden</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Welcome to GoobGarden!</h1>
-        <p>Watch your Goobs grow and thrive!</p>
-    </header>
+  <header>
+    <h1>Goob Garden</h1>
+  </header>
 
-    <main>
-        <canvas id="gameCanvas" width="1000" height="1000"></canvas>
+  <main>
+    <canvas id="garden" width="1000" height="1000"></canvas>
 
-        <section id="controls">
-            <h2>Garden Controls</h2>
-            <p>Coming soon: Buttons to interact with your Goobs!</p>
-        </section>
+    <div id="controls">
+      <p>Click the canvas to add a Goob!</p>
+    </div>
 
-        <section id="status">
-            <h2>Garden Status</h2>
-            <p>Total Goobs: <span id="goobCount">0</span></p>
-            <p>Time Elapsed: <span id="gameTime">0s</span></p>
-        </section>
-    </main>
+    <div id="status">
+      <p>Goobs: <span id="goobCount">0</span></p>
+      <p>Time: <span id="gameTime">0.0</span> seconds</p>
+    </div>
+  </main>
 
-    <footer>
-        <p>&copy; 2025 GoobGarden. All Goobs Reserved.</p>
-    </footer>
+  <footer>
+    <p>&copy; 2025 Goob Garden</p>
+  </footer>
 
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
+
