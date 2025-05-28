@@ -10,7 +10,7 @@ body {
 
 header, footer, main {
     width: 100%;
-    max-width: 1004px; /* Canvas width + border */
+    max-width: 1004px;
     text-align: center;
     margin-bottom: 20px;
 }
@@ -31,4 +31,3 @@ canvas {
     background-color: #fff;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
 }
-
