@@ -1,30 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Goob Garden</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <title>Goob Garden</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            margin: 20px;
+        }
+
+        header, footer, main {
+            width: 100%;
+            max-width: 1004px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            border: 2px solid #333;
+            background-color: #e0ffe0;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #controls, #status {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        button {
+            padding: 8px 12px;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Goob Garden</h1>
-  </header>
+    <header>
+        <h1>Goob Garden</h1>
+    </header>
 
-  <main>
-    <canvas id="gameCanvas"></canvas>
+    <main>
+        <canvas id="gameCanvas" width="1000" height="1000"></canvas>
 
-    <div id="status">
-      <p>Goobs: <span id="goobCount">0</span></p>
-      <p>Time: <span id="gameTime">0h 0m 0s</span></p>
-      <button id="resetBtn">Reset Garden</button>
-    </div>
-  </main>
+        <div id="controls">
+            <button id="resetButton">Reset Garden</button>
+        </div>
 
-  <footer>
-    <p>&copy; Goobverse</p>
-  </footer>
+        <div id="status">
+            <p>Live Clock: <span id="liveClock">00:00:00</span></p>
+            <p>Goob Count: <span id="goobCount">0</span></p>
+            <p>Game Time: <span id="gameTime">0m</span></p>
+        </div>
+    </main>
 
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
-
