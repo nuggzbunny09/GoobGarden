@@ -114,3 +114,44 @@ goobImage.onload = () => {
   drawGrid();
   restoreStateFromLocalStorage();
 };
+
+const tooltip = document.getElementById('goobTooltip');
+
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  const gridX = Math.floor(mouseX / cellSize);
+  const gridY = Math.floor(mouseY / cellSize);
+
+  let found = false;
+
+  for (const goob of goobData) {
+    const { x, y } = goob.position;
+    if (
+      gridX >= x && gridX < x + 2 &&
+      gridY >= y && gridY < y + 2
+    ) {
+      tooltip.style.display = 'block';
+      tooltip.style.left = `${e.pageX + 10}px`;
+      tooltip.style.top = `${e.pageY + 10}px`;
+      tooltip.innerHTML = `
+        <strong>${goob.name}</strong><br>
+        Age: ${goob.age}<br>
+        Hunger: ${goob.hunger}
+      `;
+      found = true;
+      break;
+    }
+  }
+
+  if (!found) {
+    tooltip.style.display = 'none';
+  }
+});
+
+canvas.addEventListener('mouseleave', () => {
+  tooltip.style.display = 'none';
+});
+
