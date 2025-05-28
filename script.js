@@ -203,6 +203,14 @@ saveGoobBtn.addEventListener('click', () => {
     selectedGoob.name = editGoobName.value;
     saveGoobsToLocalStorage();
     goobModal.style.display = 'none';
+
+    // Show confirmation
+    const confirmation = document.getElementById('saveConfirmation');
+    confirmation.style.display = 'block';
+    setTimeout(() => {
+      confirmation.style.display = 'none';
+    }, 2000); // hides after 2 seconds
   }
 });
+
 
