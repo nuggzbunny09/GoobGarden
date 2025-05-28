@@ -3,23 +3,22 @@ body {
     font-family: 'Arial', sans-serif;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centers content horizontally */
-    background-color: #f0f0f0; /* Light grey background */
+    align-items: center;
+    background-color: #f0f0f0;
     margin: 20px;
 }
 
 header, footer, main {
     width: 100%;
-    /* UPDATE THIS MAX-WIDTH! */
-    max-width: 1004px; /* Canvas width (1000px) + border (2px left + 2px right = 4px) = 1004px */
+    max-width: 1004px; /* Canvas width + border */
     text-align: center;
     margin-bottom: 20px;
 }
 
 canvas {
-    border: 2px solid #333; /* A border around your garden */
-    background-color: #e0ffe0; /* A light green for the garden background */
-    display: block; /* Removes extra space below canvas */
+    border: 2px solid #333;
+    background-color: #e0ffe0;
+    display: block;
     margin-left: auto;
     margin-right: auto;
 }
@@ -32,3 +31,4 @@ canvas {
     background-color: #fff;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
 }
+
