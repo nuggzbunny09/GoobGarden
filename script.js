@@ -8,9 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial check to see if the canvas was found
     if (canvas) {
         console.log("Canvas found! GoobGarden is ready to grow!");
-        // You can draw something simple to verify it's working
-        ctx.fillStyle = 'blue';
-        ctx.fillRect(50, 50, 100, 100); // Draw a blue square
+        
     } else {
         console.error("Canvas element not found!");
     }
