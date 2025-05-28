@@ -10,6 +10,15 @@ let timerInterval;
 let gameStartTime = null;
 let gameRunning = false;
 
+let selectedGoob = null;
+
+const goobModal = document.getElementById('goobModal');
+const editGoobName = document.getElementById('editGoobName');
+const goobAge = document.getElementById('goobAge');
+const goobHunger = document.getElementById('goobHunger');
+const saveGoobBtn = document.getElementById('saveGoobBtn');
+const closeModalBtn = document.querySelector('.close-btn');
+
 function drawGrid() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = '#e0ffe0';
