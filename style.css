@@ -30,3 +30,23 @@ canvas {
   background-color: #fff;
   box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
 }
+
+/* Buttons styled to match garden green */
+
+.green-button {
+  background-color: #a0dca0; /* Light green, matches garden background vibe */
+  border: 2px solid #5ca05c; /* Darker green border */
+  color: #1f4d1f; /* Dark green text */
+  padding: 10px 20px;
+  margin: 5px 10px 15px 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+.green-button:hover {
+  background-color: #7bb77b; /* Darker green hover */
+}
