@@ -7,12 +7,11 @@ const GRID_COUNT = 40; // 40x40 grid
 const GOOB_SIZE = 2; // goobs cover 2x2 grid squares
 
 const goobImg = new Image();
-goobImg.src = 'goob.png';
+goobImg.src = 'Goob.png';  // make sure this matches exactly (case sensitive!)
 
 let goobs = [];
 let timerInterval = null;
-let clockInterval = null;
-let startTime = null;
+let stopwatchStart = null;  // timestamp when stopwatch started
 
 const goobCountEl = document.getElementById('goobCount');
 const gameTimeEl = document.getElementById('gameTime');
@@ -42,13 +41,16 @@ function drawGrid() {
 
 function drawGoobs() {
   goobs.forEach(goob => {
-    ctx.drawImage(
-      goobImg,
-      goob.x * GRID_SIZE,
-      goob.y * GRID_SIZE,
-      GOOB_SIZE * GRID_SIZE,
-      GOOB_SIZE * GRID_SIZE
-    );
+    // Only draw after image loads
+    if (goobImg.complete) {
+      ctx.drawImage(
+        goobImg,
+        goob.x * GRID_SIZE,
+        goob.y * GRID_SIZE,
+        GOOB_SIZE * GRID_SIZE,
+        GOOB_SIZE * GRID_SIZE
+      );
+    }
   });
 }
 
@@ -56,38 +58,24 @@ function updateGoobCount() {
   goobCountEl.textContent = goobs.length;
 }
 
-function updateGameTime() {
-  if (!startTime) {
-    gameTimeEl.textContent = '0m';
+function updateStopwatch() {
+  if (!stopwatchStart) {
+    gameTimeEl.textContent = '0m 0s';
     return;
   }
-  const elapsedMs = Date.now() - startTime;
-  const elapsedMins = Math.floor(elapsedMs / 60000);
-  gameTimeEl.textContent = `${elapsedMins}m`;
+  const elapsedMs = Date.now() - stopwatchStart;
+  const totalSeconds = Math.floor(elapsedMs / 1000);
+  const mins = Math.floor(totalSeconds / 60);
+  const secs = totalSeconds % 60;
+  gameTimeEl.textContent = `${mins}m ${secs}s`;
 }
 
-function updateClock() {
-  const now = new Date();
-  // Format as HH:MM:SS
-  const hh = now.getHours().toString().padStart(2,'0');
-  const mm = now.getMinutes().toString().padStart(2,'0');
-  const ss = now.getSeconds().toString().padStart(2,'0');
-  clockEl.textContent = `${hh}:${mm}:${ss}`;
-}
-
-function startTimer() {
+function startStopwatch() {
+  stopwatchStart = Date.now();
   if (timerInterval) clearInterval(timerInterval);
-  startTime = Date.now();
-
   timerInterval = setInterval(() => {
-    updateGameTime();
+    updateStopwatch();
   }, 1000);
-}
-
-function startClock() {
-  updateClock();
-  if (clockInterval) clearInterval(clockInterval);
-  clockInterval = setInterval(updateClock, 1000);
 }
 
 function spawnInitialGoobs() {
@@ -105,22 +93,17 @@ function render() {
 
 function newGarden() {
   spawnInitialGoobs();
-  startTimer();
+  startStopwatch();
   render();
 }
 
 newGardenBtn.addEventListener('click', newGarden);
 
-// For now reset button does nothing
 resetGardenBtn.addEventListener('click', () => {
-  // You can add reset logic here later
   alert('Reset Garden not implemented yet');
 });
 
-// Start clock on page load (persistent)
-startClock();
-
-// Initially draw grid with no goobs
+// On page load just draw grid and zero goobs and timer
 drawGrid();
 updateGoobCount();
-updateGameTime();
+updateStopwatch();
