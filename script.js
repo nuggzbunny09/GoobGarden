@@ -1,109 +1,84 @@
 const canvas = document.getElementById('gardenCanvas');
 const ctx = canvas.getContext('2d');
 
-const GRID_SIZE = 25;  // pixels per grid square
-const GRID_COUNT = 40; // 40x40 grid
+const gridCount = 50;
+const cellSize = canvas.width / gridCount; // 20px
 
-const GOOB_SIZE = 2; // goobs cover 2x2 grid squares
+const newGardenBtn = document.getElementById('newGardenBtn');
+const gameTimeSpan = document.getElementById('gameTime');
 
-const goobImg = new Image();
-goobImg.src = 'Goob.png';  // make sure this matches exactly (case sensitive!)
+const goobImage = new Image();
+goobImage.src = 'Goob.png';
 
 let goobs = [];
 let timerInterval = null;
-let stopwatchStart = null;  // timestamp when stopwatch started
+let startTime = null;
 
-const goobCountEl = document.getElementById('goobCount');
-const gameTimeEl = document.getElementById('gameTime');
-const clockEl = document.getElementById('clock');
-
-const newGardenBtn = document.getElementById('newGardenBtn');
-const resetGardenBtn = document.getElementById('resetGardenBtn');
+class Goob {
+  constructor(gridX, gridY) {
+    this.gridX = gridX;
+    this.gridY = gridY;
+  }
+}
 
 function drawGrid() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
   ctx.strokeStyle = '#ccc';
-  for(let i = 0; i <= GRID_COUNT; i++) {
-    // vertical lines
-    ctx.beginPath();
-    ctx.moveTo(i * GRID_SIZE, 0);
-    ctx.lineTo(i * GRID_SIZE, GRID_COUNT * GRID_SIZE);
-    ctx.stroke();
-
-    // horizontal lines
-    ctx.beginPath();
-    ctx.moveTo(0, i * GRID_SIZE);
-    ctx.lineTo(GRID_COUNT * GRID_SIZE, i * GRID_SIZE);
-    ctx.stroke();
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  for (let i = 0; i <= gridCount; i++) {
+    let pos = i * cellSize;
+    ctx.moveTo(pos, 0);
+    ctx.lineTo(pos, canvas.height);
+    ctx.moveTo(0, pos);
+    ctx.lineTo(canvas.width, pos);
   }
+  ctx.stroke();
 }
 
 function drawGoobs() {
   goobs.forEach(goob => {
-    // Only draw after image loads
-    if (goobImg.complete) {
-      ctx.drawImage(
-        goobImg,
-        goob.x * GRID_SIZE,
-        goob.y * GRID_SIZE,
-        GOOB_SIZE * GRID_SIZE,
-        GOOB_SIZE * GRID_SIZE
-      );
-    }
+    ctx.drawImage(goobImage, goob.gridX * cellSize, goob.gridY * cellSize, cellSize * 2, cellSize * 2);
   });
 }
 
-function updateGoobCount() {
-  goobCountEl.textContent = goobs.length;
+function formatTime(ms) {
+  let totalSeconds = Math.floor(ms / 1000);
+  let hours = Math.floor(totalSeconds / 3600);
+  let minutes = Math.floor((totalSeconds % 3600) / 60);
+  let seconds = totalSeconds % 60;
+  return (
+    String(hours).padStart(2, '0') + ':' +
+    String(minutes).padStart(2, '0') + ':' +
+    String(seconds).padStart(2, '0')
+  );
 }
 
-function updateStopwatch() {
-  if (!stopwatchStart) {
-    gameTimeEl.textContent = '0m 0s';
-    return;
-  }
-  const elapsedMs = Date.now() - stopwatchStart;
-  const totalSeconds = Math.floor(elapsedMs / 1000);
-  const mins = Math.floor(totalSeconds / 60);
-  const secs = totalSeconds % 60;
-  gameTimeEl.textContent = `${mins}m ${secs}s`;
+function updateTimer() {
+  let elapsed = Date.now() - startTime;
+  gameTimeSpan.textContent = formatTime(elapsed);
 }
 
-function startStopwatch() {
-  stopwatchStart = Date.now();
+function startTimer() {
+  startTime = Date.now();
   if (timerInterval) clearInterval(timerInterval);
-  timerInterval = setInterval(() => {
-    updateStopwatch();
-  }, 1000);
-}
-
-function spawnInitialGoobs() {
-  goobs = [
-    { x: 5, y: 5 },
-    { x: 43, y: 43 }
-  ];
-  updateGoobCount();
-}
-
-function render() {
-  drawGrid();
-  drawGoobs();
+  timerInterval = setInterval(updateTimer, 1000);
 }
 
 function newGarden() {
-  spawnInitialGoobs();
-  startStopwatch();
-  render();
+  goobs = [];
+  goobs.push(new Goob(5,5));
+  goobs.push(new Goob(43,43));
+  drawGrid();
+  drawGoobs();
+  startTimer();
 }
 
-newGardenBtn.addEventListener('click', newGarden);
+// Draw initial empty grid on load
+goobImage.onload = () => {
+  drawGrid();
+};
 
-resetGardenBtn.addEventListener('click', () => {
-  alert('Reset Garden not implemented yet');
+newGardenBtn.addEventListener('click', () => {
+  newGarden();
 });
-
-// On page load just draw grid and zero goobs and timer
-drawGrid();
-updateGoobCount();
-updateStopwatch();
