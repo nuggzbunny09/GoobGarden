@@ -7,46 +7,37 @@ body {
   margin: 20px;
 }
 
-header, footer, main {
-  width: 100%;
-  max-width: 1004px;
-  text-align: center;
-  margin-bottom: 20px;
+h1 {
+  margin-bottom: 10px;
 }
 
-canvas {
+#gardenCanvas {
   border: 2px solid #333;
   background-color: #e0ffe0;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 20px auto;
 }
 
-#controls, #status {
-  margin-top: 20px;
-  padding: 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+#controls {
+  margin: 10px;
 }
 
-/* Buttons styled to match garden green */
-
-.green-button {
-  background-color: #a0dca0; /* Light green, matches garden background vibe */
-  border: 2px solid #5ca05c; /* Darker green border */
-  color: #1f4d1f; /* Dark green text */
+#newGardenBtn {
+  background-color: #a8d5a2;
+  border: none;
+  border-radius: 6px;
   padding: 10px 20px;
-  margin: 5px 10px 15px 10px;
   font-size: 16px;
-  font-weight: bold;
-  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  user-select: none;
+  transition: background-color 0.2s ease-in-out;
 }
 
-.green-button:hover {
-  background-color: #7bb77b; /* Darker green hover */
+#newGardenBtn:hover {
+  background-color: #91c890;
+}
+
+#status {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
 }
