@@ -3,8 +3,8 @@ const ctx = canvas.getContext('2d');
 canvas.width = 1000;
 canvas.height = 1000;
 
-const gridSize = 50; // 50x50 grid
-const cellSize = canvas.width / gridSize; // 20 pixels per cell
+const gridSize = 50;
+const cellSize = canvas.width / gridSize;
 
 let goobs = [];
 
@@ -12,7 +12,7 @@ class Goob {
     constructor(gridX, gridY) {
         this.gridX = gridX;
         this.gridY = gridY;
-        this.size = 2; // Goobs take 4 grid spaces (2x2)
+        this.size = 2; // 2x2 cells
     }
 }
 
@@ -20,7 +20,6 @@ const goobImg = new Image();
 goobImg.src = 'Goob.png';
 
 let gameTimeInSeconds = 0;
-let gameLoopStarted = false;
 let gameTimerInterval = null;
 
 const newResetButton = document.getElementById('newResetGarden');
@@ -29,7 +28,7 @@ const gameTimerSpan = document.getElementById('gameTimer');
 
 function drawGrid() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#e0ffe0';
+    ctx.fillStyle = '#e0ffe0'; // grid background
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     ctx.strokeStyle = '#ccc';
@@ -50,68 +49,50 @@ function drawGrid() {
 
 function drawGoobs() {
     goobs.forEach(goob => {
-        // Draw the Goob.png scaled to 2x2 grid cells (cellSize * 2)
-        ctx.drawImage(goobImg, goob.gridX * cellSize, goob.gridY * cellSize, cellSize * goob.size, cellSize * goob.size);
+        ctx.drawImage(
+            goobImg,
+            goob.gridX * cellSize,
+            goob.gridY * cellSize,
+            goob.size * cellSize,
+            goob.size * cellSize
+        );
     });
 }
 
-function draw() {
+function updateDisplay() {
     drawGrid();
     drawGoobs();
     goobCountSpan.textContent = goobs.length;
-    updateGameTimerDisplay();
+
+    const hrs = String(Math.floor(gameTimeInSeconds / 3600)).padStart(2, '0');
+    const mins = String(Math.floor((gameTimeInSeconds % 3600) / 60)).padStart(2, '0');
+    const secs = String(gameTimeInSeconds % 60).padStart(2, '0');
+    gameTimerSpan.textContent = `${hrs}:${mins}:${secs}`;
 }
 
-function updateGameTimerDisplay() {
-    const hours = Math.floor(gameTimeInSeconds / 3600);
-    const minutes = Math.floor((gameTimeInSeconds % 3600) / 60);
-    const seconds = gameTimeInSeconds % 60;
-
-    gameTimerSpan.textContent =
-        `${hours.toString().padStart(2, '0')}:` +
-        `${minutes.toString().padStart(2, '0')}:` +
-        `${seconds.toString().padStart(2, '0')}`;
-}
-
-function startGameLoop() {
-    if (gameTimerInterval) clearInterval(gameTimerInterval);
+function startTimer() {
+    clearInterval(gameTimerInterval);
     gameTimerInterval = setInterval(() => {
         gameTimeInSeconds++;
-        draw();
+        updateDisplay();
     }, 1000);
 }
 
-function saveGameState() {
-    // If you want to save game state later
-}
+function newOrResetGarden() {
+    const confirmReset = confirm("Are you sure you would like to start a new GoobGarden?");
+    if (!confirmReset) return;
 
-function startOrResetGarden() {
-    const confirmStart = confirm("Are you sure you would like to start a new GoobGarden?");
-    if (!confirmStart) return;
-
-    goobs.length = 0;
-
-    goobs.push(new Goob(5, 5));
-    goobs.push(new Goob(43, 43));
-
+    goobs = [new Goob(5, 5), new Goob(43, 43)];
     gameTimeInSeconds = 0;
+    updateDisplay();
+    startTimer();
 
-    if (newResetButton.textContent === 'New Garden') {
-        newResetButton.textContent = 'Reset Garden';
-    }
-
-    saveGameState();
-    draw();
-
-    if (!gameLoopStarted) {
-        startGameLoop();
-        gameLoopStarted = true;
-    }
+    newResetButton.textContent = 'Reset Garden';
 }
 
-newResetButton.addEventListener('click', startOrResetGarden);
+newResetButton.addEventListener('click', newOrResetGarden);
 
-// Initial draw with empty garden and timer at 00:00:00
-draw();
-updateGameTimerDisplay();
-
+// Wait until Goob.png is fully loaded before initial display
+goobImg.onload = () => {
+    updateDisplay();
+};
