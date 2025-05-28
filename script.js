@@ -81,12 +81,14 @@ function createInitialGoobs() {
       position: { x: 5, y: 5 },
       age: 0,
       hunger: 100
+      createdAt: Date.now()
     },
     {
       name: "Goob2",
       position: { x: 43, y: 43 },
       age: 0,
       hunger: 100
+      createdAt: Date.now()
     }
   ];
   saveGoobsToLocalStorage();
