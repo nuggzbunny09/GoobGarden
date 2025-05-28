@@ -129,7 +129,16 @@ document.getElementById('newGardenBtn').addEventListener('click', newGarden);
 goobImage.onload = () => {
   drawGrid();
   restoreStateFromLocalStorage();
+
+  const button = document.getElementById('newGardenBtn');
+  const storedGoobs = localStorage.getItem('goobs');
+  if (storedGoobs && JSON.parse(storedGoobs).length > 0) {
+    button.textContent = 'Reset Garden';
+  } else {
+    button.textContent = 'New Garden';
+  }
 };
+
 
 const tooltip = document.getElementById('goobTooltip');
 
