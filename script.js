@@ -1,89 +1,106 @@
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-
-const cellSize = 20;
-const gridSize = 50;
-canvas.width = cellSize * gridSize;
-canvas.height = cellSize * gridSize;
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+const tileSize = 20;
+const gridWidth = 50;
+const gridHeight = 50;
+canvas.width = tileSize * gridWidth;
+canvas.height = tileSize * gridHeight;
 
 let goobs = [];
-let startTime = Date.now();
 
-const goobImage = new Image();
-goobImage.src = 'goob.png';
-
-// Goob class
-class Goob {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    draw(ctx, image, size) {
-        ctx.drawImage(image, this.x * size, this.y * size, size, size);
-    }
+// === Persistent Game Clock ===
+function getGameStartTime() {
+  return parseInt(localStorage.getItem("gameStartTime"), 10);
 }
 
-// Add a goob only if there's no goob at the position
-function addGoob(x, y) {
-    const exists = goobs.some(goob => goob.x === x && goob.y === y);
-    if (!exists) {
-        goobs.push(new Goob(x, y));
-    }
+function setGameStartTime(timestamp) {
+  localStorage.setItem("gameStartTime", timestamp.toString());
 }
 
-// Reset the garden to initial state
+function resetGameClock() {
+  const now = Date.now();
+  setGameStartTime(now);
+}
+
+function updateGameClock() {
+  const gameTimeDisplay = document.getElementById("gameTime");
+  const startTime = getGameStartTime();
+  if (!startTime) return;
+
+  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+  const hours = Math.floor(elapsed / 3600);
+  const minutes = Math.floor((elapsed % 3600) / 60);
+  const seconds = elapsed % 60;
+  gameTimeDisplay.textContent = `${hours}h ${minutes}m ${seconds}s`;
+}
+
+// === Goob Functions ===
+function drawGrid() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = "#ccc";
+  for (let x = 0; x <= canvas.width; x += tileSize) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, canvas.height);
+    ctx.stroke();
+  }
+  for (let y = 0; y <= canvas.height; y += tileSize) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
+    ctx.stroke();
+  }
+}
+
+function drawGoobs() {
+  for (const goob of goobs) {
+    ctx.fillStyle = "purple";
+    ctx.beginPath();
+    ctx.arc(
+      goob.x * tileSize + tileSize / 2,
+      goob.y * tileSize + tileSize / 2,
+      tileSize / 2 - 2,
+      0,
+      Math.PI * 2
+    );
+    ctx.fill();
+  }
+}
+
+function updateGoobCount() {
+  document.getElementById("goobCount").textContent = goobs.length;
+}
+
+function saveGoobs() {
+  localStorage.setItem("goobs", JSON.stringify(goobs));
+}
+
+function loadGoobs() {
+  const data = localStorage.getItem("goobs");
+  return data ? JSON.parse(data) : [];
+}
+
+// === Reset Button ===
 function resetGarden() {
-    goobs = [];
-    addGoob(5, 5);
-    addGoob(43, 43);
-    startTime = Date.now(); // Reset timer
+  goobs = [
+    { x: 5, y: 5 },
+    { x: 43, y: 43 }
+  ];
+  saveGoobs();
+  resetGameClock();
+  updateGoobCount();
+  render();
 }
 
-// Draw everything
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Grid
-    ctx.strokeStyle = '#ccc';
-    ctx.lineWidth = 0.5;
-    for (let i = 0; i < gridSize; i++) {
-        ctx.beginPath();
-        ctx.moveTo(i * cellSize, 0);
-        ctx.lineTo(i * cellSize, canvas.height);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(0, i * cellSize);
-        ctx.lineTo(canvas.width, i * cellSize);
-        ctx.stroke();
-    }
-
-    // Draw goobs
-    goobs.forEach(goob => goob.draw(ctx, goobImage, cellSize));
-
-    // Time elapsed
-    const elapsed = Math.floor((Date.now() - startTime) / 1000);
-    const hours = Math.floor(elapsed / 3600);
-    const minutes = Math.floor((elapsed % 3600) / 60);
-    const seconds = elapsed % 60;
-    document.getElementById('gameTime').textContent =
-        `${hours}h ${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s`;
-
-    // Update Goob count
-    document.getElementById('goobCount').textContent = goobs.length;
+// === Full Render ===
+function render() {
+  drawGrid();
+  drawGoobs();
 }
 
-// Main loop
-function gameLoop() {
-    draw();
-    requestAnimationFrame(gameLoop);
-}
-
-// Init
-window.onload = () => {
-    document.getElementById('resetBtn').addEventListener('click', resetGarden);
-    resetGarden(); // Start with 2 Goobs
-    gameLoop();
-};
-
+// === Init ===
+function startGame() {
+  goobs = loadGoobs();
+  if (!getGameStartTime()) {
+    resetGarden(); // Sets initial time and goobs
+  } else {
