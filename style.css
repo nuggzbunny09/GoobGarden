@@ -10,8 +10,8 @@ body {
 
 header, footer, main {
     width: 100%;
-    /* This needs to match the canvas width + its border (2px left + 2px right = 4px) */
-    max-width: 604px; /* 600px canvas + 4px border = 604px */
+    /* UPDATE THIS MAX-WIDTH! */
+    max-width: 1004px; /* Canvas width (1000px) + border (2px left + 2px right = 4px) = 1004px */
     text-align: center;
     margin-bottom: 20px;
 }
@@ -22,7 +22,6 @@ canvas {
     display: block; /* Removes extra space below canvas */
     margin-left: auto;
     margin-right: auto;
-    /* You don't need 'image-rendering: pixelated;' here unless you start scaling it with CSS */
 }
 
 #controls, #status {
