@@ -84,7 +84,7 @@ h1 {
 }
 
 #saveConfirmation {
-  display: none;
+  visibility: hidden;
   position: fixed;
   top: 40%;
   left: 50%;
@@ -99,10 +99,10 @@ h1 {
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
   text-align: center;
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
 #saveConfirmation.show {
-  display: block;
+  visibility: visible;
   opacity: 1;
 }
