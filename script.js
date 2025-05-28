@@ -193,6 +193,7 @@ canvas.addEventListener('click', (e) => {
       editGoobName.value = goob.name;
       goobAge.textContent = goob.age;
       goobHunger.textContent = goob.hunger;
+      goobAge.textContent = formatAge(selectedGoob.createdAt);
       goobModal.style.display = 'block';
       break;
     }
