@@ -117,6 +117,15 @@ function restoreStateFromLocalStorage() {
   updateGameTimeDisplay();
 }
 
+function formatAge(timestamp) {
+  const seconds = Math.floor((Date.now() - timestamp) / 1000);
+  const days = Math.floor(seconds / 86400);
+  const hours = Math.floor((seconds % 86400) / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  return `${days}d ${hours}h ${minutes}m`;
+}
+
+
 document.getElementById('newGardenBtn').addEventListener('click', newGarden);
 
 goobImage.onload = () => {
