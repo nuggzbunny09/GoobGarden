@@ -8,7 +8,6 @@ goobImage.src = 'Goob.png';
 let goobData = [];
 let timerInterval;
 let gameStartTime = null;
-let gameRunning = false;
 
 let selectedGoob = null;
 
@@ -18,6 +17,7 @@ const goobAge = document.getElementById('goobAge');
 const goobHunger = document.getElementById('goobHunger');
 const saveGoobBtn = document.getElementById('saveGoobBtn');
 const closeModalBtn = document.querySelector('.close-btn');
+const confirmation = document.getElementById('confirmation');
 
 function drawGrid() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -42,7 +42,13 @@ function drawGrid() {
 
 function drawGoobs() {
   goobData.forEach(goob => {
-    ctx.drawImage(goobImage, goob.position.x * cellSize, goob.position.y * cellSize, cellSize * 2, cellSize * 2);
+    ctx.drawImage(
+      goobImage,
+      goob.position.x * cellSize,
+      goob.position.y * cellSize,
+      cellSize * 2,
+      cellSize * 2
+    );
   });
 }
 
@@ -75,20 +81,19 @@ function saveGoobsToLocalStorage() {
 }
 
 function createInitialGoobs() {
+  const now = Date.now();
   goobData = [
     {
       name: "Goob1",
       position: { x: 5, y: 5 },
-      age: 0,
-      hunger: 100
-      createdAt: Date.now()
+      hunger: 100,
+      createdAt: now
     },
     {
       name: "Goob2",
       position: { x: 43, y: 43 },
-      age: 0,
-      hunger: 100
-      createdAt: Date.now()
+      hunger: 100,
+      createdAt: now
     }
   ];
   saveGoobsToLocalStorage();
@@ -112,21 +117,12 @@ function restoreStateFromLocalStorage() {
   const storedGoobs = localStorage.getItem('goobs');
   if (storedGoobs) {
     goobData = JSON.parse(storedGoobs);
-    drawGrid();
-    drawGoobs();
   }
+  drawGrid();
+  drawGoobs();
   loadGameTimer();
   updateGameTimeDisplay();
 }
-
-function formatAge(timestamp) {
-  const seconds = Math.floor((Date.now() - timestamp) / 1000);
-  const days = Math.floor(seconds / 86400);
-  const hours = Math.floor((seconds % 86400) / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  return `${days}d ${hours}h ${minutes}m`;
-}
-
 
 document.getElementById('newGardenBtn').addEventListener('click', newGarden);
 
@@ -153,12 +149,18 @@ canvas.addEventListener('mousemove', (e) => {
       gridX >= x && gridX < x + 2 &&
       gridY >= y && gridY < y + 2
     ) {
+      const ageMs = Date.now() - goob.createdAt;
+      const ageMin = Math.floor(ageMs / 60000);
+      const days = Math.floor(ageMin / 1440);
+      const hours = Math.floor((ageMin % 1440) / 60);
+      const minutes = ageMin % 60;
+
       tooltip.style.display = 'block';
       tooltip.style.left = `${e.pageX + 10}px`;
       tooltip.style.top = `${e.pageY + 10}px`;
       tooltip.innerHTML = `
         <strong>${goob.name}</strong><br>
-        Age: ${goob.age}<br>
+        Age: ${days}d ${hours}h ${minutes}m<br>
         Hunger: ${goob.hunger}
       `;
       found = true;
@@ -191,9 +193,15 @@ canvas.addEventListener('click', (e) => {
     ) {
       selectedGoob = goob;
       editGoobName.value = goob.name;
-      goobAge.textContent = goob.age;
+
+      const ageMs = Date.now() - goob.createdAt;
+      const ageMin = Math.floor(ageMs / 60000);
+      const days = Math.floor(ageMin / 1440);
+      const hours = Math.floor((ageMin % 1440) / 60);
+      const minutes = ageMin % 60;
+
+      goobAge.textContent = `${days}d ${hours}h ${minutes}m`;
       goobHunger.textContent = goob.hunger;
-      goobAge.textContent = formatAge(selectedGoob.createdAt);
       goobModal.style.display = 'block';
       break;
     }
@@ -215,14 +223,19 @@ saveGoobBtn.addEventListener('click', () => {
     selectedGoob.name = editGoobName.value;
     saveGoobsToLocalStorage();
     goobModal.style.display = 'none';
-
-    const confirmation = document.getElementById('saveConfirmation');
-    confirmation.classList.add('show');
-
-    setTimeout(() => {
-      confirmation.classList.remove('show');
-    }, 2000); // Fades out after 2 seconds
+    showConfirmation("Goob name updated!");
   }
 });
 
+function showConfirmation(message) {
+  confirmation.textContent = message;
+  confirmation.style.opacity = '1';
+  confirmation.style.display = 'block';
 
+  setTimeout(() => {
+    confirmation.style.opacity = '0';
+    setTimeout(() => {
+      confirmation.style.display = 'none';
+    }, 500);
+  }, 2000);
+}
