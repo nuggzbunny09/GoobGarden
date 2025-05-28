@@ -204,12 +204,12 @@ saveGoobBtn.addEventListener('click', () => {
     saveGoobsToLocalStorage();
     goobModal.style.display = 'none';
 
-    // Show confirmation
     const confirmation = document.getElementById('saveConfirmation');
-    confirmation.style.display = 'block';
+    confirmation.classList.add('show');
+
     setTimeout(() => {
-      confirmation.style.display = 'none';
-    }, 2000); // hides after 2 seconds
+      confirmation.classList.remove('show');
+    }, 2000); // Fades out after 2 seconds
   }
 });
 
