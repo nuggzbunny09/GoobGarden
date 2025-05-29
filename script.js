@@ -18,6 +18,29 @@ let selectedGoob = null;
 let timerInterval;
 let gameStartTime = null;
 
+window.addEventListener("DOMContentLoaded", () => {
+  const canvases = document.querySelectorAll(".goobCanvas");
+  const img = new Image();
+  img.src = "Goob.png";
+  img.onload = () => {
+    canvases.forEach(canvas => {
+      const ctx = canvas.getContext("2d");
+      canvas.width = 50;
+      canvas.height = 50;
+
+      const tintColor = canvas.dataset.color;
+      // Draw original
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      // Set blending mode and overlay color
+      ctx.globalCompositeOperation = "source-atop";
+      ctx.fillStyle = tintColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.globalCompositeOperation = "source-over";
+    });
+  };
+});
+
+
 function drawGrid() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = '#e0ffe0';
