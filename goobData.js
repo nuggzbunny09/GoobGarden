@@ -1,23 +1,40 @@
 // goobData.js
 
-// Get saved Goob data from localStorage
-export function getGoobData(goobId) {
-  const data = JSON.parse(localStorage.getItem('goobData')) || {};
-  return data[goobId] || createNewGoobData();
+function getGoobs() {
+  return JSON.parse(localStorage.getItem('goobs') || '[]');
 }
 
-// Save Goob data to localStorage
-export function setGoobData(goobId, newData) {
-  const data = JSON.parse(localStorage.getItem('goobData')) || {};
-  data[goobId] = newData;
-  localStorage.setItem('goobData', JSON.stringify(data));
+function saveGoobs(goobs) {
+  localStorage.setItem('goobs', JSON.stringify(goobs));
 }
 
-// Create a new Goob data structure
-export function createNewGoobData() {
-  return {
-    luckModifier: 1.0, // Default neutral modifier
-    rareEvents: 0,     // How many rare events have occurred
-    history: []        // Optional: track past outcomes
-  };
+function getGoobById(id) {
+  const goobs = getGoobs();
+  return goobs.find(goob => goob.id === id);
+}
+
+function updateGoob(updatedGoob) {
+  const goobs = getGoobs();
+  const index = goobs.findIndex(g => g.id === updatedGoob.id);
+  if (index !== -1) {
+    goobs[index] = updatedGoob;
+    saveGoobs(goobs);
+  }
+}
+
+// Add a Goob-specific achievement
+function unlockGoobAchievement(goobId, achievement) {
+  const goob = getGoobById(goobId);
+  if (!goob.achievements) goob.achievements = [];
+
+  if (!goob.achievements.includes(achievement)) {
+    goob.achievements.push(achievement);
+    updateGoob(goob);
+  }
+}
+
+// Check if Goob has an achievement
+function goobHasAchievement(goobId, achievement) {
+  const goob = getGoobById(goobId);
+  return goob.achievements?.includes(achievement) || false;
 }
