@@ -14,6 +14,7 @@ const confirmation = document.getElementById('saveConfirmation');
 const tooltip = document.getElementById('goobTooltip');
 
 let goobData = [];
+let lastAnimationTime = 0;
 let selectedGoob = null;
 let timerInterval;
 let gameStartTime = null;
@@ -108,25 +109,47 @@ function moveGoobsRandomly() {
   for (let goob of goobData) {
     const { dx, dy } = getRandomDirection();
     if (canMove(goob, dx, dy, goobData)) {
-      goob.position.x += dx;
-      goob.position.y += dy;
+      goob.startPosition = { ...goob.position };
+      goob.targetPosition = {
+        x: goob.position.x + dx,
+        y: goob.position.y + dy
+      };
+      goob.startTime = performance.now();
     }
   }
+
+  saveGoobsToLocalStorage();
+}
 
   saveGoobsToLocalStorage(); // if you have this
   drawGarden(); // re-render the canvas
 }
 
-function drawGoobs() {
-  goobData.forEach(goob => {
+function drawGoobs(timestamp) {
+  for (let goob of goobData) {
+    let { x, y } = goob.position;
+
+    if (goob.targetPosition && goob.startTime !== undefined) {
+      const progress = Math.min((timestamp - goob.startTime) / 500, 1); // 500ms animation
+      x = goob.startPosition.x + (goob.targetPosition.x - goob.startPosition.x) * progress;
+      y = goob.startPosition.y + (goob.targetPosition.y - goob.startPosition.y) * progress;
+
+      if (progress >= 1) {
+        goob.position = { ...goob.targetPosition };
+        delete goob.startPosition;
+        delete goob.targetPosition;
+        delete goob.startTime;
+      }
+    }
+
     ctx.drawImage(
       goobImage,
-      goob.position.x * cellSize,
-      goob.position.y * cellSize,
+      x * cellSize,
+      y * cellSize,
       cellSize * 2,
       cellSize * 2
     );
-  });
+  }
 }
 
 function updateGameTimeDisplay() {
@@ -201,6 +224,7 @@ goobImage.onload = () => {
   const button = document.getElementById('newGardenBtn');
   const storedGoobs = localStorage.getItem('goobs');
   button.textContent = storedGoobs && JSON.parse(storedGoobs).length > 0 ? 'Reset Garden' : 'New Garden';
+  requestAnimationFrame(animateGarden);
 };
 
 document.getElementById('newGardenBtn').addEventListener('click', newGarden);
@@ -289,6 +313,16 @@ function showConfirmation(message) {
     confirmation.classList.remove('show');
   }, 2000);
 }
+
+function animateGarden(timestamp) {
+  if (!lastAnimationTime || timestamp - lastAnimationTime > 16) {
+    drawGrid();
+    drawGoobs(timestamp);
+    lastAnimationTime = timestamp;
+  }
+  requestAnimationFrame(animateGarden);
+}
+
 
 setInterval(moveGoobsRandomly, 10000); // every 10 seconds
 
