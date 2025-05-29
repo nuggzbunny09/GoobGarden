@@ -14,7 +14,7 @@ h1 {
   font-weight: bold;
   text-align: center;
   margin: 30px 0 10px;
-  color: #00FF00; /* light green */
+  color: #00BFFF; /* light green */
   text-shadow: 4px 4px 0 #2e8b57, 2px 2px 8px rgba(0,0,0,0.3); /* 3D look */
   font-family: 'Luckiest Guy', 'Comic Sans MS', cursive;
 }
