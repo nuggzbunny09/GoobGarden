@@ -287,3 +287,5 @@ function showConfirmation(message) {
   }, 2000);
 }
 
+setInterval(moveGoobsRandomly, 10000); // every 10 seconds
+
