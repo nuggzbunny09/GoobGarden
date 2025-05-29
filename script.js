@@ -74,8 +74,8 @@ function getRandomDirection() {
 }
 
 function canMove(goob, dx, dy, allGoobs) {
-  const newX = goob.x + dx;
-  const newY = goob.y + dy;
+  const newX = goob.position.x + dx;
+  const newY = goob.position.y + dy;
 
   // Stay within grid bounds (check all 2x2 tiles)
   if (
@@ -93,7 +93,7 @@ function canMove(goob, dx, dy, allGoobs) {
       for (let oy = 0; oy < 2; oy++) {
         for (let gx = 0; gx < 2; gx++) {
           for (let gy = 0; gy < 2; gy++) {
-            if (newX + gx === other.x + ox && newY + gy === other.y + oy) {
+            if (newX + gx === other.position.x + ox && newY + gy === other.position.y + oy) {
               return false;
             }
           }
@@ -119,10 +119,6 @@ function moveGoobsRandomly() {
   }
 
   saveGoobsToLocalStorage();
-}
-
-  saveGoobsToLocalStorage(); // if you have this
-  drawGarden(); // re-render the canvas
 }
 
 function drawGoobs(timestamp) {
