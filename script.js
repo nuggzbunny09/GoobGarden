@@ -1,15 +1,8 @@
 const canvas = document.getElementById('gardenCanvas');
 const ctx = canvas.getContext('2d');
 const cellSize = 20;
-const gridSize = 50;
 const goobImage = new Image();
 goobImage.src = 'Goob.png';
-
-let goobData = [];
-let timerInterval;
-let gameStartTime = null;
-
-let selectedGoob = null;
 
 const goobModal = document.getElementById('goobModal');
 const editGoobName = document.getElementById('editGoobName');
@@ -17,7 +10,13 @@ const goobAge = document.getElementById('goobAge');
 const goobHunger = document.getElementById('goobHunger');
 const saveGoobBtn = document.getElementById('saveGoobBtn');
 const closeModalBtn = document.querySelector('.close-btn');
-const confirmation = document.getElementById('confirmation');
+const confirmation = document.getElementById('saveConfirmation');
+const tooltip = document.getElementById('goobTooltip');
+
+let goobData = [];
+let selectedGoob = null;
+let timerInterval;
+let gameStartTime = null;
 
 function drawGrid() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -100,64 +99,42 @@ function createInitialGoobs() {
 }
 
 function newGarden() {
-  const confirmed = confirm("Are you sure you would like to start a new GoobGarden?");
-  if (!confirmed) return;
-
+  if (!confirm("Are you sure you want to start a new Goob Garden?")) return;
   localStorage.clear();
   createInitialGoobs();
   startGameTimer();
   drawGrid();
   drawGoobs();
-
-  const button = document.getElementById('newGardenBtn');
-  button.textContent = 'Reset Garden';
+  document.getElementById('newGardenBtn').textContent = 'Reset Garden';
 }
 
 function restoreStateFromLocalStorage() {
   const storedGoobs = localStorage.getItem('goobs');
-  if (storedGoobs) {
-    goobData = JSON.parse(storedGoobs);
-  }
+  if (storedGoobs) goobData = JSON.parse(storedGoobs);
   drawGrid();
   drawGoobs();
   loadGameTimer();
   updateGameTimeDisplay();
 }
 
-document.getElementById('newGardenBtn').addEventListener('click', newGarden);
-
 goobImage.onload = () => {
   drawGrid();
   restoreStateFromLocalStorage();
-
   const button = document.getElementById('newGardenBtn');
   const storedGoobs = localStorage.getItem('goobs');
-  if (storedGoobs && JSON.parse(storedGoobs).length > 0) {
-    button.textContent = 'Reset Garden';
-  } else {
-    button.textContent = 'New Garden';
-  }
+  button.textContent = storedGoobs && JSON.parse(storedGoobs).length > 0 ? 'Reset Garden' : 'New Garden';
 };
 
-
-const tooltip = document.getElementById('goobTooltip');
+document.getElementById('newGardenBtn').addEventListener('click', newGarden);
 
 canvas.addEventListener('mousemove', (e) => {
   const rect = canvas.getBoundingClientRect();
-  const mouseX = e.clientX - rect.left;
-  const mouseY = e.clientY - rect.top;
-
-  const gridX = Math.floor(mouseX / cellSize);
-  const gridY = Math.floor(mouseY / cellSize);
-
-  let found = false;
+  const gridX = Math.floor((e.clientX - rect.left) / cellSize);
+  const gridY = Math.floor((e.clientY - rect.top) / cellSize);
 
   for (const goob of goobData) {
     const { x, y } = goob.position;
-    if (
-      gridX >= x && gridX < x + 2 &&
-      gridY >= y && gridY < y + 2
-    ) {
+    if (gridX >= x && gridX < x + 2 && gridY >= y && gridY < y + 2) {
       const ageMs = Date.now() - goob.createdAt;
       const ageMin = Math.floor(ageMs / 60000);
       const days = Math.floor(ageMin / 1440);
@@ -172,14 +149,10 @@ canvas.addEventListener('mousemove', (e) => {
         Age: ${days}d ${hours}h ${minutes}m<br>
         Hunger: ${goob.hunger}
       `;
-      found = true;
-      break;
+      return;
     }
   }
-
-  if (!found) {
-    tooltip.style.display = 'none';
-  }
+  tooltip.style.display = 'none';
 });
 
 canvas.addEventListener('mouseleave', () => {
@@ -188,18 +161,12 @@ canvas.addEventListener('mouseleave', () => {
 
 canvas.addEventListener('click', (e) => {
   const rect = canvas.getBoundingClientRect();
-  const mouseX = e.clientX - rect.left;
-  const mouseY = e.clientY - rect.top;
-
-  const gridX = Math.floor(mouseX / cellSize);
-  const gridY = Math.floor(mouseY / cellSize);
+  const gridX = Math.floor((e.clientX - rect.left) / cellSize);
+  const gridY = Math.floor((e.clientY - rect.top) / cellSize);
 
   for (const goob of goobData) {
     const { x, y } = goob.position;
-    if (
-      gridX >= x && gridX < x + 2 &&
-      gridY >= y && gridY < y + 2
-    ) {
+    if (gridX >= x && gridX < x + 2 && gridY >= y && gridY < y + 2) {
       selectedGoob = goob;
       editGoobName.value = goob.name;
 
@@ -212,7 +179,7 @@ canvas.addEventListener('click', (e) => {
       goobAge.textContent = `${days}d ${hours}h ${minutes}m`;
       goobHunger.textContent = goob.hunger;
       goobModal.style.display = 'block';
-      break;
+      return;
     }
   }
 });
