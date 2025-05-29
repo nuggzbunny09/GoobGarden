@@ -207,7 +207,18 @@ function newGarden() {
 
 function restoreStateFromLocalStorage() {
   const storedGoobs = localStorage.getItem('goobs');
-  if (storedGoobs) goobData = JSON.parse(storedGoobs);
+  if (storedGoobs) {
+    goobData = JSON.parse(storedGoobs);
+
+    // Clean up any lingering animation data
+    for (let goob of goobData) {
+      goob.position = goob.position || { x: 0, y: 0 };
+      delete goob.startPosition;
+      delete goob.targetPosition;
+      delete goob.startTime;
+    }
+  }
+
   drawGrid();
   drawGoobs();
   loadGameTimer();
