@@ -1,14 +1,22 @@
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: 'Comic Sans MS', 'Arial', sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f0f0f0;
-  margin: 20px;
+  background-color: #1f3d1f; /* darker green for contrast */
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
 }
 
 h1 {
-  margin-bottom: 10px;
+  font-size: 64px;
+  font-weight: bold;
+  text-align: center;
+  margin: 30px 0 10px;
+  color: #90ee90; /* light green */
+  text-shadow: 4px 4px 0 #2e8b57, 2px 2px 8px rgba(0,0,0,0.3); /* 3D look */
+  font-family: 'Luckiest Guy', 'Comic Sans MS', cursive;
 }
 
 #gardenCanvas {
@@ -16,20 +24,22 @@ h1 {
   background-color: #e0ffe0;
   display: block;
   margin: 20px auto;
+  box-shadow: 0px 0px 15px #000;
 }
 
 #controls {
-  margin: 10px;
+  margin: 20px;
 }
 
 #newGardenBtn {
   background-color: #a8d5a2;
   border: none;
-  border-radius: 6px;
-  padding: 10px 20px;
-  font-size: 16px;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 18px;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.3s ease;
 }
 
 #newGardenBtn:hover {
@@ -38,8 +48,9 @@ h1 {
 
 #status {
   margin-top: 10px;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
+  color: #d0ffd0;
 }
 
 #goobTooltip {
