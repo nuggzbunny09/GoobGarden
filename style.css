@@ -136,7 +136,8 @@ h1, #mainTitle {
 
 /* Confirmation Box */
 #saveConfirmation {
-  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease;
   position: fixed;
   top: 40%;
   left: 50%;
@@ -150,8 +151,7 @@ h1, #mainTitle {
   z-index: 1000;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   text-align: center;
-  opacity: 0;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  display: none; /* starts hidden */
 }
 
 #saveConfirmation.show {
