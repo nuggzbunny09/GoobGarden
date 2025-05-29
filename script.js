@@ -228,13 +228,10 @@ saveGoobBtn.addEventListener('click', () => {
 
 function showConfirmation(message) {
   confirmation.textContent = message;
-  confirmation.style.opacity = '1';
-  confirmation.style.display = 'block';
+  confirmation.classList.add('show');
 
   setTimeout(() => {
-    confirmation.style.opacity = '0';
-    setTimeout(() => {
-      confirmation.style.display = 'none';
-    }, 500);
+    confirmation.classList.remove('show');
   }, 2000);
 }
+
