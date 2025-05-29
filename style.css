@@ -31,7 +31,7 @@ h1, #mainTitle {
   justify-content: center;
   flex-wrap: nowrap;
   gap: 8px;
-  margin: 10px 0 20px;
+  margin: 30px 0 20px;
   position: relative;
   z-index: 10;
 }
