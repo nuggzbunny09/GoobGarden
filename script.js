@@ -222,7 +222,7 @@ saveGoobBtn.addEventListener('click', () => {
     selectedGoob.name = editGoobName.value;
     saveGoobsToLocalStorage();
     goobModal.style.display = 'none';
-    showConfirmation("Goob name updated!");
+    showConfirmation("Goob Saved!");
   }
 });
 
