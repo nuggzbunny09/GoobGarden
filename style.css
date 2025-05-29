@@ -165,3 +165,9 @@ h1, #mainTitle {
   opacity: 1;
 }
 
+#headerCanvas {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
