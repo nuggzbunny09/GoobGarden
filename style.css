@@ -1,32 +1,64 @@
+/* General Layout */
 body {
   font-family: 'Comic Sans MS', 'Arial', sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #7FFF00; /* darker green for contrast */
+  background-color: #7FFF00; /* Vibrant green background */
   margin: 0;
   padding: 0;
   min-height: 100vh;
 }
 
-h1 {
+/* Main Title */
+h1, #mainTitle {
   font-size: 64px;
   font-weight: bold;
   text-align: center;
   margin: 30px 0 10px;
-  color: #00BFFF; /* light green */
-  text-shadow: 4px 4px 0 #2e8b57, 2px 2px 8px rgba(0,0,0,0.3); /* 3D look */
+  color: #00FFFF; /* Electric Blue */
+  text-shadow:
+    2px 2px 0 #000,
+    4px 4px 0 #004d99,
+    6px 6px 5px rgba(0, 0, 0, 0.4);
   font-family: 'Luckiest Guy', 'Comic Sans MS', cursive;
 }
 
+/* Header with Goobs */
+#goobHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+  margin: 30px 0 20px;
+  position: relative;
+  z-index: 10;
+}
+
+.goobIcon {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  filter: drop-shadow(0 0 8px var(--tint));
+  transition: transform 0.3s;
+  background-color: transparent;
+}
+
+.goobIcon:hover {
+  transform: scale(1.15);
+}
+
+/* Garden Canvas */
 #gardenCanvas {
   border: 2px solid #333;
   background-color: #e0ffe0;
   display: block;
   margin: 20px auto;
-  box-shadow: 0px 0px 15px #000;
+  box-shadow: 0 0 15px #000;
 }
 
+/* Controls */
 #controls {
   margin: 20px;
 }
@@ -46,25 +78,28 @@ h1 {
   background-color: #91c890;
 }
 
+/* Game Status */
 #status {
   margin-top: 10px;
   font-size: 20px;
   font-weight: bold;
-  color: text-black;
+  color: black;
 }
 
+/* Tooltip */
 #goobTooltip {
   position: absolute;
   background-color: white;
   border: 1px solid #333;
   padding: 6px 10px;
   border-radius: 6px;
-  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
   font-size: 14px;
   pointer-events: none;
   z-index: 100;
 }
 
+/* Modal */
 .modal {
   display: none;
   position: fixed;
@@ -74,7 +109,7 @@ h1 {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
@@ -94,6 +129,7 @@ h1 {
   cursor: pointer;
 }
 
+/* Confirmation Box */
 #saveConfirmation {
   visibility: hidden;
   position: fixed;
@@ -107,7 +143,7 @@ h1 {
   padding: 20px 40px;
   border-radius: 10px;
   z-index: 1000;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   text-align: center;
   opacity: 0;
   transition: opacity 0.5s ease, visibility 0.5s ease;
@@ -117,43 +153,4 @@ h1 {
   visibility: visible;
   opacity: 1;
 }
-
-#goobHeader {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: nowrap;
-  gap: 8px;
-  margin-top: 30px;
-  margin-bottom: 20px;
-  position: relative;
-  z-index: 10;
-}
-
-.goobIcon {
-  width: 50px;
-  height: 50px;
-  border-radius: 8px;
-  filter: drop-shadow(0 0 8px var(--tint));
-  transition: transform 0.3s;
-  background-color: transparent;
-  z-index: 11;
-}
-
-.goobIcon:hover {
-  transform: scale(1.15);
-}
-
-#mainTitle {
-  font-size: 60px;
-  font-weight: 400;
-  font-family: 'Luckiest Guy', cursive;
-  color: #00FFFF; /* Electric Blue */
-  text-shadow:
-    2px 2px 0 #000,
-    4px 4px 0 #004d99,
-    6px 6px 5px rgba(0,0,0,0.4);
-  margin: 0 15px;
-}
-
 
