@@ -10,6 +10,12 @@ body {
   min-height: 100vh;
 }
 
+html {
+  margin: 0;
+  padding: 0;
+}
+
+
 /* Main Title */
 h1, #mainTitle {
   font-size: 64px;
