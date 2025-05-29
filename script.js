@@ -320,5 +320,5 @@ function animateGarden(timestamp) {
 }
 
 
-setInterval(moveGoobsRandomly, 10000); // every 10 seconds
+setInterval(moveGoobsRandomly, 1000); // every 10 seconds
 
