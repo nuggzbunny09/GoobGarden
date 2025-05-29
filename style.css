@@ -15,7 +15,7 @@ h1, #mainTitle {
   font-size: 64px;
   font-weight: bold;
   text-align: center;
-  margin: 0 0 10px;
+  margin: 0;
   color: #00FFFF; /* Electric Blue */
   text-shadow:
     2px 2px 0 #000,
