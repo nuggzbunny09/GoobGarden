@@ -78,9 +78,10 @@ function canMove(goob, dx, dy, allGoobs) {
 
   // Stay within grid bounds (check all 2x2 tiles)
   if (
-    newX < 0 || newY < 0 ||
-    newX + 1 >= 50 || newY + 1 >= 50
-  ) return false;
+  newX < 0 || newY < 0 ||
+  newX + 1 >= canvas.width / cellSize ||
+  newY + 1 >= canvas.height / cellSize
+)
 
   // Check for collisions with other Goobs
   for (let other of allGoobs) {
@@ -102,9 +103,9 @@ function canMove(goob, dx, dy, allGoobs) {
 }
 
 function moveGoobsRandomly() {
-  for (let goob of goobs) {
+  for (let goob of goobData) {
     const { dx, dy } = getRandomDirection();
-    if (canMove(goob, dx, dy, goobs)) {
+    if (canMove(goob, dx, dy, goobData)) {
       goob.x += dx;
       goob.y += dy;
     }
