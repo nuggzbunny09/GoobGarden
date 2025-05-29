@@ -62,6 +62,58 @@ function drawGrid() {
   }
 }
 
+function getRandomDirection() {
+  const directions = [
+    { dx: 0, dy: -1 }, // up
+    { dx: 0, dy: 1 },  // down
+    { dx: -1, dy: 0 }, // left
+    { dx: 1, dy: 0 }   // right
+  ];
+  return directions[Math.floor(Math.random() * directions.length)];
+}
+
+function canMove(goob, dx, dy, allGoobs) {
+  const newX = goob.x + dx;
+  const newY = goob.y + dy;
+
+  // Stay within grid bounds (check all 2x2 tiles)
+  if (
+    newX < 0 || newY < 0 ||
+    newX + 1 >= 50 || newY + 1 >= 50
+  ) return false;
+
+  // Check for collisions with other Goobs
+  for (let other of allGoobs) {
+    if (other === goob) continue;
+    for (let ox = 0; ox < 2; ox++) {
+      for (let oy = 0; oy < 2; oy++) {
+        for (let gx = 0; gx < 2; gx++) {
+          for (let gy = 0; gy < 2; gy++) {
+            if (newX + gx === other.x + ox && newY + gy === other.y + oy) {
+              return false;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return true;
+}
+
+function moveGoobsRandomly() {
+  for (let goob of goobs) {
+    const { dx, dy } = getRandomDirection();
+    if (canMove(goob, dx, dy, goobs)) {
+      goob.x += dx;
+      goob.y += dy;
+    }
+  }
+
+  saveGoobsToLocalStorage(); // if you have this
+  drawGarden(); // re-render the canvas
+}
+
 function drawGoobs() {
   goobData.forEach(goob => {
     ctx.drawImage(
