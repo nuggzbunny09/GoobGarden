@@ -1,61 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Goob Garden</title>
-<link rel="stylesheet" href="style.css" />
-<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Goob Garden</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div id="goobHeader">
-  <!-- 5 Left Goobs -->
-  <img src="Goob.png" class="goobIcon" style="--tint: #FFEB3B;">
-  <img src="Goob.png" class="goobIcon" style="--tint: #FFD59E;">
-  <img src="Goob.png" class="goobIcon" style="--tint: #FF7F50;">
-  <img src="Goob.png" class="goobIcon" style="--tint: #FFB7C5;">
-  <img src="Goob.png" class="goobIcon" style="--tint: #D1B3FF;">
+  <!-- Header Canvas with 10 Colorized Goobs -->
+  <canvas id="headerCanvas" width="1000" height="100"></canvas>
 
-  <!-- Existing Title -->
-  <h1 id="mainTitle">GoobGarden</h1>
+  <!-- Main Title -->
+  <h1 id="mainTitle">Goob Garden</h1>
 
-  <!-- 5 Right Goobs -->
-  <img src="Goob.png" class="goobIcon" style="--tint: #87CEFA;">
-  <img src="Goob.png" class="goobIcon" style="--tint: #98FF98;">
-  <img src="Goob.png" class="goobIcon" style="--tint: #7FFF00;">
-  <img src="Goob.png" class="goobIcon" style="--tint: #66D9EF;">
-  <img src="Goob.png" class="goobIcon" style="--tint: #FFFDD0;">
-</div>
+  <!-- Main Canvas Grid -->
+  <canvas id="gardenCanvas" width="1000" height="1000"></canvas>
 
+  <!-- Controls -->
+  <div id="controls">
+    <button id="newGardenBtn">New Garden</button>
+  </div>
 
-<canvas id="gardenCanvas" width="1000" height="1000"></canvas>
+  <!-- Game Time Status -->
+  <div id="status">
+    Game Time: <span id="gameTime">00:00:00</span>
+  </div>
 
-<div id="controls">
-  <button id="newGardenBtn">New Garden</button>
-</div>
-
-<div id="status">
-  Game Time: <span id="gameTime">00:00:00</span>
-</div>
-
+  <!-- Tooltip for Goob Info -->
   <div id="goobTooltip" style="display: none;"></div>
 
-
+  <!-- Edit Goob Modal -->
   <div id="goobModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    <h2>Edit Goob</h2>
-    <label>Name: <input type="text" id="editGoobName" /></label><br />
-    <p>Age: <span id="goobAge"></span></p>
-    <p>Hunger: <span id="goobHunger"></span></p>
-    <button id="saveGoobBtn">Save</button>
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2>Edit Goob</h2>
+      <label>Name: <input type="text" id="editGoobName" /></label><br />
+      <p>Age: <span id="goobAge"></span></p>
+      <p>Hunger: <span id="goobHunger"></span></p>
+      <button id="saveGoobBtn">Save</button>
+    </div>
   </div>
-</div>
 
+  <!-- Save Confirmation Message -->
   <div id="saveConfirmation">Goob saved!</div>
 
-<script src="script.js"></script>
-  
+  <!-- Main Script -->
+  <script src="script.js"></script>
+
 </body>
 </html>
