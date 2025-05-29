@@ -9,6 +9,12 @@ const editGoobName = document.getElementById('editGoobName');
 const goobAge = document.getElementById('goobAge');
 const goobHunger = document.getElementById('goobHunger');
 const saveGoobBtn = document.getElementById('saveGoobBtn');
+editGoobName.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    saveGoobBtn.click(); // Same as clicking the "Save" button
+  }
+});
 const closeModalBtn = document.querySelector('.close-btn');
 const confirmation = document.getElementById('saveConfirmation');
 const tooltip = document.getElementById('goobTooltip');
