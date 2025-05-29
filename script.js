@@ -106,8 +106,8 @@ function moveGoobsRandomly() {
   for (let goob of goobData) {
     const { dx, dy } = getRandomDirection();
     if (canMove(goob, dx, dy, goobData)) {
-      goob.x += dx;
-      goob.y += dy;
+      goob.postition.x += dx;
+      goob.position.y += dy;
     }
   }
 
