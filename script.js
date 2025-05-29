@@ -81,7 +81,9 @@ function canMove(goob, dx, dy, allGoobs) {
   newX < 0 || newY < 0 ||
   newX + 1 >= canvas.width / cellSize ||
   newY + 1 >= canvas.height / cellSize
-)
+) {
+  return false;
+}
 
   // Check for collisions with other Goobs
   for (let other of allGoobs) {
@@ -106,7 +108,7 @@ function moveGoobsRandomly() {
   for (let goob of goobData) {
     const { dx, dy } = getRandomDirection();
     if (canMove(goob, dx, dy, goobData)) {
-      goob.postition.x += dx;
+      goob.position.x += dx;
       goob.position.y += dy;
     }
   }
