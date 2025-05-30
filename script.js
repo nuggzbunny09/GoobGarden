@@ -208,13 +208,13 @@ function createInitialGoobs() {
     {
       name: "Goob1",
       position: { x: 5, y: 5 },
-      hunger: 100,
+      hunger: 24,
       createdAt: now
     },
     {
       name: "Goob2",
       position: { x: 43, y: 43 },
-      hunger: 100,
+      hunger: 24,
       createdAt: now
     }
   ];
