@@ -268,7 +268,7 @@ function newGarden() {
   goobAge.textContent = '-';
   goobHunger.textContent = '-';
   selectedGoob = null;
-  openUserModal(); // ✅ Ensure this shows only when necessary
+  openUserModal();
   
 }
 
