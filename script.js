@@ -421,13 +421,14 @@ function openUserModal() {
   const user = getCurrentUser();
   if (!user) return;
 
-  document.getElementById('userModalName').textContent = user.username || 'Unknown';
-  document.getElementById('editUsernameInput').value = user.username || '';
+  // Pre-fill the name input
+  const nameInput = document.getElementById('userModalName');
+  nameInput.value = user.username || '';
 
-  // Simple age display: You can customize formatting
+  // Show age
   document.getElementById('userAgeDisplay').textContent = user.age || '0.0.0';
 
-  // Display achievements
+  // Show achievements
   const list = document.getElementById('userAchievementsList');
   list.innerHTML = '';
   if (user.achievements && user.achievements.length > 0) {
@@ -442,6 +443,7 @@ function openUserModal() {
     list.appendChild(li);
   }
 
+  // Open the modal
   document.getElementById('userModal').style.display = 'block';
 }
 
@@ -450,18 +452,18 @@ function closeUserModal() {
 }
 
 function saveNewUsername() {
-  const newName = document.getElementById('editUsernameInput').value.trim();
+  const newName = document.getElementById('userModalName').value.trim();
   if (!newName) return;
 
   const user = getCurrentUser();
-  if (!user) return;
-
   user.username = newName;
   saveCurrentUser(user);
 
-  document.getElementById('userModalName').textContent = newName;
-  updateUsernameInSidebar(); // If your sidebar shows name
+  updateUsernameInSidebar?.(); // Optional: update sidebar name if used
+
+  closeUserModal();
 }
+
 
 
 
