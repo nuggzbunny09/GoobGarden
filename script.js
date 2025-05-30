@@ -430,7 +430,13 @@ function openUserModal() {
   nameInput.value = user.username || '';
 
   // Show age
-  document.getElementById('userAgeDisplay').textContent = user.age || '0.0.0';
+  const gardenAgeMs = Date.now() - (user.gardenCreated || Date.now());
+const ageMin = Math.floor(gardenAgeMs / 60000);
+const days = Math.floor(ageMin / 1440);
+const hours = Math.floor((ageMin % 1440) / 60);
+const minutes = ageMin % 60;
+document.getElementById('userAgeDisplay').textContent = `${days}d ${hours}h ${minutes}m`;
+
 
   // Show achievements
   const list = document.getElementById('userAchievementsList');
