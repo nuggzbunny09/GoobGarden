@@ -49,9 +49,10 @@
 
   <div id="userModal" class="modal">
   <div class="modal-content">
-    <span class="close-btn">&times;</span>
+    <span class="close" onclick="closeUserModal()">&times;</span>
     <h2>User Info</h2>
-    <label>Name: <input type="text" id="userModalName" maxlength="15" /></label><br />
+    <label for="userModalName">Name:</label>
+    <input type="text" id="userModalName" maxlength="15" /><br />
     <button onclick="saveNewUsername()">Save Username</button>
     <p><strong>Account Age:</strong> <span id="userAgeDisplay"></span></p>
     <p><strong>Achievements:</strong></p>
