@@ -9,45 +9,33 @@
 </head>
 <body>
 
-  <!-- Main Title -->
+  <!-- Goob Header -->
   <div id="goobHeader">
-  <!-- 5 Left Goob Canvases -->
-  <canvas class="goobCanvas" data-color="#FFEB3B"></canvas>
-  <canvas class="goobCanvas" data-color="#FFD59E"></canvas>
-  <canvas class="goobCanvas" data-color="#FF7F50"></canvas>
-  <canvas class="goobCanvas" data-color="#FFB7C5"></canvas>
-  <canvas class="goobCanvas" data-color="#D1B3FF"></canvas>
+    <canvas class="goobCanvas" data-color="#FFEB3B"></canvas>
+    <canvas class="goobCanvas" data-color="#FFD59E"></canvas>
+    <canvas class="goobCanvas" data-color="#FF7F50"></canvas>
+    <canvas class="goobCanvas" data-color="#FFB7C5"></canvas>
+    <canvas class="goobCanvas" data-color="#D1B3FF"></canvas>
+    <h1 id="mainTitle">Goob Garden</h1>
+    <canvas class="goobCanvas" data-color="#87CEFA"></canvas>
+    <canvas class="goobCanvas" data-color="#98FF98"></canvas>
+    <canvas class="goobCanvas" data-color="#7FFF00"></canvas>
+    <canvas class="goobCanvas" data-color="#66D9EF"></canvas>
+    <canvas class="goobCanvas" data-color="#FFFDD0"></canvas>
+  </div>
 
-  <!-- Title -->
-  <h1 id="mainTitle">Goob Garden</h1>
-
-  <!-- 5 Right Goob Canvases -->
-  <canvas class="goobCanvas" data-color="#87CEFA"></canvas>
-  <canvas class="goobCanvas" data-color="#98FF98"></canvas>
-  <canvas class="goobCanvas" data-color="#7FFF00"></canvas>
-  <canvas class="goobCanvas" data-color="#66D9EF"></canvas>
-  <canvas class="goobCanvas" data-color="#FFFDD0"></canvas>
-</div>
-
-
-  <!-- Main Canvas Grid -->
   <canvas id="gardenCanvas" width="1000" height="1000"></canvas>
 
-  <!-- Game Time Status -->
   <div id="status">
     Game Time: <span id="gameTime">00:00:00</span>
   </div>
-  
-  <!-- Controls -->
+
   <div id="controls">
     <button id="newGardenBtn">New Garden</button>
   </div>
 
-
-  <!-- Tooltip for Goob Info -->
   <div id="goobTooltip" style="display: none;"></div>
 
-  <!-- Edit Goob Modal -->
   <div id="goobModal" class="modal">
     <div class="modal-content">
       <span class="close-btn">&times;</span>
@@ -60,23 +48,19 @@
   </div>
 
   <div id="userDataModal" class="modal" style="display: none;">
-  <div class="modal-content">
-    <span class="close-btn" id="closeUserModal">&times;</span>
-    <h2>Edit User Name</h2>
-    <label>Name: <input type="text" id="editUserName" maxlength="15" /></label><br />
-    <button id="saveUserBtn">Save</button>
-    <p id="userSaveMessage" style="display: none;">User name saved!</p>
+    <div class="modal-content">
+      <span class="close-btn" id="closeUserModal">&times;</span>
+      <h2>Edit User Name</h2>
+      <label>Name: <input type="text" id="editUserName" maxlength="15" /></label><br />
+      <button id="saveUserBtn">Save</button>
+      <p id="userSaveMessage" style="display: none;">User name saved!</p>
+    </div>
   </div>
-</div>
 
-
-  <!-- Save Confirmation Message -->
   <div id="saveConfirmation">Goob saved!</div>
 
-  <!-- Main Script -->
   <script src="userData.js"></script>
   <script src="script.js"></script>
-
 
 </body>
 </html>
