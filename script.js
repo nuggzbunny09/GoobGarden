@@ -233,20 +233,24 @@ function newGarden() {
   if (!confirm("Are you sure you want to start a new Goob Garden?")) return;
 
   let user = getCurrentUser();
+  const isNewUser = !user;
 
-  // If no user, create a new one
   if (!user) {
-    user = { username: '', goobs: [], inventory: {}, achievements: [], gardenCreated: Date.now() };
+    user = {
+      username: '',
+      goobs: [],
+      inventory: {},
+      gardenCreated: Date.now(),
+      achievements: []
+    };
   }
 
   user.goobs = [];
   user.inventory = {};
   user.gardenCreated = Date.now();
-
   setCurrentUser(user);
 
-  createInitialGoobs(); // Only once to create two goobs with fresh positions & age
-
+  createInitialGoobs();
   startGameTimer();
   drawGrid();
 
@@ -264,7 +268,10 @@ function newGarden() {
   goobAge.textContent = '-';
   goobHunger.textContent = '-';
   selectedGoob = null;
-  openUserModal();
+
+  if (isNewUser || !user.username) {
+    openUserModal(); // ✅ Ensure this shows only when necessary
+  }
 }
 
 
