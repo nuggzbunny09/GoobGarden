@@ -241,6 +241,20 @@ if (goobImage.complete) {
   goobModal.style.display = 'block';
 }
 
+function getCurrentUser() {
+  const userJSON = localStorage.getItem('currentUser');
+  if (!userJSON) return null;
+  try {
+    return JSON.parse(userJSON);
+  } catch {
+    return null;
+  }
+}
+
+function setCurrentUser(user) {
+  localStorage.setItem('currentUser', JSON.stringify(user));
+}
+
 
 function restoreStateFromLocalStorage() {
   const user = getCurrentUser();
