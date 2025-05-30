@@ -204,7 +204,7 @@ function saveGoobsToLocalStorage() {
 function createInitialGoobs() {
   const now = Date.now();
 
-  goobData = [
+  const initialGoobs = [
     {
       name: "Goob1",
       position: { x: 5, y: 5 },
@@ -219,9 +219,11 @@ function createInitialGoobs() {
     }
   ];
 
+  goobData = initialGoobs;
+
   const user = getCurrentUser();
   if (user) {
-    user.goobs = goobData;
+    user.goobs = initialGoobs;
     setCurrentUser(user);
   }
 }
@@ -234,7 +236,7 @@ function newGarden() {
 
   // If no user, create a new one
   if (!user) {
-    user = { username: '', goobs: [], inventory: {}, gardenCreated: Date.now() };
+    user = { username: '', goobs: [], inventory: {}, achievements: [], gardenCreated: Date.now() };
   }
 
   user.goobs = [];
@@ -459,7 +461,7 @@ function saveNewUsername() {
 
   const user = getCurrentUser();
   user.username = newName;
-  saveCurrentUser(user);
+  setCurrentUser(user);
 
 
   closeUserModal();
