@@ -7,7 +7,9 @@ goobImage.src = 'Goob.png';
 const goobModal = document.getElementById('goobModal');
 const editGoobName = document.getElementById('editGoobName');
 const goobAge = document.getElementById('goobAge');
-const goobHunger = document.getElementById('goobHunger');
+const ageHours = Math.floor((Date.now() - goob.createdAt) / (1000 * 60 * 60));
+const maxHunger = 24;
+const currentHunger = Math.max(0, maxHunger - ageHours);
 const saveGoobBtn = document.getElementById('saveGoobBtn');
 editGoobName.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
@@ -368,8 +370,8 @@ canvas.addEventListener('click', (e) => {
 
       goobAge.textContent = `${days}d ${hours}h ${minutes}m`;
       const hungerBar = document.getElementById("hungerBar");
-hungerBar.value = goob.hunger;
-      document.getElementById("hungerText").textContent = `${goob.hunger}/24`;
+hungerBar.value = currentHunger;
+document.getElementById("hungerText").textContent = `${currentHunger}/24`;
       goobModal.style.display = 'block';
       return;
     }
