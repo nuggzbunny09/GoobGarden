@@ -179,7 +179,11 @@ function loadGameTimer() {
 }
 
 function saveGoobsToLocalStorage() {
-  localStorage.setItem('goobs', JSON.stringify(goobData));
+  const user = getCurrentUser();
+  if (!user) return;
+
+  user.goobs = goobData;
+  setCurrentUser(user);
 }
 
 function createInitialGoobs() {
@@ -198,13 +202,21 @@ function createInitialGoobs() {
       createdAt: now
     }
   ];
+
   saveGoobsToLocalStorage();
 }
 
 function newGarden() {
   if (!confirm("Are you sure you want to start a new Goob Garden?")) return;
-  localStorage.clear();
-  createNewUserData();
+
+  const user = getCurrentUser();
+  if (!user) return;
+
+  user.goobs = [];
+  user.inventory = {};
+  user.gardenCreated = Date.now();
+  setCurrentUser(user);
+
   createInitialGoobs();
   startGameTimer();
   drawGrid();
@@ -213,11 +225,10 @@ function newGarden() {
 }
 
 function restoreStateFromLocalStorage() {
-  const storedGoobs = localStorage.getItem('goobs');
-  if (storedGoobs) {
-    goobData = JSON.parse(storedGoobs);
+  const user = getCurrentUser();
+  if (user && user.goobs) {
+    goobData = user.goobs;
 
-    // Clean up any lingering animation data
     for (let goob of goobData) {
       goob.position = goob.position || { x: 0, y: 0 };
       delete goob.startPosition;
@@ -235,9 +246,11 @@ function restoreStateFromLocalStorage() {
 goobImage.onload = () => {
   drawGrid();
   restoreStateFromLocalStorage();
+
+  const user = getCurrentUser();
   const button = document.getElementById('newGardenBtn');
-  const storedGoobs = localStorage.getItem('goobs');
-  button.textContent = storedGoobs && JSON.parse(storedGoobs).length > 0 ? 'Reset Garden' : 'New Garden';
+  button.textContent = user && user.goobs && user.goobs.length > 0 ? 'Reset Garden' : 'New Garden';
+
   requestAnimationFrame(animateGarden);
 };
 
