@@ -344,7 +344,7 @@ canvas.addEventListener('mousemove', (e) => {
       tooltip.innerHTML = `
         <strong>${goob.name}</strong><br>
         Age: ${days}d ${hours}h ${minutes}m<br>
-        Hunger: ${goobHunger}
+        Hunger: ${.goobHunger}
       `;
       return;
     }
@@ -375,8 +375,8 @@ canvas.addEventListener('click', (e) => {
 
       goobAge.textContent = `${days}d ${hours}h ${minutes}m`;
       const hungerBar = document.getElementById("hungerBar");
-hungerBar.value = goobHunger;
-      document.getElementById("hungerText").textContent = `${goobHunger}/24`;
+hungerBar.value = .goobHunger;
+      document.getElementById("hungerText").textContent = `${.goobHunger}/24`;
       goobModal.style.display = 'block';
       return;
     }
