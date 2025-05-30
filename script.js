@@ -459,7 +459,6 @@ function saveNewUsername() {
   user.username = newName;
   saveCurrentUser(user);
 
-  updateUsernameInSidebar?.(); // Optional: update sidebar name if used
 
   closeUserModal();
 }
