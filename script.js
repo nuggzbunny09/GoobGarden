@@ -262,7 +262,7 @@ function newGarden() {
   goobAge.textContent = '-';
   goobHunger.textContent = '-';
   selectedGoob = null;
-  goobModal.style.display = 'block';
+  openUserModal();
 }
 
 
