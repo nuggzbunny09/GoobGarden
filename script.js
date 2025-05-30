@@ -429,7 +429,7 @@ function animateGarden(timestamp) {
 }
 
 function openUserModal() {
-  console.log("🚨 openUserModal called");
+  console.log("🟢 openUserModal called");
   const user = getCurrentUser();
   if (!user) return;
 
