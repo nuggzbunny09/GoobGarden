@@ -129,6 +129,10 @@ h1, #mainTitle {
   font-size: 22px;
 }
 
+.modal-content input {
+  font-family: 'Fredoka', sans-serif;
+}
+
 .close-btn {
   float: right;
   font-size: 20px;
