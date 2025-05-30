@@ -344,7 +344,7 @@ canvas.addEventListener('mousemove', (e) => {
       tooltip.innerHTML = `
         <strong>${goob.name}</strong><br>
         Age: ${days}d ${hours}h ${minutes}m<br>
-        Hunger: ${goob.hunger}
+        Tummy: ${goob.hunger}/24
       `;
       return;
     }
