@@ -218,9 +218,19 @@ function newGarden() {
   setCurrentUser(user);
 
   createInitialGoobs();
-  startGameTimer();
-  drawGrid();
+  createInitialGoobs();
+startGameTimer();
+drawGrid();
+
+// Ensure Goob image is loaded before drawing them
+if (goobImage.complete) {
   drawGoobs();
+} else {
+  goobImage.onload = () => {
+    drawGoobs();
+  };
+}
+
   document.getElementById('newGardenBtn').textContent = 'Reset Garden';
 
   // Show username edit modal
