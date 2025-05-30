@@ -34,3 +34,15 @@ function hasAchievement(achievement) {
   const data = getUserData();
   return data.achievements.includes(achievement);
 }
+
+const defaultUserData = {
+  inventory: [],
+  achievements: []
+};
+
+function createNewUserData() {
+  if (!localStorage.getItem('userData')) {
+    localStorage.setItem('userData', JSON.stringify(defaultUserData));
+  }
+}
+
