@@ -178,8 +178,23 @@ function loadGameTimer() {
   }
 }
 
+function getOrCreateUser() {
+  let user = getCurrentUser();
+  if (!user) {
+    user = {
+      username: 'Player',
+      goobs: [],
+      inventory: {},
+      gardenCreated: Date.now()
+    };
+    setCurrentUser(user);
+  }
+  return user;
+}
+
+
 function saveGoobsToLocalStorage() {
-  const user = getCurrentUser();
+  const user = getOrCreateUser();
   if (!user) return;
 
   user.goobs = goobData;
@@ -209,8 +224,7 @@ function createInitialGoobs() {
 function newGarden() {
   if (!confirm("Are you sure you want to start a new Goob Garden?")) return;
 
-  const user = getCurrentUser();
-  if (!user) return;
+  const user = getOrCreatetUser();
 
   user.goobs = [];
   user.inventory = {};
@@ -363,7 +377,7 @@ saveGoobBtn.addEventListener('click', () => {
   if (selectedGoob) {
     selectedGoob.name = editGoobName.value;
   } else {
-    const user = getCurrentUser();
+    const user = getOrCreateUser();
     user.username = editGoobName.value;
     setCurrentUser(user);
   }
