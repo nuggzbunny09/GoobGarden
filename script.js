@@ -204,6 +204,7 @@ function createInitialGoobs() {
 function newGarden() {
   if (!confirm("Are you sure you want to start a new Goob Garden?")) return;
   localStorage.clear();
+  createNewUserData();
   createInitialGoobs();
   startGameTimer();
   drawGrid();
