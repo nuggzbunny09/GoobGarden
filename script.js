@@ -417,6 +417,53 @@ function animateGarden(timestamp) {
   requestAnimationFrame(animateGarden);
 }
 
+function openUserModal() {
+  const user = getCurrentUser();
+  if (!user) return;
+
+  document.getElementById('userModalName').textContent = user.username || 'Unknown';
+  document.getElementById('editUsernameInput').value = user.username || '';
+
+  // Simple age display: You can customize formatting
+  document.getElementById('userAgeDisplay').textContent = user.age || '0.0.0';
+
+  // Display achievements
+  const list = document.getElementById('userAchievementsList');
+  list.innerHTML = '';
+  if (user.achievements && user.achievements.length > 0) {
+    user.achievements.forEach(ach => {
+      const li = document.createElement('li');
+      li.textContent = ach;
+      list.appendChild(li);
+    });
+  } else {
+    const li = document.createElement('li');
+    li.textContent = 'None yet!';
+    list.appendChild(li);
+  }
+
+  document.getElementById('userModal').style.display = 'block';
+}
+
+function closeUserModal() {
+  document.getElementById('userModal').style.display = 'none';
+}
+
+function saveNewUsername() {
+  const newName = document.getElementById('editUsernameInput').value.trim();
+  if (!newName) return;
+
+  const user = getCurrentUser();
+  if (!user) return;
+
+  user.username = newName;
+  saveCurrentUser(user);
+
+  document.getElementById('userModalName').textContent = newName;
+  updateUsernameInSidebar(); // If your sidebar shows name
+}
+
+
 
 setInterval(moveGoobsRandomly, 1000); // every 10 seconds
 
