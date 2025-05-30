@@ -222,7 +222,15 @@ function newGarden() {
   drawGrid();
   drawGoobs();
   document.getElementById('newGardenBtn').textContent = 'Reset Garden';
+
+  // Show username edit modal
+  editGoobName.value = user.username || '';
+  goobAge.textContent = '-';
+  goobHunger.textContent = '-';
+  selectedGoob = null;
+  goobModal.style.display = 'block';
 }
+
 
 function restoreStateFromLocalStorage() {
   const user = getCurrentUser();
