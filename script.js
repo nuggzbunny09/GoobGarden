@@ -245,11 +245,15 @@ function getCurrentUser() {
   const userJSON = localStorage.getItem('currentUser');
   if (!userJSON) return null;
   try {
-    return JSON.parse(userJSON);
+    const user = JSON.parse(userJSON);
+    // Basic validation to ensure it's an object
+    if (user && typeof user === 'object') return user;
+    return null;
   } catch {
     return null;
   }
 }
+
 
 function setCurrentUser(user) {
   localStorage.setItem('currentUser', JSON.stringify(user));
