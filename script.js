@@ -203,6 +203,7 @@ function saveGoobsToLocalStorage() {
 
 function createInitialGoobs() {
   const now = Date.now();
+
   goobData = [
     {
       name: "Goob1",
@@ -218,42 +219,52 @@ function createInitialGoobs() {
     }
   ];
 
-  saveGoobsToLocalStorage();
+  const user = getCurrentUser();
+  if (user) {
+    user.goobs = goobData;
+    setCurrentUser(user);
+  }
 }
+
 
 function newGarden() {
   if (!confirm("Are you sure you want to start a new Goob Garden?")) return;
 
-  const user = getOrCreatetUser();
+  let user = getCurrentUser();
+
+  // If no user, create a new one
+  if (!user) {
+    user = { username: '', goobs: [], inventory: {}, gardenCreated: Date.now() };
+  }
 
   user.goobs = [];
   user.inventory = {};
   user.gardenCreated = Date.now();
+
   setCurrentUser(user);
 
-  createInitialGoobs();
-  createInitialGoobs();
-startGameTimer();
-drawGrid();
+  createInitialGoobs(); // Only once to create two goobs with fresh positions & age
 
-// Ensure Goob image is loaded before drawing them
-if (goobImage.complete) {
-  drawGoobs();
-} else {
-  goobImage.onload = () => {
+  startGameTimer();
+  drawGrid();
+
+  if (goobImage.complete) {
     drawGoobs();
-  };
-}
+  } else {
+    goobImage.onload = () => {
+      drawGoobs();
+    };
+  }
 
   document.getElementById('newGardenBtn').textContent = 'Reset Garden';
 
-  // Show username edit modal
   editGoobName.value = user.username || '';
   goobAge.textContent = '-';
   goobHunger.textContent = '-';
   selectedGoob = null;
   goobModal.style.display = 'block';
 }
+
 
 function getCurrentUser() {
   const userJSON = localStorage.getItem('currentUser');
