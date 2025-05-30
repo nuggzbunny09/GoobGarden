@@ -334,11 +334,17 @@ window.addEventListener('click', (e) => {
 saveGoobBtn.addEventListener('click', () => {
   if (selectedGoob) {
     selectedGoob.name = editGoobName.value;
-    saveGoobsToLocalStorage();
-    goobModal.style.display = 'none';
-    showConfirmation("Goob Saved!");
+  } else {
+    const user = getCurrentUser();
+    user.username = editGoobName.value;
+    setCurrentUser(user);
   }
+
+  saveGoobsToLocalStorage();
+  goobModal.style.display = 'none';
+  showConfirmation("Saved!");
 });
+
 
 function showConfirmation(message) {
   confirmation.textContent = message;
