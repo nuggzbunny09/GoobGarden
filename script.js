@@ -367,7 +367,8 @@ canvas.addEventListener('click', (e) => {
       const minutes = ageMin % 60;
 
       goobAge.textContent = `${days}d ${hours}h ${minutes}m`;
-      goobHunger.textContent = goob.hunger;
+      const hungerBar = document.getElementById("hungerBar");
+hungerBar.value = goob.hunger;
       goobModal.style.display = 'block';
       return;
     }
