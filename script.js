@@ -269,7 +269,6 @@ function newGarden() {
   goobHunger.textContent = '-';
   selectedGoob = null;
 
-  if (isNewUser || !user.username) {
     openUserModal(); // ✅ Ensure this shows only when necessary
   }
 }
