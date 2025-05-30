@@ -125,6 +125,7 @@ h1, #mainTitle {
   border-radius: 8px;
   width: 300px;
   text-align: left;
+  font-family: 'Fredoka', sans-serif;
 }
 
 .close-btn {
