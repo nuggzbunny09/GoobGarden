@@ -207,17 +207,18 @@ h1, #mainTitle {
   gap: 8px;
   padding: 8px;
 }
+
 .inventory-item {
   width: 60px;
   height: 60px;
   background-color: white;
   display: flex;
-  align-items: center;     /* Vertical centering */
-  justify-content: center; /* Horizontal centering */
+  align-items: center;
+  justify-content: center;
   border-radius: 8px;
   box-shadow: 0 0 4px rgba(0,0,0,0.2);
   margin: 5px;
-  position: relative;      /* Optional, in case of overlays */
+  position: relative; /* Needed for positioning the label */
   flex-shrink: 0;
 }
 
@@ -228,6 +229,19 @@ h1, #mainTitle {
   pointer-events: none;
   display: block;
 }
+
+.inventory-item span {
+  position: absolute;
+  bottom: -10px; /* Moves it below the white box */
+  right: -5px;   /* Slightly outside the right edge */
+  font-size: 0.8em;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 2px 5px;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
 
 
 
