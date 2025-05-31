@@ -266,7 +266,7 @@ function newGarden() {
 
   editGoobName.value = user.username || '';
   goobAge.textContent = '-';
-  goobHunger.textContent = '-';
+  if (goobHunger) goobHunger.textContent = '-'; // Safely skip if it's not the Goob modal
   selectedGoob = null;
   openUserModal();
   
