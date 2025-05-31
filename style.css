@@ -208,14 +208,22 @@ h1, #mainTitle {
   padding: 8px;
 }
 .inventory-item {
+  width: 60px;
+  height: 60px;
+  background-color: white;      /* White square */
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 14px;
+  justify-content: center;
+  border-radius: 8px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.2);
+  margin: 5px;
+  flex-direction: column;
 }
+
 .inventory-item img {
-  width: 32px;
-  height: 32px;
+  max-width: 80%;
+  max-height: 80%;
+  pointer-events: none;
 }
 
 
