@@ -500,6 +500,36 @@ function updateUserGreeting() {
   }
 }
 
+function updateInventoryDisplay() {
+  const user = getCurrentUser();
+  const grid = document.getElementById('inventoryGrid');
+  grid.innerHTML = ''; // Clear existing
+
+  if (!user || !user.inventory) return;
+
+  Object.entries(user.inventory).forEach(([item, count]) => {
+    if (count > 0) {
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'inventory-item';
+
+      const img = document.createElement('img');
+      img.src = `images/${capitalize(item)}.png`; // Tree.png, Water.png
+      img.alt = item;
+
+      const label = document.createElement('span');
+      label.textContent = `x${count}`;
+
+      itemDiv.appendChild(img);
+      itemDiv.appendChild(label);
+      grid.appendChild(itemDiv);
+    }
+  });
+}
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 
 
 
