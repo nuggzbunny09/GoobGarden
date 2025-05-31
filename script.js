@@ -548,18 +548,22 @@ function capitalize(str) {
 
 function setupInventoryDraggables() {
   const grid = document.getElementById('inventoryGrid');
-  grid.querySelectorAll('.inventory-item img').forEach(img => {
-    img.addEventListener('mousedown', (e) => {
-      e.preventDefault();
-      draggingItem = img.alt; // "tree" or "water"
+  const images = grid.querySelectorAll('.inventory-item img');
 
+  images.forEach(img => {
+    img.addEventListener('mousedown', (e) => {
+      e.preventDefault(); // Prevent default drag behavior
+      draggingItem = img.alt; // Save item type like "tree" or "water"
+
+      // Create a draggable preview image
       dragImage = document.createElement('img');
       dragImage.src = img.src;
       dragImage.style.position = 'absolute';
       dragImage.style.width = '20px';
       dragImage.style.height = '20px';
       dragImage.style.pointerEvents = 'none';
-      dragImage.style.zIndex = 1000;
+      dragImage.style.zIndex = '1000';
+
       document.body.appendChild(dragImage);
       moveDragImage(e.pageX, e.pageY);
     });
