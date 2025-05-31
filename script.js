@@ -68,6 +68,14 @@ function drawGrid() {
     ctx.stroke();
   }
 }
+for (const item of placedItems) {
+    const img = new Image();
+    img.src = `images/${capitalize(item.type)}.png`;
+    img.onload = () => {
+      ctx.drawImage(img, item.x * cellSize, item.y * cellSize, cellSize * 2, cellSize * 2);
+    };
+  }
+}
 
 function getRandomDirection() {
   const directions = [
@@ -322,6 +330,9 @@ function restoreStateFromLocalStorage() {
   loadGameTimer();
   updateGameTimeDisplay();
   updateInventoryDisplay();
+  updateInventoryDisplay();
+  setupInventoryDraggables();
+
 }
 
 goobImage.onload = () => {
@@ -531,6 +542,92 @@ function updateInventoryDisplay() {
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+let draggingItem = null;
+let dragImage = null;
+
+function setupInventoryDraggables() {
+  const grid = document.getElementById('inventoryGrid');
+  grid.querySelectorAll('.inventory-item img').forEach(img => {
+    img.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      draggingItem = img.alt; // "tree" or "water"
+
+      dragImage = document.createElement('img');
+      dragImage.src = img.src;
+      dragImage.style.position = 'absolute';
+      dragImage.style.width = '20px';
+      dragImage.style.height = '20px';
+      dragImage.style.pointerEvents = 'none';
+      dragImage.style.zIndex = 1000;
+      document.body.appendChild(dragImage);
+      moveDragImage(e.pageX, e.pageY);
+    });
+  });
+}
+
+function moveDragImage(x, y) {
+  if (dragImage) {
+    dragImage.style.left = `${x - 10}px`;
+    dragImage.style.top = `${y - 10}px`;
+  }
+}
+
+document.addEventListener('mousemove', (e) => {
+  if (dragImage) {
+    moveDragImage(e.pageX, e.pageY);
+  }
+});
+
+document.addEventListener('mouseup', (e) => {
+  if (draggingItem && dragImage) {
+    const rect = canvas.getBoundingClientRect();
+    const gridX = Math.floor((e.clientX - rect.left) / cellSize);
+    const gridY = Math.floor((e.clientY - rect.top) / cellSize);
+
+    if (gridX >= 0 && gridY >= 0 && gridX <= gridCols - 2 && gridY <= gridRows - 2) {
+      placeItemOnGrid(draggingItem, gridX, gridY);
+    }
+
+    draggingItem = null;
+    document.body.removeChild(dragImage);
+    dragImage = null;
+  }
+});
+
+let placedItems = [];
+
+function placeItemOnGrid(type, x, y) {
+  const user = getCurrentUser();
+  if (!user || !user.inventory[type] || user.inventory[type] <= 0) return;
+
+  // Deduct item
+  user.inventory[type]--;
+  setCurrentUser(user);
+  updateInventoryDisplay();
+
+  // Place item visually
+  placedItems.push({ type, x, y });
+  savePlacedItems();
+  drawGrid(); // Redraw the grid with items
+  drawGoobs(); // Keep goobs visible
+}
+
+function savePlacedItems() {
+  const user = getCurrentUser();
+  if (user) {
+    user.placedItems = placedItems;
+    setCurrentUser(user);
+  }
+}
+
+function loadPlacedItems() {
+  const user = getCurrentUser();
+  if (user && Array.isArray(user.placedItems)) {
+    placedItems = user.placedItems;
+  }
+}
+
 
 
 
