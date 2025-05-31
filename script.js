@@ -478,6 +478,16 @@ function saveNewUsername() {
   closeUserModal();
 }
 
+function updateUserGreeting() {
+  const user = getCurrentUser();
+  const greeting = document.getElementById('userGreeting');
+  if (user && user.username) {
+    greeting.textContent = `${user.username}'s Garden`;
+  } else {
+    greeting.textContent = `Your Garden`;
+  }
+}
+
 
 
 
