@@ -321,6 +321,7 @@ function restoreStateFromLocalStorage() {
   drawGoobs();
   loadGameTimer();
   updateGameTimeDisplay();
+  updateInventoryDisplay();
 }
 
 goobImage.onload = () => {
