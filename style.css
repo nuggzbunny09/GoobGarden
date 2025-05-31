@@ -166,4 +166,30 @@ h1, #mainTitle {
   visibility: visible;
 }
 
+#mainLayout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+#leftSidebar, #rightSidebar {
+  width: 200px;
+  background-color: #1a1a1a; /* match your theme */
+  color: white;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+#centerContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #000; /* or whatever matches your game */
+}
+
+
 
