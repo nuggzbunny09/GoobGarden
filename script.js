@@ -25,6 +25,8 @@ let selectedGoob = null;
 let timerInterval;
 let gameStartTime = null;
 let placedItems = JSON.parse(localStorage.getItem('placedItems')) || [];
+let draggingItem = null;
+let dragImage = null;
 
 window.addEventListener("DOMContentLoaded", () => {
   const canvases = document.querySelectorAll(".goobCanvas");
@@ -542,9 +544,6 @@ function updateInventoryDisplay() {
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
-
-let draggingItem = null;
-let dragImage = null;
 
 function setupInventoryDraggables() {
   const grid = document.getElementById('inventoryGrid');
