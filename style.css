@@ -192,5 +192,13 @@ h1, #mainTitle {
   background-color: #33AB7D; /* or whatever matches your game */
 }
 
+.sidebar-heading {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #ffffff; /* or any color you want */
+}
+
 
 
