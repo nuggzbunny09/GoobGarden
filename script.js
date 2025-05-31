@@ -75,7 +75,6 @@ for (const item of placedItems) {
       ctx.drawImage(img, item.x * cellSize, item.y * cellSize, cellSize * 2, cellSize * 2);
     };
   }
-}
 
 function getRandomDirection() {
   const directions = [
