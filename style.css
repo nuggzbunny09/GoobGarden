@@ -201,5 +201,22 @@ h1, #mainTitle {
   color: #ffffff; /* or any color you want */
 }
 
+.inventory-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 8px;
+}
+.inventory-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+}
+.inventory-item img {
+  width: 32px;
+  height: 32px;
+}
+
 
 
