@@ -24,7 +24,7 @@ let lastAnimationTime = 0;
 let selectedGoob = null;
 let timerInterval;
 let gameStartTime = null;
-let placedItems = [];
+let placedItems = JSON.parse(localStorage.getItem('placedItems')) || [];
 
 window.addEventListener("DOMContentLoaded", () => {
   const canvases = document.querySelectorAll(".goobCanvas");
