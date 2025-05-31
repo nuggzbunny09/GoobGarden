@@ -281,6 +281,7 @@ function newGarden() {
   if (goobHunger) goobHunger.textContent = '-';
   selectedGoob = null;
   openUserModal();
+  updateInventoryDisplay();
   updateUserGreeting();
 }
 
