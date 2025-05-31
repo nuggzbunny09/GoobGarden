@@ -210,20 +210,23 @@ h1, #mainTitle {
 .inventory-item {
   width: 60px;
   height: 60px;
-  background-color: white;      /* White square */
+  background-color: white;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: center;     /* Vertical centering */
+  justify-content: center; /* Horizontal centering */
   border-radius: 8px;
   box-shadow: 0 0 4px rgba(0,0,0,0.2);
   margin: 5px;
-  flex-direction: column;
+  position: relative;      /* Optional, in case of overlays */
+  flex-shrink: 0;
 }
 
 .inventory-item img {
   max-width: 80%;
   max-height: 80%;
+  object-fit: contain;
   pointer-events: none;
+  display: block;
 }
 
 
