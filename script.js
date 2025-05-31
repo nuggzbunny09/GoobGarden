@@ -24,7 +24,7 @@ let lastAnimationTime = 0;
 let selectedGoob = null;
 let timerInterval;
 let gameStartTime = null;
-let placedItems = JSON.parse(localStorage.getItem('placedItems')) || [];
+let placedItems = [];
 let draggingItem = null;
 let dragImage = null;
 
