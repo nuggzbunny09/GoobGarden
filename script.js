@@ -245,12 +245,23 @@ function newGarden() {
     };
   }
 
+  // Reset garden
   user.goobs = [];
-  user.inventory = {};
   user.gardenCreated = Date.now();
+
+  // 👇 Give starting items
+  user.inventory = {
+    tree: 10,
+    water: 10
+  };
+
+  // Save updated user to localStorage
   setCurrentUser(user);
 
+  // Generate starter goobs
   createInitialGoobs();
+
+  // Redraw game world
   startGameTimer();
   drawGrid();
 
@@ -264,15 +275,14 @@ function newGarden() {
 
   document.getElementById('newGardenBtn').textContent = 'Reset Garden';
 
+  // Reset and show user info
   editGoobName.value = user.username || '';
   goobAge.textContent = '-';
-  if (goobHunger) goobHunger.textContent = '-'; // Safely skip if it's not the Goob modal
+  if (goobHunger) goobHunger.textContent = '-';
   selectedGoob = null;
   openUserModal();
   updateUserGreeting();
-  
 }
-
 
 function getCurrentUser() {
   const userJSON = localStorage.getItem('currentUser');
