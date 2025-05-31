@@ -583,6 +583,14 @@ document.addEventListener('mousemove', (e) => {
   }
 });
 
+document.addEventListener('mouseup', () => {
+  if (dragImage) {
+    document.body.removeChild(dragImage);
+    dragImage = null;
+    draggingItem = null;
+  }
+});
+
 function placeItemOnGrid(type, x, y) {
   const user = getCurrentUser();
   if (!user || !user.inventory[type] || user.inventory[type] <= 0) return;
