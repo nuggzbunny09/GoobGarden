@@ -269,6 +269,7 @@ function newGarden() {
   if (goobHunger) goobHunger.textContent = '-'; // Safely skip if it's not the Goob modal
   selectedGoob = null;
   openUserModal();
+  updateUserGreeting();
   
 }
 
