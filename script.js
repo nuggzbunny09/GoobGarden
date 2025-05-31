@@ -321,6 +321,7 @@ goobImage.onload = () => {
   button.textContent = user && user.goobs && user.goobs.length > 0 ? 'Reset Garden' : 'New Garden';
 
   requestAnimationFrame(animateGarden);
+  updateUserGreeting();
 };
 
 document.getElementById('newGardenBtn').addEventListener('click', newGarden);
