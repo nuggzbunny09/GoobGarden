@@ -537,6 +537,7 @@ function updateInventoryDisplay() {
       itemDiv.appendChild(img);
       itemDiv.appendChild(label);
       grid.appendChild(itemDiv);
+      setupInventoryDraggables();
     }
   });
 }
