@@ -24,6 +24,7 @@ let lastAnimationTime = 0;
 let selectedGoob = null;
 let timerInterval;
 let gameStartTime = null;
+let placedItems = [];
 
 window.addEventListener("DOMContentLoaded", () => {
   const canvases = document.querySelectorAll(".goobCanvas");
@@ -593,8 +594,6 @@ document.addEventListener('mouseup', (e) => {
     dragImage = null;
   }
 });
-
-let placedItems = [];
 
 function placeItemOnGrid(type, x, y) {
   const user = getCurrentUser();
