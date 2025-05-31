@@ -583,22 +583,6 @@ document.addEventListener('mousemove', (e) => {
   }
 });
 
-document.addEventListener('mouseup', (e) => {
-  if (draggingItem && dragImage) {
-    const rect = canvas.getBoundingClientRect();
-    const gridX = Math.floor((e.clientX - rect.left) / cellSize);
-    const gridY = Math.floor((e.clientY - rect.top) / cellSize);
-
-    if (gridX >= 0 && gridY >= 0 && gridX <= gridCols - 2 && gridY <= gridRows - 2) {
-      placeItemOnGrid(draggingItem, gridX, gridY);
-    }
-
-    draggingItem = null;
-    document.body.removeChild(dragImage);
-    dragImage = null;
-  }
-});
-
 function placeItemOnGrid(type, x, y) {
   const user = getCurrentUser();
   if (!user || !user.inventory[type] || user.inventory[type] <= 0) return;
