@@ -2,13 +2,13 @@ const itemDirectory = {
   tree: {
     name: "Tree",
     image: "images/Tree.png",
-    description: "Provides shade and boosts mood.",
+    description: "Acts as a barrier.",
     placeable: true
   },
   water: {
     name: "Water",
     image: "images/Water.png",
-    description: "Hydrates nearby Goobs.",
+    description: "Goobs can drown, be careful.",
     placeable: true
   }
 };
