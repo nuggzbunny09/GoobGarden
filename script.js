@@ -618,8 +618,11 @@ document.addEventListener('mousemove', (e) => {
   }
 
   if (dragImage) {
-    dragImage.style.left = e.pageX + 'px';
-    dragImage.style.top = e.pageY + 'px';
+    const pixelOffsetX = (dragOffsetX || 0) * cellSize;
+    const pixelOffsetY = (dragOffsetY || 0) * cellSize;
+
+dragImage.style.left = (e.pageX - pixelOffsetX) + 'px';
+dragImage.style.top = (e.pageY - pixelOffsetY) + 'px';
   }
 });
 
