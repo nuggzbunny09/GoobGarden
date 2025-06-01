@@ -55,14 +55,14 @@ window.addEventListener("DOMContentLoaded", () => {
 function preloadItemImage(type, callback) {
   if (itemImages[type]) {
     if (itemImages[type].complete) {
-      callback(); // image already loaded
+      callback();
     } else {
-      itemImages[type].onload = callback; // wait until it loads
+      itemImages[type].addEventListener('load', callback);
     }
   } else {
     const img = new Image();
     img.src = `images/${capitalize(type)}.png`;
-    img.onload = callback;
+    img.addEventListener('load', callback);
     itemImages[type] = img;
   }
 }
@@ -79,7 +79,6 @@ function drawGrid() {
     ctx.lineTo(i, canvas.height);
     ctx.stroke();
   }
-
   for (let j = 0; j <= canvas.height; j += cellSize) {
     ctx.beginPath();
     ctx.moveTo(0, j);
@@ -87,13 +86,18 @@ function drawGrid() {
     ctx.stroke();
   }
 
-  // ✅ Draw placed items
+  // ✅ Draw placed items only here
   for (const item of placedItems) {
-    const img = new Image();
-    img.src = `images/${capitalize(item.type)}.png`;
-    img.onload = () => {
-      ctx.drawImage(img, item.x * cellSize, item.y * cellSize, cellSize * 2, cellSize * 2);
-    };
+    const img = itemImages[item.type];
+    if (img && img.complete) {
+      ctx.drawImage(
+        img,
+        item.x * cellSize,
+        item.y * cellSize,
+        cellSize * 2,
+        cellSize * 2
+      );
+    }
   }
 }
 
@@ -337,25 +341,38 @@ function setCurrentUser(user) {
 
 function restoreStateFromLocalStorage() {
   const user = getCurrentUser();
-  if (user && user.goobs) {
-    goobData = user.goobs;
+  if (user) {
+    goobData = user.goobs || [];
+    placedItems = user.placedItems || [];
 
+    // Set default properties on goobs
     for (let goob of goobData) {
       goob.position = goob.position || { x: 0, y: 0 };
       delete goob.startPosition;
       delete goob.targetPosition;
       delete goob.startTime;
     }
+
+    // ✅ Preload all placed item images before drawing
+    const typesToLoad = [...new Set(placedItems.map(item => item.type))];
+    let loadedCount = 0;
+
+    for (const type of typesToLoad) {
+      preloadItemImage(type, () => {
+        loadedCount++;
+        if (loadedCount === typesToLoad.length) {
+          // Only draw once ALL images are ready
+          drawGrid();
+          drawGoobs();
+        }
+      });
+    }
   }
-  loadPlacedItems();
-  drawGrid();
-  drawGoobs();
+
   loadGameTimer();
   updateGameTimeDisplay();
   updateInventoryDisplay();
-  updateInventoryDisplay();
   setupInventoryDraggables();
-
 }
 
 goobImage.onload = () => {
