@@ -651,6 +651,9 @@ function placeItemOnGrid(type, x, y) {
     const user = getCurrentUser();
     if (!user || !user.inventory[type] || user.inventory[type] <= 0) return;
 
+    const gridCols = Math.floor(canvas.width / cellSize);
+    const gridRows = Math.floor(canvas.height / cellSize);
+    
     if (x < 0 || y < 0 || x + 1 >= gridCols || y + 1 >= gridRows) {
     showConfirmation("Too close to edge!");
     return;
