@@ -346,7 +346,6 @@ function restoreStateFromLocalStorage() {
   updateInventoryDisplay();
   updateInventoryDisplay();
   setupInventoryDraggables();
-  loadPlacedItems(); 
 
 }
 
@@ -354,6 +353,7 @@ goobImage.onload = () => {
   drawGrid();
   restoreStateFromLocalStorage();
   updateUserGreeting();
+  loadPlacedItems();
 
   const user = getCurrentUser();
   const button = document.getElementById('newGardenBtn');
