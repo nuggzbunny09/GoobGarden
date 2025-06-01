@@ -292,7 +292,7 @@ function newGarden() {
 
   // Save updated user to localStorage
   setCurrentUser(user);
-  user.placedItems = [];
+  placedItems = [];
   // Generate starter goobs
   createInitialGoobs();
 
