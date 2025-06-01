@@ -601,7 +601,7 @@ function setupInventoryDraggables() {
       dragOffsetX = e.offsetX;
   dragOffsetY = e.offsetY;
     });
-  }
+  });
 }
 
 document.addEventListener('mousemove', (e) => {
