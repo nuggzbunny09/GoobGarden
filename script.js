@@ -671,23 +671,28 @@ function loadPlacedItems() {
 }
 
 canvas.addEventListener('mouseup', (e) => {
-  if (!draggingItem) return;
+  if (!draggingItem || !draggingSource) return;
 
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
-
   const tileX = Math.floor(mouseX / cellSize);
   const tileY = Math.floor(mouseY / cellSize);
 
-  // Move the existing item (do NOT place a new one)
-  draggingItem.x = tileX;
-  draggingItem.y = tileY;
+  if (draggingSource === 'inventory') {
+    // Place a new item from inventory
+    placeItemOnGrid(draggingItem, tileX, tileY);
+  } else if (draggingSource === 'placed') {
+    // Move existing placed item
+    draggingItem.x = tileX;
+    draggingItem.y = tileY;
+    savePlacedItems();
+  }
 
-  savePlacedItems();   // Persist new position
-  draggingItem = null; // Clear drag state
+  draggingItem = null;
+  draggingSource = null;
 
-  drawGrid();          // Redraw everything
+  drawGrid();
   drawGoobs();
 });
 
@@ -695,17 +700,17 @@ canvas.addEventListener('mousedown', (e) => {
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
-  const gridX = Math.floor(mouseX / cellSize);
-  const gridY = Math.floor(mouseY / cellSize);
+  const tileX = Math.floor(mouseX / cellSize);
+  const tileY = Math.floor(mouseY / cellSize);
 
-  // Check if clicking on a placed item (2x2 area)
   for (const item of placedItems) {
-    if (gridX >= item.x && gridX < item.x + 2 &&
-        gridY >= item.y && gridY < item.y + 2) {
+    if (
+      tileX >= item.x && tileX < item.x + 2 &&
+      tileY >= item.y && tileY < item.y + 2
+    ) {
       draggingItem = item;
-      dragOffset.x = gridX - item.x;
-      dragOffset.y = gridY - item.y;
-      break;
+      draggingSource = 'placed';
+      return;
     }
   }
 });
