@@ -208,7 +208,7 @@ h1, #mainTitle {
   padding: 8px;
 }
 
-.invertory-item {
+.inventory-item {
   width: 60px;
   height: 60px;
   background-color: white;
@@ -218,7 +218,7 @@ h1, #mainTitle {
   border-radius: 8px;
   box-shadow: 0 0 4px rgba(0,0,0,0.2);
   margin: 5px;
-  position: relative; /* Needed for positioning the label */
+  position: relative;
   flex-shrink: 0;
 }
 
@@ -226,15 +226,15 @@ h1, #mainTitle {
   max-width: 80%;
   max-height: 80%;
   object-fit: contain;
-  pointer-events: auto; /* 👈 THIS ENABLES EVENTS */
+  pointer-events: auto; /* 👈 allow dragging */
   display: block;
-  cursor: grab;
+  cursor: grab;         /* 👈 visual feedback for draggable */
 }
 
 .inventory-item span {
   position: absolute;
-  bottom: -10px; /* Moves it below the white box */
-  right: -5px;   /* Slightly outside the right edge */
+  bottom: -10px;
+  right: -5px;
   font-size: 0.8em;
   background: rgba(0, 0, 0, 0.7);
   color: white;
@@ -242,7 +242,3 @@ h1, #mainTitle {
   border-radius: 4px;
   pointer-events: none;
 }
-
-
-
-
