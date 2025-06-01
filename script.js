@@ -559,8 +559,8 @@ function setupInventoryDraggables() {
       dragImage = document.createElement('img');
       dragImage.src = img.src;
       dragImage.style.position = 'absolute';
-      dragImage.style.width = '20px';
-      dragImage.style.height = '20px';
+      dragImage.style.width = '40px';
+      dragImage.style.height = '40px';
       dragImage.style.pointerEvents = 'none';
       dragImage.style.zIndex = '1000';
 
