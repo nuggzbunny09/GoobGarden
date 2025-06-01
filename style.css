@@ -247,7 +247,7 @@ h1, #mainTitle {
   display: block;
   margin: 20px auto 0; /* Center horizontally, space from top */
   padding: 10px 20px;
-  background-color: #33AB7D; /* Bright blue, change as needed */
+  background-color: #B0FC38; /* Bright blue, change as needed */
   color: white;
   border: none;
   border-radius: 6px;
@@ -258,6 +258,6 @@ h1, #mainTitle {
 }
 
 .modal-save-btn:hover {
-  background-color: #2A936A; /* Slightly darker on hover */
+  background-color: #AEF359; /* Slightly darker on hover */
 }
 
