@@ -26,11 +26,12 @@ let selectedGoob = null;
 let timerInterval;
 let gameStartTime = null;
 let placedItems = [];
-let draggingItem = null;
-let dragImage = null;
+let draggingInventoryItem = null;   // from inventory
+let draggingPlacedItem = null;      // from existing grid
+let dragImage = null;               // visual cursor icon
 let isDragging = false;
-let dragOffset = { x: 0, y: 0 };
-let draggingSource = null;
+
+
 
 window.addEventListener("DOMContentLoaded", () => {
   const canvases = document.querySelectorAll(".goobCanvas");
