@@ -568,7 +568,8 @@ function setupInventoryDraggables() {
        }
      if (dragImage) {
       moveDragImage(e.pageX, e.pageY);
-}
+   }
+});
 
 function moveDragImage(x, y) {
   if (dragImage) {
