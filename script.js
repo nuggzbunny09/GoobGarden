@@ -339,7 +339,7 @@ function restoreStateFromLocalStorage() {
       delete goob.startTime;
     }
   }
-  loadPlaceItems();
+  loadPlacedItems();
   drawGrid();
   drawGoobs();
   loadGameTimer();
