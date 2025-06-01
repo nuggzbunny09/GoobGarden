@@ -29,6 +29,8 @@ let placedItems = [];
 let draggingItem = null;
 let dragImage = null;
 let isDragging = false;
+let draggingItem = null;
+let dragOffset = { x: 0, y: 0 };
 
 window.addEventListener("DOMContentLoaded", () => {
   const canvases = document.querySelectorAll(".goobCanvas");
@@ -681,6 +683,25 @@ canvas.addEventListener('mouseup', (e) => {
 
   // Clear dragging state
   draggingItem = null;
+});
+
+canvas.addEventListener('mousedown', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+  const gridX = Math.floor(mouseX / cellSize);
+  const gridY = Math.floor(mouseY / cellSize);
+
+  // Check if clicking on a placed item (2x2 area)
+  for (const item of placedItems) {
+    if (gridX >= item.x && gridX < item.x + 2 &&
+        gridY >= item.y && gridY < item.y + 2) {
+      draggingItem = item;
+      dragOffset.x = gridX - item.x;
+      dragOffset.y = gridY - item.y;
+      break;
+    }
+  }
 });
 
 
