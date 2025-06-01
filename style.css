@@ -265,3 +265,12 @@ h1, #mainTitle {
   background-color: #2C956D; /* Slightly darker on hover */
 }
 
+canvas.grab {
+  cursor: grab;
+}
+
+canvas.grabbing {
+  cursor: grabbing !important;
+}
+
+
