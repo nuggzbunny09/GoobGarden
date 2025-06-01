@@ -269,6 +269,7 @@ function newGarden() {
   // Reset garden
   user.goobs = [];
   user.gardenCreated = Date.now();
+  user.placedItems = [];
 
   // 👇 Give starting items
   user.inventory = {
