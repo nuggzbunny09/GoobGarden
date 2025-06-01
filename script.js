@@ -29,7 +29,6 @@ let placedItems = [];
 let draggingItem = null;
 let dragImage = null;
 let isDragging = false;
-let draggingItem = null;
 let dragOffset = { x: 0, y: 0 };
 
 window.addEventListener("DOMContentLoaded", () => {
