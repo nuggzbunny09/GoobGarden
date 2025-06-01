@@ -645,7 +645,6 @@ function cleanupDragging() {
    document.body.classList.remove('dragging-any');
   canvas.classList.remove('grabbing');
   canvas.classList.remove('grab');
-});
 }
 
 function moveDragImage(x, y) {
