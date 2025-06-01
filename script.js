@@ -678,11 +678,15 @@ canvas.addEventListener('mouseup', (e) => {
   const tileX = Math.floor(mouseX / cellSize);
   const tileY = Math.floor(mouseY / cellSize);
 
-  // Call the place function
-  placeItemOnGrid(draggingItem, tileX, tileY);
+  // Move the existing item (do NOT place a new one)
+  draggingItem.x = tileX;
+  draggingItem.y = tileY;
 
-  // Clear dragging state
-  draggingItem = null;
+  savePlacedItems();   // Persist new position
+  draggingItem = null; // Clear drag state
+
+  drawGrid();          // Redraw everything
+  drawGoobs();
 });
 
 canvas.addEventListener('mousedown', (e) => {
@@ -702,6 +706,24 @@ canvas.addEventListener('mousedown', (e) => {
       break;
     }
   }
+});
+
+canvas.addEventListener('mousemove', (e) => {
+  if (!draggingItem) return;
+
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  const gridX = Math.floor(mouseX / cellSize) - dragOffset.x;
+  const gridY = Math.floor(mouseY / cellSize) - dragOffset.y;
+
+  // Temporarily update the item's position
+  draggingItem.x = gridX;
+  draggingItem.y = gridY;
+
+  drawGrid();
+  drawGoobs();
 });
 
 
