@@ -709,12 +709,18 @@ canvas.addEventListener('mousedown', (e) => {
   const tileX = Math.floor(mouseX / cellSize);
   const tileY = Math.floor(mouseY / cellSize);
 
+  // Find the item that includes this tile within its 2x2 area
   const item = placedItems.find(obj =>
-    obj.x === tileX && obj.y === tileY
+    tileX >= obj.x &&
+    tileX < obj.x + 2 &&
+    tileY >= obj.y &&
+    tileY < obj.y + 2
   );
 
   if (item) {
     draggingPlacedItem = item;
+    dragOffsetX = tileX - item.x;
+    dragOffsetY = tileY - item.y;
     isDragging = false;
     e.preventDefault();
   }
