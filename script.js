@@ -598,8 +598,9 @@ function setupInventoryDraggables() {
       e.preventDefault();
       draggingInventoryItem = img.alt;
       isDragging = false;
+      dragOffsetX = e.offsetX;
+  dragOffsetY = e.offsetY;
     });
-  });
 }
 
 document.addEventListener('mousemove', (e) => {
@@ -727,9 +728,10 @@ canvas.addEventListener('mousedown', (e) => {
 
   if (item) {
     draggingPlacedItem = item;
-    dragOffsetX = tileX - item.x;
-    dragOffsetY = tileY - item.y;
     isDragging = false;
+    dragOffsetX = mouseX - (item.x * cellSize);
+    dragOffsetY = mouseY - (item.y * cellSize);
+
     e.preventDefault();
   }
 });
