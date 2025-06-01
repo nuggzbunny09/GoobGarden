@@ -18,6 +18,7 @@ editGoobName.addEventListener('keydown', (e) => {
 const closeModalBtn = document.querySelector('.close-btn');
 const confirmation = document.getElementById('saveConfirmation');
 const tooltip = document.getElementById('goobTooltip');
+const itemImages = {}; // cache for item images
 
 let goobData = [];
 let lastAnimationTime = 0;
@@ -51,6 +52,13 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 });
 
+function preloadItemImage(type) {
+  if (!itemImages[type]) {
+    const img = new Image();
+    img.src = `images/${capitalize(type)}.png`;
+    itemImages[type] = img;
+  }
+}
 
 function drawGrid() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -73,13 +81,13 @@ function drawGrid() {
   }
 
   // ✅ Draw placed items here
-  for (const item of placedItems) {
-    const img = new Image();
-    img.src = `images/${capitalize(item.type)}.png`;
-    img.onload = () => {
-      ctx.drawImage(img, item.x * cellSize, item.y * cellSize, cellSize * 2, cellSize * 2);
-    };
+ for (const item of placedItems) {
+  const img = itemImages[item.type];
+  if (img && img.complete) {
+    ctx.drawImage(img, item.x * cellSize, item.y * cellSize, cellSize * 2, cellSize * 2);
   }
+}
+
 }
 
 function getRandomDirection() {
@@ -599,6 +607,7 @@ function moveDragImage(x, y) {
 }
 
 function placeItemOnGrid(type, x, y) {
+  preloadItemImage(type);
   const user = getCurrentUser();
   if (!user || !user.inventory[type] || user.inventory[type] <= 0) return;
 
