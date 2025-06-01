@@ -619,12 +619,9 @@ document.addEventListener('mousemove', (e) => {
     document.body.appendChild(dragImage);
   }
 
-  if (dragImage) {
-    const pixelOffsetX = (dragOffsetX || 0) * cellSize;
-    const pixelOffsetY = (dragOffsetY || 0) * cellSize;
-
-dragImage.style.left = (e.pageX - pixelOffsetX) + 'px';
-dragImage.style.top = (e.pageY - pixelOffsetY) + 'px';
+   if (dragImage) {
+    dragImage.style.left = (e.pageX - dragOffsetX) + 'px';
+    dragImage.style.top = (e.pageY - dragOffsetY) + 'px';
   }
 });
 
