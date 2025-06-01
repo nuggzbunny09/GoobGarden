@@ -71,14 +71,16 @@ function drawGrid() {
     ctx.lineTo(canvas.width, j);
     ctx.stroke();
   }
-}
-for (const item of placedItems) {
+
+  // ✅ Draw placed items here
+  for (const item of placedItems) {
     const img = new Image();
     img.src = `images/${capitalize(item.type)}.png`;
     img.onload = () => {
       ctx.drawImage(img, item.x * cellSize, item.y * cellSize, cellSize * 2, cellSize * 2);
     };
   }
+}
 
 function getRandomDirection() {
   const directions = [
