@@ -30,6 +30,7 @@ let draggingItem = null;
 let dragImage = null;
 let isDragging = false;
 let dragOffset = { x: 0, y: 0 };
+let draggingSource = null;
 
 window.addEventListener("DOMContentLoaded", () => {
   const canvases = document.querySelectorAll(".goobCanvas");
@@ -594,6 +595,7 @@ function setupInventoryDraggables() {
     img.addEventListener('mousedown', (e) => {
       e.preventDefault(); // prevent default drag behavior
       draggingItem = img.alt;
+      draggingSource = 'inventory';
       isDragging = false; // Set flag — wait for mousemove to start drag
     });
   });
@@ -624,6 +626,7 @@ document.addEventListener('mouseup', () => {
     dragImage = null;
   }
   draggingItem = null;
+  draggingSource = null; 
   isDragging = false;
 });
 
