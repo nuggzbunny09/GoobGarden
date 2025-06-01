@@ -292,7 +292,7 @@ function newGarden() {
 
   // Save updated user to localStorage
   setCurrentUser(user);
-
+  user.placedItems = [];
   // Generate starter goobs
   createInitialGoobs();
 
@@ -315,6 +315,7 @@ function newGarden() {
   goobAge.textContent = '-';
   if (goobHunger) goobHunger.textContent = '-';
   selectedGoob = null;
+  user.placeItems = [];
   openUserModal();
   updateInventoryDisplay();
   updateUserGreeting();
