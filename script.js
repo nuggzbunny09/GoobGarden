@@ -594,19 +594,20 @@ function setupInventoryDraggables() {
 
   images.forEach(img => {
     img.addEventListener('mousedown', (e) => {
-      e.preventDefault(); // prevent default drag behavior
-      draggingItem = img.alt;
-      draggingSource = 'inventory';
-      isDragging = false; // Set flag — wait for mousemove to start drag
+      e.preventDefault();
+      draggingInventoryItem = img.alt;
+      isDragging = false;
     });
   });
 }
 
 document.addEventListener('mousemove', (e) => {
-  if (draggingItem && !dragImage && !isDragging) {
+  if ((draggingInventoryItem || draggingPlacedItem) && !dragImage && !isDragging) {
     isDragging = true;
+    const itemType = draggingInventoryItem || draggingPlacedItem.type;
+
     dragImage = document.createElement('img');
-    dragImage.src = `images/${capitalize(draggingItem)}.png`;
+    dragImage.src = `images/${capitalize(itemType)}.png`;
     dragImage.style.position = 'absolute';
     dragImage.style.width = '40px';
     dragImage.style.height = '40px';
@@ -616,19 +617,26 @@ document.addEventListener('mousemove', (e) => {
   }
 
   if (dragImage) {
-    moveDragImage(e.pageX, e.pageY);
+    dragImage.style.left = e.pageX + 'px';
+    dragImage.style.top = e.pageY + 'px';
   }
 });
 
-document.addEventListener('mouseup', () => {
+document.addEventListener('mouseup', (e) => {
+  if (!e.target.closest('canvas')) {
+    cleanupDragging(); // Cancel drag if dropped outside canvas
+  }
+});
+
+function cleanupDragging() {
   if (dragImage) {
     document.body.removeChild(dragImage);
     dragImage = null;
   }
-  draggingItem = null;
-  draggingSource = null; 
+  draggingInventoryItem = null;
+  draggingPlacedItem = null;
   isDragging = false;
-});
+}
 
 function moveDragImage(x, y) {
   if (dragImage) {
@@ -675,25 +683,19 @@ function loadPlacedItems() {
 }
 
 canvas.addEventListener('mouseup', (e) => {
-  if (!draggingItem) return;
-
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
   const tileX = Math.floor(mouseX / cellSize);
   const tileY = Math.floor(mouseY / cellSize);
 
-  // ✅ Place the item BEFORE resetting dragging state
-  placeItemOnGrid(draggingItem, tileX, tileY);
-
-  // ✅ Now reset dragging
-  draggingItem = null;
-  isDragging = false;
-
-  if (dragImage) {
-    document.body.removeChild(dragImage);
-    dragImage = null;
+  if (draggingInventoryItem) {
+    placeItemOnGrid(draggingInventoryItem, tileX, tileY);
+  } else if (draggingPlacedItem) {
+    movePlacedItem(draggingPlacedItem, tileX, tileY);
   }
+
+  cleanupDragging();
 });
 
 canvas.addEventListener('mousedown', (e) => {
@@ -703,15 +705,14 @@ canvas.addEventListener('mousedown', (e) => {
   const tileX = Math.floor(mouseX / cellSize);
   const tileY = Math.floor(mouseY / cellSize);
 
-  for (const item of placedItems) {
-    if (
-      tileX >= item.x && tileX < item.x + 2 &&
-      tileY >= item.y && tileY < item.y + 2
-    ) {
-      draggingItem = item;
-      draggingSource = 'placed';
-      return;
-    }
+  const item = placedItems.find(obj =>
+    obj.x === tileX && obj.y === tileY
+  );
+
+  if (item) {
+    draggingPlacedItem = item;
+    isDragging = false;
+    e.preventDefault();
   }
 });
 
@@ -733,8 +734,14 @@ canvas.addEventListener('mousemove', (e) => {
   drawGoobs();
 });
 
-
-
+function movePlacedItem(item, newX, newY) {
+  // Optional: Add boundary check for 2x2 items here
+  item.x = newX;
+  item.y = newY;
+  savePlacedItems();
+  drawGrid();
+  drawGoobs();
+}
 
 
 
