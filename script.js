@@ -346,6 +346,7 @@ function restoreStateFromLocalStorage() {
   updateInventoryDisplay();
   updateInventoryDisplay();
   setupInventoryDraggables();
+  loadPlacedItems(); 
 
 }
 
