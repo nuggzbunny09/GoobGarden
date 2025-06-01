@@ -27,6 +27,7 @@ let gameStartTime = null;
 let placedItems = [];
 let draggingItem = null;
 let dragImage = null;
+let isDragging = false;
 
 window.addEventListener("DOMContentLoaded", () => {
   const canvases = document.querySelectorAll(".goobCanvas");
@@ -552,10 +553,9 @@ function setupInventoryDraggables() {
 
   images.forEach(img => {
     img.addEventListener('mousedown', (e) => {
-      e.preventDefault(); // Prevent default drag behavior
-      draggingItem = img.alt; // Save item type like "tree" or "water"
-
-      // Create a draggable preview image
+       if (draggingItem && !dragImage) {
+    // First time dragging — create drag image
+      isDragging = true;
       dragImage = document.createElement('img');
       dragImage.src = img.src;
       dragImage.style.position = 'absolute';
@@ -565,6 +565,8 @@ function setupInventoryDraggables() {
       dragImage.style.zIndex = '1000';
 
       document.body.appendChild(dragImage);
+       }
+     if (dragImage) {
       moveDragImage(e.pageX, e.pageY);
     });
   });
@@ -587,8 +589,9 @@ document.addEventListener('mouseup', () => {
   if (dragImage) {
     document.body.removeChild(dragImage);
     dragImage = null;
-    draggingItem = null;
   }
+  draggingItem = null;
+  isDragging = false;
 });
 
 function placeItemOnGrid(type, x, y) {
