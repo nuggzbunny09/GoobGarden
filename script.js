@@ -338,7 +338,7 @@ function restoreStateFromLocalStorage() {
       delete goob.startTime;
     }
   }
-
+  loadPlaceItems();
   drawGrid();
   drawGoobs();
   loadGameTimer();
@@ -353,7 +353,6 @@ goobImage.onload = () => {
   drawGrid();
   restoreStateFromLocalStorage();
   updateUserGreeting();
-  loadPlacedItems();
 
   const user = getCurrentUser();
   const button = document.getElementById('newGardenBtn');
