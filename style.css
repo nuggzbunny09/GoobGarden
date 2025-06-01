@@ -265,12 +265,7 @@ h1, #mainTitle {
   background-color: #2C956D; /* Slightly darker on hover */
 }
 
-canvas.grab {
-  cursor: grab;
-}
-
-canvas.grabbing {
+body.dragging-any {
   cursor: grabbing !important;
 }
-
 
