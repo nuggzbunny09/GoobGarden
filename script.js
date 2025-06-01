@@ -80,15 +80,16 @@ function drawGrid() {
     ctx.stroke();
   }
 
-  // ✅ Draw placed items here
- for (const item of placedItems) {
-  const img = itemImages[item.type];
-  if (img && img.complete) {
-    ctx.drawImage(img, item.x * cellSize, item.y * cellSize, cellSize * 2, cellSize * 2);
+  // ✅ Draw placed items
+  for (const item of placedItems) {
+    const img = new Image();
+    img.src = `images/${capitalize(item.type)}.png`;
+    img.onload = () => {
+      ctx.drawImage(img, item.x * cellSize, item.y * cellSize, cellSize * 2, cellSize * 2);
+    };
   }
 }
 
-}
 
 function getRandomDirection() {
   const directions = [
