@@ -226,8 +226,9 @@ h1, #mainTitle {
   max-width: 80%;
   max-height: 80%;
   object-fit: contain;
-  pointer-events: none;
+  pointer-events: auto; /* 👈 THIS ENABLES EVENTS */
   display: block;
+  cursor: grab;
 }
 
 .inventory-item span {
