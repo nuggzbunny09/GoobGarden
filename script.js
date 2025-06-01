@@ -605,6 +605,7 @@ function setupInventoryDraggables() {
 document.addEventListener('mousemove', (e) => {
   if ((draggingInventoryItem || draggingPlacedItem) && !dragImage && !isDragging) {
     isDragging = true;
+    document.body.classList.add('dragging-any');
     const itemType = draggingInventoryItem || draggingPlacedItem.type;
 
     dragImage = document.createElement('img');
@@ -640,6 +641,11 @@ function cleanupDragging() {
   draggingInventoryItem = null;
   draggingPlacedItem = null;
   isDragging = false;
+
+   document.body.classList.remove('dragging-any');
+  canvas.classList.remove('grabbing');
+  canvas.classList.remove('grab');
+});
 }
 
 function moveDragImage(x, y) {
