@@ -602,7 +602,7 @@ function setupInventoryDraggables() {
 }
 
 document.addEventListener('mousemove', (e) => {
-  if (draggingItem && !dragImage) {
+  if (draggingItem && !dragImage && !isDragging) {
     isDragging = true;
     dragImage = document.createElement('img');
     dragImage.src = `images/${capitalize(draggingItem)}.png`;
@@ -611,7 +611,6 @@ document.addEventListener('mousemove', (e) => {
     dragImage.style.height = '40px';
     dragImage.style.pointerEvents = 'none';
     dragImage.style.zIndex = '1000';
-
     document.body.appendChild(dragImage);
   }
 
@@ -675,7 +674,7 @@ function loadPlacedItems() {
 }
 
 canvas.addEventListener('mouseup', (e) => {
-  if (!draggingItem || !draggingSource) return;
+  if (!draggingItem) return;
 
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
@@ -683,21 +682,17 @@ canvas.addEventListener('mouseup', (e) => {
   const tileX = Math.floor(mouseX / cellSize);
   const tileY = Math.floor(mouseY / cellSize);
 
-  if (draggingSource === 'inventory') {
-    // Place a new item from inventory
-    placeItemOnGrid(draggingItem, tileX, tileY);
-  } else if (draggingSource === 'placed') {
-    // Move existing placed item
-    draggingItem.x = tileX;
-    draggingItem.y = tileY;
-    savePlacedItems();
-  }
+  // ✅ Place the item BEFORE resetting dragging state
+  placeItemOnGrid(draggingItem, tileX, tileY);
 
+  // ✅ Now reset dragging
   draggingItem = null;
-  draggingSource = null;
+  isDragging = false;
 
-  drawGrid();
-  drawGoobs();
+  if (dragImage) {
+    document.body.removeChild(dragImage);
+    dragImage = null;
+  }
 });
 
 canvas.addEventListener('mousedown', (e) => {
