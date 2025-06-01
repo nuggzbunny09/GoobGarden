@@ -553,32 +553,27 @@ function setupInventoryDraggables() {
 
   images.forEach(img => {
     img.addEventListener('mousedown', (e) => {
-       if (draggingItem && !dragImage) {
-    // First time dragging — create drag image
-      isDragging = true;
-      dragImage = document.createElement('img');
-      dragImage.src = img.src;
-      dragImage.style.position = 'absolute';
-      dragImage.style.width = '40px';
-      dragImage.style.height = '40px';
-      dragImage.style.pointerEvents = 'none';
-      dragImage.style.zIndex = '1000';
-
-      document.body.appendChild(dragImage);
-       }
-     if (dragImage) {
-      moveDragImage(e.pageX, e.pageY);
-   }
-});
-
-function moveDragImage(x, y) {
-  if (dragImage) {
-    dragImage.style.left = `${x - 10}px`;
-    dragImage.style.top = `${y - 10}px`;
-  }
+      e.preventDefault(); // prevent default drag behavior
+      draggingItem = img.alt;
+      isDragging = false; // Set flag — wait for mousemove to start drag
+    });
+  });
 }
 
 document.addEventListener('mousemove', (e) => {
+  if (draggingItem && !dragImage) {
+    isDragging = true;
+    dragImage = document.createElement('img');
+    dragImage.src = `images/${capitalize(draggingItem)}.png`;
+    dragImage.style.position = 'absolute';
+    dragImage.style.width = '40px';
+    dragImage.style.height = '40px';
+    dragImage.style.pointerEvents = 'none';
+    dragImage.style.zIndex = '1000';
+
+    document.body.appendChild(dragImage);
+  }
+
   if (dragImage) {
     moveDragImage(e.pageX, e.pageY);
   }
@@ -592,6 +587,13 @@ document.addEventListener('mouseup', () => {
   draggingItem = null;
   isDragging = false;
 });
+
+function moveDragImage(x, y) {
+  if (dragImage) {
+    dragImage.style.left = `${x - 10}px`;
+    dragImage.style.top = `${y - 10}px`;
+  }
+}
 
 function placeItemOnGrid(type, x, y) {
   const user = getCurrentUser();
