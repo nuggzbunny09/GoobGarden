@@ -697,8 +697,8 @@ canvas.addEventListener('mouseup', (e) => {
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
-  const tileX = Math.floor(mouseX / cellSize);
-  const tileY = Math.floor(mouseY / cellSize);
+  const tileX = Math.floor((mouseX - cellSize) / cellSize);
+  const tileY = Math.floor((mouseY - cellSize) / cellSize);
 
   if (draggingInventoryItem) {
     placeItemOnGrid(draggingInventoryItem, tileX, tileY);
