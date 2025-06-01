@@ -263,7 +263,8 @@ function newGarden() {
   // 👇 Give starting items
   user.inventory = {
     tree: 10,
-    water: 10
+    water: 10,
+    redBerry: 10
   };
 
   // Save updated user to localStorage
