@@ -627,6 +627,24 @@ function loadPlacedItems() {
   }
 }
 
+canvas.addEventListener('mouseup', (e) => {
+  if (!draggingItem) return;
+
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  const tileX = Math.floor(mouseX / cellSize);
+  const tileY = Math.floor(mouseY / cellSize);
+
+  // Call the place function
+  placeItemOnGrid(draggingItem, tileX, tileY);
+
+  // Clear dragging state
+  draggingItem = null;
+});
+
+
 
 
 
