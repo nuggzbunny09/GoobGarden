@@ -15,5 +15,5 @@ const itemDirectory = {
     name: "Red Berry",
     image: "images/RedBerry.png",
     description: "Fills Goob's Tummy 8 points",
-    placeable: false
+    placeable: true
 };
