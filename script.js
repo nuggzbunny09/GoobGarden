@@ -52,10 +52,17 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 });
 
-function preloadItemImage(type) {
-  if (!itemImages[type]) {
+function preloadItemImage(type, callback) {
+  if (itemImages[type]) {
+    if (itemImages[type].complete) {
+      callback(); // image already loaded
+    } else {
+      itemImages[type].onload = callback; // wait until it loads
+    }
+  } else {
     const img = new Image();
     img.src = `images/${capitalize(type)}.png`;
+    img.onload = callback;
     itemImages[type] = img;
   }
 }
@@ -609,20 +616,21 @@ function moveDragImage(x, y) {
 }
 
 function placeItemOnGrid(type, x, y) {
-  preloadItemImage(type);
-  const user = getCurrentUser();
-  if (!user || !user.inventory[type] || user.inventory[type] <= 0) return;
+  preloadItemImage(type, () => {
+    const user = getCurrentUser();
+    if (!user || !user.inventory[type] || user.inventory[type] <= 0) return;
 
-  // Deduct item
-  user.inventory[type]--;
-  setCurrentUser(user);
-  updateInventoryDisplay();
+    // Deduct item
+    user.inventory[type]--;
+    setCurrentUser(user);
+    updateInventoryDisplay();
 
-  // Place item visually
-  placedItems.push({ type, x, y });
-  savePlacedItems();
-  drawGrid(); // Redraw the grid with items
-  drawGoobs(); // Keep goobs visible
+    // Place item visually
+    placedItems.push({ type, x, y });
+    savePlacedItems();
+    drawGrid(); // Redraw the grid with items
+    drawGoobs(); // Keep goobs visible
+  });
 }
 
 function savePlacedItems() {
