@@ -198,6 +198,10 @@ h1, #mainTitle {
   margin-bottom: 1rem;
   margin-top: 40px;
   text-align: center;
+  text-shadow:
+    2px 2px 0 #000,
+    4px 4px 0 #004d99,
+    6px 6px 5px rgba(0, 0, 0, 0.4);
   color: #ffffff; /* or any color you want */
 }
 
