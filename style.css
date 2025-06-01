@@ -208,13 +208,18 @@ h1, #mainTitle {
   padding: 8px;
 }
 
-.inventory-item img {
-  max-width: 80%;
-  max-height: 80%;
-  object-fit: contain;
-  pointer-events: auto; /* 👈 THIS ENABLES EVENTS */
-  display: block;
-  cursor: grab;
+.invertory-item {
+  width: 60px;
+  height: 60px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.2);
+  margin: 5px;
+  position: relative; /* Needed for positioning the label */
+  flex-shrink: 0;
 }
 
 .inventory-item img {
