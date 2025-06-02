@@ -751,15 +751,14 @@ document.addEventListener('mouseup', (e) => {
   const tileY = intersectionY - 1;
 
   if (draggingInventoryItem) {
-    // Fix: wait for preload, then clean up
-    preloadItemImage(itemType, () => {
-      placeItemOnGrid(itemType, tileX, tileY);
-      cleanupDragging();
-    });
-  } else if (draggingPlacedItem) {
-    movePlacedItem(draggingPlacedItem, tileX, tileY);
+  preloadItemImage(itemType, () => {
+    placeItemOnGrid(itemType, tileX, tileY);
     cleanupDragging();
-  }
+  });
+} else if (draggingPlacedItem) {
+  movePlacedItem(draggingPlacedItem, tileX, tileY);
+  cleanupDragging();
+}
 
   // Do NOT run cleanupDragging() here anymore
 }
