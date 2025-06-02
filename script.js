@@ -741,27 +741,32 @@ document.addEventListener('mouseup', (e) => {
     e.clientY <= rect.bottom;
 
   if ((draggingInventoryItem || draggingPlacedItem) && isInsideCanvas) {
-  const itemType = draggingInventoryItem || draggingPlacedItem?.type;
+    const itemType = draggingInventoryItem || draggingPlacedItem?.type;
 
-  const cursorX = e.clientX - rect.left;
-  const cursorY = e.clientY - rect.top;
-  const intersectionX = Math.round(cursorX / cellSize);
-  const intersectionY = Math.round(cursorY / cellSize);
-  const tileX = intersectionX - 1;
-  const tileY = intersectionY - 1;
+    const cursorX = e.clientX - rect.left;
+    const cursorY = e.clientY - rect.top;
+    const intersectionX = Math.round(cursorX / cellSize);
+    const intersectionY = Math.round(cursorY / cellSize);
+    const tileX = intersectionX - 1;
+    const tileY = intersectionY - 1;
 
-  if (draggingInventoryItem) {
-  preloadItemImage(itemType, () => {
-    placeItemOnGrid(itemType, tileX, tileY);
+    if (draggingInventoryItem) {
+      preloadItemImage(itemType, () => {
+        placeItemOnGrid(itemType, tileX, tileY);
+        cleanupDragging();
+      });
+    } else if (draggingPlacedItem) {
+      movePlacedItem(draggingPlacedItem, tileX, tileY);
+      cleanupDragging();
+    }
+
+    // Do NOT run cleanupDragging() here anymore
+  }
+
+  if (!isInsideCanvas) {
     cleanupDragging();
-  });
-} else if (draggingPlacedItem) {
-  movePlacedItem(draggingPlacedItem, tileX, tileY);
-  cleanupDragging();
-}
-
-  // Do NOT run cleanupDragging() here anymore
-}
+  }
+}); // ← 🧩 this was missing
 
 function movePlacedItem(item, newX, newY) {
   // Optional: Add boundary check for 2x2 items here
