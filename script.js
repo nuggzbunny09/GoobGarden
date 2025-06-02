@@ -627,11 +627,38 @@ document.addEventListener('mousemove', (e) => {
 });
 
 document.addEventListener('mouseup', (e) => {
-  if (!e.target.closest('canvas')) {
-    cleanupDragging(); // Cancel drag if dropped outside canvas
+  const rect = canvas.getBoundingClientRect();
+  const isInsideCanvas =
+    e.clientX >= rect.left &&
+    e.clientX <= rect.right &&
+    e.clientY >= rect.top &&
+    e.clientY <= rect.bottom;
+
+  // If dragging and dropped on the canvas, place item
+  if ((draggingInventoryItem || draggingPlacedItem) && isInsideCanvas) {
+    const itemType = draggingInventoryItem || draggingPlacedItem?.type;
+    const imageCenter = itemDirectory[itemType]?.imageCenter || { x: 20, y: 20 };
+
+    const imageCenterX = e.clientX - rect.left - imageCenter.x;
+    const imageCenterY = e.clientY - rect.top - imageCenter.y;
+
+    const tileX = Math.floor(imageCenterX / cellSize);
+    const tileY = Math.floor(imageCenterY / cellSize);
+
+    if (draggingInventoryItem) {
+      placeItemOnGrid(draggingInventoryItem, tileX, tileY);
+    } else if (draggingPlacedItem) {
+      movePlacedItem(draggingPlacedItem, tileX, tileY);
+    }
+
+    cleanupDragging();
+  }
+
+  // If dropped anywhere else (not canvas), cancel drag
+  if (!isInsideCanvas) {
+    cleanupDragging();
   }
 });
-
 function cleanupDragging() {
   if (dragImage) {
     document.body.removeChild(dragImage);
@@ -692,31 +719,6 @@ function loadPlacedItems() {
     placedItems = user.placedItems;
   }
 }
-
-canvas.addEventListener('mouseup', (e) => {
-  if (!draggingInventoryItem && !draggingPlacedItem) return;
-
-  const rect = canvas.getBoundingClientRect();
-  const mouseX = e.clientX - rect.left;
-  const mouseY = e.clientY - rect.top;
-
-  const itemType = draggingInventoryItem || draggingPlacedItem?.type;
-  const imageCenter = itemDirectory[itemType]?.imageCenter || { x: 20, y: 20 };
-
-  const imageCenterX = e.pageX - imageCenter.x;
-  const imageCenterY = e.pageY - imageCenter.y;
-
-  const tileX = Math.floor(imageCenterX / cellSize);
-  const tileY = Math.floor(imageCenterY / cellSize);
-
-  if (draggingInventoryItem) {
-    placeItemOnGrid(draggingInventoryItem, tileX, tileY);
-  } else if (draggingPlacedItem) {
-    movePlacedItem(draggingPlacedItem, tileX, tileY);
-  }
-
-  cleanupDragging(); // 🔑 must call this!
-});
 
 canvas.addEventListener('mousedown', (e) => {
   const rect = canvas.getBoundingClientRect();
