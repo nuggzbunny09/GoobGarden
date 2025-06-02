@@ -756,12 +756,6 @@ document.addEventListener('mouseup', (e) => {
     const tileX = Math.floor(snappedX / cellSize) - 1;
     const tileY = Math.floor(snappedY / cellSize) - 1;
 
-    // Optional: clamp to grid bounds if necessary (e.g., to avoid overflow)
-    const maxTileX = numCols - 2;
-    const maxTileY = numRows - 2;
-    const clampedTileX = Math.max(0, Math.min(tileX, maxTileX));
-    const clampedTileY = Math.max(0, Math.min(tileY, maxTileY));
-
     // Step 4: Place or move the item
     if (draggingInventoryItem) {
       placeItemOnGrid(draggingInventoryItem, clampedTileX, clampedTileY);
