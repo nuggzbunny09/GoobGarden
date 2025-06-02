@@ -755,12 +755,6 @@ document.addEventListener('mouseup', (e) => {
     const tileX = intersectionX - 1;
     const tileY = intersectionY - 1;
 
-    // Clamp so items don't go out of bounds
-    const maxTileX = numCols - 2;
-    const maxTileY = numRows - 2;
-    const clampedTileX = Math.max(0, Math.min(tileX, maxTileX));
-    const clampedTileY = Math.max(0, Math.min(tileY, maxTileY));
-
     if (draggingInventoryItem) {
       placeItemOnGrid(draggingInventoryItem, clampedTileX, clampedTileY);
     } else if (draggingPlacedItem) {
