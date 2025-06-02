@@ -741,33 +741,28 @@ document.addEventListener('mouseup', (e) => {
     e.clientY <= rect.bottom;
 
   if ((draggingInventoryItem || draggingPlacedItem) && isInsideCanvas) {
-    const itemType = draggingInventoryItem || draggingPlacedItem?.type;
+  const itemType = draggingInventoryItem || draggingPlacedItem?.type;
 
-    // Cursor position relative to canvas
-    const cursorX = e.clientX - rect.left;
-    const cursorY = e.clientY - rect.top;
+  const cursorX = e.clientX - rect.left;
+  const cursorY = e.clientY - rect.top;
+  const intersectionX = Math.round(cursorX / cellSize);
+  const intersectionY = Math.round(cursorY / cellSize);
+  const tileX = intersectionX - 1;
+  const tileY = intersectionY - 1;
 
-    // Snap to nearest grid intersection (in tiles)
-    const intersectionX = Math.round(cursorX / cellSize);
-    const intersectionY = Math.round(cursorY / cellSize);
-
-    // Place top-left corner of 2x2 item one tile above/left of intersection
-    const tileX = intersectionX - 1;
-    const tileY = intersectionY - 1;
-
-    if (draggingInventoryItem) {
-      placeItemOnGrid(draggingInventoryItem, clampedTileX, clampedTileY);
-    } else if (draggingPlacedItem) {
-      movePlacedItem(draggingPlacedItem, clampedTileX, clampedTileY);
-    }
-
+  if (draggingInventoryItem) {
+    // Fix: wait for preload, then clean up
+    preloadItemImage(itemType, () => {
+      placeItemOnGrid(itemType, tileX, tileY);
+      cleanupDragging();
+    });
+  } else if (draggingPlacedItem) {
+    movePlacedItem(draggingPlacedItem, tileX, tileY);
     cleanupDragging();
   }
 
-  if (!isInsideCanvas) {
-    cleanupDragging();
-  }
-});
+  // Do NOT run cleanupDragging() here anymore
+}
 
 function movePlacedItem(item, newX, newY) {
   // Optional: Add boundary check for 2x2 items here
