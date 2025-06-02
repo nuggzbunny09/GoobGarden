@@ -736,8 +736,10 @@ canvas.addEventListener('mousedown', (e) => {
   if (item) {
     draggingPlacedItem = item;
     isDragging = false;
-    dragOffsetX = mouseX - (item.x * cellSize);
-    dragOffsetY = mouseY - (item.y * cellSize);
+
+    const rect = canvas.getBoundingClientRect();
+    dragOffsetX = e.clientX - rect.left - item.x * cellSize;
+    dragOffsetY = e.clientY - rect.top - item.y * cellSize;
 
     e.preventDefault();
   }
