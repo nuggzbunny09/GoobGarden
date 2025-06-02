@@ -696,20 +696,19 @@ function loadPlacedItems() {
 canvas.addEventListener('mouseup', (e) => {
   const rect = canvas.getBoundingClientRect();
 
-  // Get actual image position on screen (top-left of image)
   const dragLeft = e.pageX - dragOffsetX;
   const dragTop = e.pageY - dragOffsetY;
 
-  // Now find the center of the image based on that position
-  const imageCenterX = dragLeft + 20; // 20 = half image width
-  const imageCenterY = dragTop + 20;
+  const imageWidth = 40; // or get this dynamically if variable
+  const imageHeight = 40;
 
-  // Convert image center to tile coordinates
-  const mouseX = imageCenterX - rect.left;
-  const mouseY = imageCenterY - rect.top;
+  // Calculate center of image in canvas coords
+  const imageCenterX = dragLeft + imageWidth / 2 - rect.left;
+  const imageCenterY = dragTop + imageHeight / 2 - rect.top;
 
-  const tileX = Math.floor(mouseX / cellSize);
-  const tileY = Math.floor(mouseY / cellSize);
+  // Convert to tile position based on center
+  const tileX = Math.floor(imageCenterX / cellSize);
+  const tileY = Math.floor(imageCenterY / cellSize);
 
   if (draggingInventoryItem) {
     placeItemOnGrid(draggingInventoryItem, tileX, tileY);
