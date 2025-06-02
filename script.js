@@ -694,19 +694,20 @@ function loadPlacedItems() {
 }
 
 canvas.addEventListener('mouseup', (e) => {
+  if (!draggingInventoryItem && !draggingPlacedItem) return;
+
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
 
-  const itemType = draggingInventoryItem || (draggingPlacedItem && draggingPlacedItem.type);
-  const centerOffset = itemData[itemType]?.imageCenter || { x: 20, y: 20 };
+  const itemType = draggingInventoryItem || draggingPlacedItem?.type;
+  const imageCenter = itemDirectory[itemType]?.imageCenter || { x: 20, y: 20 };
 
-  // Image center on canvas
-  const imageCenterX = mouseX - dragOffsetX + centerOffset.x;
-  const imageCenterY = mouseY - dragOffsetY + centerOffset.y;
+  const imageCenterX = e.pageX - imageCenter.x;
+  const imageCenterY = e.pageY - imageCenter.y;
 
-  const tileX = Math.floor(imageCenterX / cellSize) - 1;
-  const tileY = Math.floor(imageCenterY / cellSize) - 1;
+  const tileX = Math.floor(imageCenterX / cellSize);
+  const tileY = Math.floor(imageCenterY / cellSize);
 
   if (draggingInventoryItem) {
     placeItemOnGrid(draggingInventoryItem, tileX, tileY);
@@ -714,7 +715,7 @@ canvas.addEventListener('mouseup', (e) => {
     movePlacedItem(draggingPlacedItem, tileX, tileY);
   }
 
-  cleanupDragging();
+  cleanupDragging(); // 🔑 must call this!
 });
 
 canvas.addEventListener('mousedown', (e) => {
