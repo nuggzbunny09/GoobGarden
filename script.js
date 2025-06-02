@@ -742,21 +742,25 @@ document.addEventListener('mouseup', (e) => {
 
   if ((draggingInventoryItem || draggingPlacedItem) && isInsideCanvas) {
     const itemType = draggingInventoryItem || draggingPlacedItem?.type;
-    const imageCenter = itemDirectory[itemType]?.imageCenter || { x: 20, y: 20 };
 
-    // Step 1: Find image center relative to canvas
-    const centerX = e.clientX - rect.left;
-    const centerY = e.clientY - rect.top;
+    // Cursor position relative to canvas
+    const cursorX = e.clientX - rect.left;
+    const cursorY = e.clientY - rect.top;
 
-    // Step 2: Snap to nearest grid intersection point
-    const snappedX = Math.round(centerX / cellSize) * cellSize;
-    const snappedY = Math.round(centerY / cellSize) * cellSize;
+    // Snap to nearest grid intersection (in tiles)
+    const intersectionX = Math.round(cursorX / cellSize);
+    const intersectionY = Math.round(cursorY / cellSize);
 
-    // Step 3: Get top-left tile of 2x2 grid block from snapped intersection
-    const tileX = Math.floor(snappedX / cellSize) - 1;
-    const tileY = Math.floor(snappedY / cellSize) - 1;
+    // Place top-left corner of 2x2 item one tile above/left of intersection
+    const tileX = intersectionX - 1;
+    const tileY = intersectionY - 1;
 
-    // Step 4: Place or move the item
+    // Clamp so items don't go out of bounds
+    const maxTileX = numCols - 2;
+    const maxTileY = numRows - 2;
+    const clampedTileX = Math.max(0, Math.min(tileX, maxTileX));
+    const clampedTileY = Math.max(0, Math.min(tileY, maxTileY));
+
     if (draggingInventoryItem) {
       placeItemOnGrid(draggingInventoryItem, clampedTileX, clampedTileY);
     } else if (draggingPlacedItem) {
