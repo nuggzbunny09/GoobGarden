@@ -604,61 +604,6 @@ function setupInventoryDraggables() {
   });
 }
 
-document.addEventListener('mousemove', (e) => {
-  if ((draggingInventoryItem || draggingPlacedItem) && !dragImage && !isDragging) {
-    isDragging = true;
-    document.body.classList.add('dragging-any');
-    const itemType = draggingInventoryItem || draggingPlacedItem.type;
-
-    dragImage = document.createElement('img');
-    dragImage.src = `images/${capitalize(itemType)}.png`;
-    dragImage.style.position = 'absolute';
-    dragImage.style.width = '40px';
-    dragImage.style.height = '40px';
-    dragImage.style.pointerEvents = 'none';
-    dragImage.style.zIndex = '1000';
-    document.body.appendChild(dragImage);
-  }
-
-   if (dragImage) {
-    dragImage.style.left = (e.pageX - dragOffsetX) + 'px';
-    dragImage.style.top = (e.pageY - dragOffsetY) + 'px';
-  }
-});
-
-document.addEventListener('mouseup', (e) => {
-  const rect = canvas.getBoundingClientRect();
-  const isInsideCanvas =
-    e.clientX >= rect.left &&
-    e.clientX <= rect.right &&
-    e.clientY >= rect.top &&
-    e.clientY <= rect.bottom;
-
-  // If dragging and dropped on the canvas, place item
-  if ((draggingInventoryItem || draggingPlacedItem) && isInsideCanvas) {
-    const itemType = draggingInventoryItem || draggingPlacedItem?.type;
-    const imageCenter = itemDirectory[itemType]?.imageCenter || { x: 20, y: 20 };
-
-    const imageCenterX = e.clientX - rect.left - imageCenter.x;
-    const imageCenterY = e.clientY - rect.top - imageCenter.y;
-
-    const tileX = Math.floor(imageCenterX / cellSize);
-    const tileY = Math.floor(imageCenterY / cellSize);
-
-    if (draggingInventoryItem) {
-      placeItemOnGrid(draggingInventoryItem, tileX, tileY);
-    } else if (draggingPlacedItem) {
-      movePlacedItem(draggingPlacedItem, tileX, tileY);
-    }
-
-    cleanupDragging();
-  }
-
-  // If dropped anywhere else (not canvas), cancel drag
-  if (!isInsideCanvas) {
-    cleanupDragging();
-  }
-});
 function cleanupDragging() {
   if (dragImage) {
     document.body.removeChild(dragImage);
@@ -763,6 +708,59 @@ canvas.addEventListener('mousemove', (e) => {
 
   drawGrid();
   drawGoobs();
+});
+
+document.addEventListener('mousemove', (e) => {
+  if ((draggingInventoryItem || draggingPlacedItem) && !dragImage && !isDragging) {
+    isDragging = true;
+    document.body.classList.add('dragging-any');
+    const itemType = draggingInventoryItem || draggingPlacedItem.type;
+
+    dragImage = document.createElement('img');
+    dragImage.src = `images/${capitalize(itemType)}.png`;
+    dragImage.style.position = 'absolute';
+    dragImage.style.width = '40px';
+    dragImage.style.height = '40px';
+    dragImage.style.pointerEvents = 'none';
+    dragImage.style.zIndex = '1000';
+    document.body.appendChild(dragImage);
+  }
+
+   if (dragImage) {
+    dragImage.style.left = (e.pageX - 20) + 'px'; // 40px / 2
+    dragImage.style.top = (e.pageY - 20) + 'px';
+  }
+});
+
+document.addEventListener('mouseup', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const isInsideCanvas =
+    e.clientX >= rect.left &&
+    e.clientX <= rect.right &&
+    e.clientY >= rect.top &&
+    e.clientY <= rect.bottom;
+
+  if ((draggingInventoryItem || draggingPlacedItem) && isInsideCanvas) {
+    const canvasX = e.clientX - rect.left;
+    const canvasY = e.clientY - rect.top;
+
+    const tileX = Math.floor(canvasX / cellSize);
+    const tileY = Math.floor(canvasY / cellSize);
+
+    if (draggingInventoryItem) {
+      placeItemOnGrid(draggingInventoryItem, tileX, tileY);
+    } else if (draggingPlacedItem) {
+      movePlacedItem(draggingPlacedItem, tileX, tileY);
+    }
+  }
+
+  cleanupDragging();
+});
+
+  // If dropped anywhere else (not canvas), cancel drag
+  if (!isInsideCanvas) {
+    cleanupDragging();
+  }
 });
 
 function movePlacedItem(item, newX, newY) {
