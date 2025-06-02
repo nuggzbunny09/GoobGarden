@@ -740,22 +740,25 @@ document.addEventListener('mouseup', (e) => {
     e.clientY >= rect.top &&
     e.clientY <= rect.bottom;
 
+  // If dragging and dropped on the canvas, place item
   if ((draggingInventoryItem || draggingPlacedItem) && isInsideCanvas) {
-    const canvasX = e.clientX - rect.left;
-    const canvasY = e.clientY - rect.top;
+    const itemType = draggingInventoryItem || draggingPlacedItem?.type;
+    const imageCenter = itemDirectory[itemType]?.imageCenter || { x: 20, y: 20 };
 
-    const tileX = Math.floor(canvasX / cellSize);
-    const tileY = Math.floor(canvasY / cellSize);
+    const imageCenterX = e.clientX - rect.left - imageCenter.x;
+    const imageCenterY = e.clientY - rect.top - imageCenter.y;
+
+    const tileX = Math.floor(imageCenterX / cellSize);
+    const tileY = Math.floor(imageCenterY / cellSize);
 
     if (draggingInventoryItem) {
       placeItemOnGrid(draggingInventoryItem, tileX, tileY);
     } else if (draggingPlacedItem) {
       movePlacedItem(draggingPlacedItem, tileX, tileY);
     }
-  }
 
-  cleanupDragging();
-});
+    cleanupDragging();
+  }
 
   // If dropped anywhere else (not canvas), cancel drag
   if (!isInsideCanvas) {
