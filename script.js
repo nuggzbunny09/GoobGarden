@@ -760,7 +760,6 @@ document.addEventListener('mouseup', (e) => {
   // If dropped anywhere else (not canvas), cancel drag
   if (!isInsideCanvas) {
     cleanupDragging();
-  }
 });
 
 function movePlacedItem(item, newX, newY) {
