@@ -122,12 +122,25 @@ function canMove(goob, dx, dy, allGoobs) {
 
   // Stay within grid bounds (check all 2x2 tiles)
   if (
-  newX < 0 || newY < 0 ||
-  newX + 1 >= canvas.width / cellSize ||
-  newY + 1 >= canvas.height / cellSize
-) {
-  return false;
-}
+    newX < 0 || newY < 0 ||
+    newX + 1 >= canvas.width / cellSize ||
+    newY + 1 >= canvas.height / cellSize
+  ) {
+    return false;
+  }
+
+  // Get blocked tiles from placed items like trees
+  const blockedTiles = getBlockedTilesFromPlacedItems();
+
+  // Check if any of the 2x2 tiles the Goob would occupy are blocked
+  for (let gx = 0; gx < 2; gx++) {
+    for (let gy = 0; gy < 2; gy++) {
+      const tileKey = `${newX + gx},${newY + gy}`;
+      if (blockedTiles.has(tileKey)) {
+        return false; // tree or other blocker
+      }
+    }
+  }
 
   // Check for collisions with other Goobs
   for (let other of allGoobs) {
