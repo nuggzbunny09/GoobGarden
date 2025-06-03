@@ -657,32 +657,44 @@ function updateUserGreeting() {
   }
 }
 
-function updateInventoryDisplay() {
-  const user = getCurrentUser();
-  const grid = document.getElementById('inventoryGrid');
-  grid.innerHTML = ''; // Clear existing
+Object.entries(user.inventory).forEach(([item, count]) => {
+  if (count > 0) {
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'inventory-item';
 
-  if (!user || !user.inventory) return;
+    const img = document.createElement('img');
+    img.src = `images/${capitalize(item)}.png`;
+    img.alt = item;
 
-  Object.entries(user.inventory).forEach(([item, count]) => {
-    if (count > 0) {
-      const itemDiv = document.createElement('div');
-      itemDiv.className = 'inventory-item';
+    const label = document.createElement('span');
+    label.textContent = `x${count}`;
 
-      const img = document.createElement('img');
-      img.src = `images/${capitalize(item)}.png`; // Tree.png, Water.png
-      img.alt = item;
+    itemDiv.appendChild(img);
+    itemDiv.appendChild(label);
+    grid.appendChild(itemDiv);
 
-      const label = document.createElement('span');
-      label.textContent = `x${count}`;
+    // Tooltip logic using itemDirectory from itemData.js
+    const tooltip = document.getElementById('itemTooltip');
+    const itemData = itemDirectory[item];
 
-      itemDiv.appendChild(img);
-      itemDiv.appendChild(label);
-      grid.appendChild(itemDiv);
+    if (itemData) {
+      itemDiv.addEventListener('mousemove', (e) => {
+        tooltip.innerHTML = `
+          <strong>${itemData.name}</strong><br>
+          ${itemData.description}<br>
+          <em>Owned: ${count}</em>
+        `;
+        tooltip.style.left = `${e.pageX + 10}px`;
+        tooltip.style.top = `${e.pageY + 10}px`;
+        tooltip.style.display = 'block';
+      });
+
+      itemDiv.addEventListener('mouseleave', () => {
+        tooltip.style.display = 'none';
+      });
     }
-  });
-  setupInventoryDraggables();
-}
+  }
+});
 
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
