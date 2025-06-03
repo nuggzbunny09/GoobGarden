@@ -60,6 +60,10 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 });
 
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 function preloadItemImage(type, callback) {
   if (itemImages[type]) {
     if (itemImages[type].complete) {
