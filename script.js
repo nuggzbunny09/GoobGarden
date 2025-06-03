@@ -148,35 +148,43 @@ function updateGoobWaterStatus() {
 }
 
 function isTileOccupied(x, y, { checkGoobs = true, checkItems = true } = {}) {
-  // Check placed items
+  // Collect tiles the new item will occupy
+  const newItemTiles = [
+    [x, y],
+    [x + 1, y],
+    [x, y + 1],
+    [x + 1, y + 1],
+  ];
+
+  // Check against placed items
   if (checkItems) {
     for (const item of placedItems) {
-      for (let ix = 0; ix < 2; ix++) {
-        for (let iy = 0; iy < 2; iy++) {
-          for (let tx = 0; tx < 2; tx++) {
-            for (let ty = 0; ty < 2; ty++) {
-              if ((x + tx === item.x + ix) && (y + ty === item.y + iy)) {
-                return true;
-              }
-            }
-          }
+      const itemTiles = [
+        [item.x, item.y],
+        [item.x + 1, item.y],
+        [item.x, item.y + 1],
+        [item.x + 1, item.y + 1],
+      ];
+      for (const [tx, ty] of newItemTiles) {
+        for (const [ix, iy] of itemTiles) {
+          if (tx === ix && ty === iy) return true;
         }
       }
     }
   }
 
-  // Check Goobs
+  // Check against Goobs
   if (checkGoobs) {
     for (const goob of goobData) {
-      for (let gx = 0; gx < 2; gx++) {
-        for (let gy = 0; gy < 2; gy++) {
-          for (let tx = 0; tx < 2; tx++) {
-            for (let ty = 0; ty < 2; ty++) {
-              if ((x + tx === goob.position.x + gx) && (y + ty === goob.position.y + gy)) {
-                return true;
-              }
-            }
-          }
+      const goobTiles = [
+        [goob.position.x, goob.position.y],
+        [goob.position.x + 1, goob.position.y],
+        [goob.position.x, goob.position.y + 1],
+        [goob.position.x + 1, goob.position.y + 1],
+      ];
+      for (const [tx, ty] of newItemTiles) {
+        for (const [gx, gy] of goobTiles) {
+          if (tx === gx && ty === gy) return true;
         }
       }
     }
