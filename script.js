@@ -155,7 +155,7 @@ function isTileOccupied(x, y, { checkGoobs = true, checkItems = true } = {}) {
         for (let iy = 0; iy < 2; iy++) {
           for (let tx = 0; tx < 2; tx++) {
             for (let ty = 0; ty < 2; ty++) {
-              if (x + tx === item.x + ix && y + ty === item.y + iy) {
+              if ((x + tx === item.x + ix) && (y + ty === item.y + iy)) {
                 return true;
               }
             }
@@ -165,14 +165,14 @@ function isTileOccupied(x, y, { checkGoobs = true, checkItems = true } = {}) {
     }
   }
 
-  // Check goobs
+  // Check Goobs
   if (checkGoobs) {
     for (const goob of goobData) {
       for (let gx = 0; gx < 2; gx++) {
         for (let gy = 0; gy < 2; gy++) {
           for (let tx = 0; tx < 2; tx++) {
             for (let ty = 0; ty < 2; ty++) {
-              if (x + tx === goob.position.x + gx && y + ty === goob.position.y + gy) {
+              if ((x + tx === goob.position.x + gx) && (y + ty === goob.position.y + gy)) {
                 return true;
               }
             }
