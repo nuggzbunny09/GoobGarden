@@ -147,15 +147,17 @@ function updateGoobWaterStatus() {
   }
 }
 
-function isTileOccupied(x, y) {
-  // Check 2x2 area for existing placed items
-  for (let item of placedItems) {
-    for (let ix = 0; ix < 2; ix++) {
-      for (let iy = 0; iy < 2; iy++) {
-        for (let tx = 0; tx < 2; tx++) {
-          for (let ty = 0; ty < 2; ty++) {
-            if (x + tx === item.x + ix && y + ty === item.y + iy) {
-              return true;
+function isTileOccupied(x, y, { checkGoobs = true, checkItems = true } = {}) {
+  // Check placed items
+  if (checkItems) {
+    for (const item of placedItems) {
+      for (let ix = 0; ix < 2; ix++) {
+        for (let iy = 0; iy < 2; iy++) {
+          for (let tx = 0; tx < 2; tx++) {
+            for (let ty = 0; ty < 2; ty++) {
+              if (x + tx === item.x + ix && y + ty === item.y + iy) {
+                return true;
+              }
             }
           }
         }
@@ -163,14 +165,16 @@ function isTileOccupied(x, y) {
     }
   }
 
-  // Check for Goobs
-  for (let goob of goobData) {
-    for (let gx = 0; gx < 2; gx++) {
-      for (let gy = 0; gy < 2; gy++) {
-        for (let tx = 0; tx < 2; tx++) {
-          for (let ty = 0; ty < 2; ty++) {
-            if (x + tx === goob.position.x + gx && y + ty === goob.position.y + gy) {
-              return true;
+  // Check goobs
+  if (checkGoobs) {
+    for (const goob of goobData) {
+      for (let gx = 0; gx < 2; gx++) {
+        for (let gy = 0; gy < 2; gy++) {
+          for (let tx = 0; tx < 2; tx++) {
+            for (let ty = 0; ty < 2; ty++) {
+              if (x + tx === goob.position.x + gx && y + ty === goob.position.y + gy) {
+                return true;
+              }
             }
           }
         }
