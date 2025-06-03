@@ -698,8 +698,10 @@ function updateInventoryDisplay() {
             ${itemData.description}<br>
             <em>Owned: ${count}</em>
           `;
-          tooltip.style.left = `${e.pageX + 10}px`;
-          tooltip.style.top = `${e.pageY + 10}px`;
+          const rect = tooltip.getBoundingClientRect();
+          tooltip.style.left = (e.pageX - rect.width - 10) + 'px';
+          tooltip.style.top = (e.pageY + 10) + 'px'; // slightly below the cursor
+
           tooltip.style.display = 'block';
         });
 
