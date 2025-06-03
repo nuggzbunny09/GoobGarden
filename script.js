@@ -691,30 +691,30 @@ function updateInventoryDisplay() {
       const tooltip = document.getElementById('itemTooltip');
       const itemData = itemDirectory[item];
 
-      itemDiv.addEventListener('mouseenter', () => {
-  tooltip.innerHTML = `
-    <strong>${itemData.name}</strong><br>
-    ${itemData.description}<br>
-    <em>Owned: ${count}</em>
-  `;
-  tooltip.style.display = 'block';
-});
+      if (itemData) {
+        itemDiv.addEventListener('mouseenter', () => {
+          tooltip.innerHTML = `
+            <strong>${itemData.name}</strong><br>
+            ${itemData.description}<br>
+            <em>Owned: ${count}</em>
+          `;
+          tooltip.style.display = 'block';
+        });
 
-itemDiv.addEventListener('mousemove', (e) => {
-  const rect = tooltip.getBoundingClientRect();
-  let left = e.pageX - rect.width - 10;
+        itemDiv.addEventListener('mousemove', (e) => {
+          const rect = tooltip.getBoundingClientRect();
+          let left = e.pageX - rect.width - 10;
 
-  // Fallback to right side if offscreen
-  if (left < 0) left = e.pageX + 10;
+          // Fallback to right side if offscreen
+          if (left < 0) left = e.pageX + 10;
 
-  tooltip.style.left = `${left}px`;
-  tooltip.style.top = `${e.pageY + 10}px`;
-});
+          tooltip.style.left = `${left}px`;
+          tooltip.style.top = `${e.pageY + 10}px`;
+        });
 
-itemDiv.addEventListener('mouseleave', () => {
-  tooltip.style.display = 'none';
-});
-
+        itemDiv.addEventListener('mouseleave', () => {
+          tooltip.style.display = 'none';
+        });
       }
     }
   });
