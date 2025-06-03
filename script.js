@@ -35,7 +35,15 @@ let draggingPlacedItem = null;      // from existing grid
 let dragImage = null;               // visual cursor icon
 let isDragging = false;
 let wasDragging = false;
-
+let placingRequired = false;
+let requiredPlacement = {
+  tree: 10,
+  water: 10
+};
+let placedCounts = {
+  tree: 0,
+  water: 0
+};
 
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -244,6 +252,8 @@ function canMove(goob, dx, dy, allGoobs) {
 }
 
 function moveGoobsRandomly() {
+  if (placingRequired) return; // ⛔ Stop movement until setup is done
+
   for (let goob of goobData) {
     const { dx, dy } = getRandomDirection();
     if (canMove(goob, dx, dy, goobData)) {
@@ -376,7 +386,8 @@ function newGarden() {
       goobs: [],
       inventory: {},
       gardenCreated: Date.now(),
-      achievements: []
+      achievements: [],
+      placedItems: []
     };
   }
 
@@ -395,11 +406,15 @@ function newGarden() {
   // Save updated user to localStorage
   setCurrentUser(user);
   placedItems = [];
-  // Generate starter goobs
+
+  // ⛔ Disable goob movement until required items are placed
+  placingRequired = true;
+  placedCounts = { tree: 0, water: 0 };
+
+  // ✅ Create starter Goobs (but don't start moving them yet!)
   createInitialGoobs();
 
   // Redraw game world
-  startGameTimer();
   drawGrid();
 
   if (goobImage.complete) {
@@ -417,8 +432,10 @@ function newGarden() {
   goobAge.textContent = '-';
   if (goobHunger) goobHunger.textContent = '-';
   selectedGoob = null;
-  user.placeItems = [];
+
+  // 📌 Ensure user modal opens immediately
   openUserModal();
+
   updateInventoryDisplay();
   updateUserGreeting();
 }
@@ -767,21 +784,21 @@ function placeItemOnGrid(type, x, y) {
     const gridRows = Math.floor(canvas.height / cellSize);
     
     if (x < 0 || y < 0 || x + 1 >= gridCols || y + 1 >= gridRows) {
-    showConfirmation("Too close to edge!");
-    return;
+      showConfirmation("Too close to edge!");
+      return;
     }
 
     if (type === 'tree') {
-  if (isTileOccupied(x, y, { checkGoobs: true, checkItems: true })) {
-    showConfirmation("Can't place a tree here!");
-    return;
-  }
-} else if (type === 'water') {
-  if (isTileOccupied(x, y, { checkGoobs: false, checkItems: true })) {
-    showConfirmation("Can't place water here!");
-    return;
-  }
-}
+      if (isTileOccupied(x, y, { checkGoobs: true, checkItems: true })) {
+        showConfirmation("Can't place a tree here!");
+        return;
+      }
+    } else if (type === 'water') {
+      if (isTileOccupied(x, y, { checkGoobs: false, checkItems: true })) {
+        showConfirmation("Can't place water here!");
+        return;
+      }
+    }
 
     // Deduct item
     user.inventory[type]--;
@@ -791,8 +808,19 @@ function placeItemOnGrid(type, x, y) {
     // Place item visually
     placedItems.push({ type, x, y });
     savePlacedItems();
-    drawGrid(); // Redraw the grid with items
-    drawGoobs(); // Keep goobs visible
+    drawGrid();
+    drawGoobs();
+
+    // ✅ Step 3: Track placed counts and check readiness
+    if (placingRequired && (type === 'tree' || type === 'water')) {
+      placedCounts[type]++;
+
+      if (placedCounts.tree >= 10 && placedCounts.water >= 10) {
+        placingRequired = false;
+        startGameTimer(); // Start goobs only after both conditions met
+        showConfirmation("Garden complete! Goobs are now active.");
+      }
+    }
   });
 }
 
