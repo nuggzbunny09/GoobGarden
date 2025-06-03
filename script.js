@@ -4,6 +4,9 @@ const cellSize = 20;
 const goobImage = new Image();
 goobImage.src = 'Goob.png';
 
+const goobWaterImage = new Image();
+goobWaterImage.src = 'images/GoobWater.png'; // adjust path if needed
+
 const goobModal = document.getElementById('goobModal');
 const editGoobName = document.getElementById('editGoobName');
 const goobAge = document.getElementById('goobAge');
@@ -116,6 +119,34 @@ function getRandomDirection() {
   return directions[Math.floor(Math.random() * directions.length)];
 }
 
+function isGoobInWater(goob) {
+  for (const item of placedItems) {
+    if (item.type !== 'water') continue;
+
+    for (let gx = 0; gx < 2; gx++) {
+      for (let gy = 0; gy < 2; gy++) {
+        for (let wx = 0; wx < 2; wx++) {
+          for (let wy = 0; wy < 2; wy++) {
+            if (
+              goob.position.x + gx === item.x + wx &&
+              goob.position.y + gy === item.y + wy
+            ) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
+
+function updateGoobWaterStatus() {
+  for (let goob of goobData) {
+    goob.isInWater = isGoobInWater(goob);
+  }
+}
+
 function canMove(goob, dx, dy, allGoobs) {
   const newX = goob.position.x + dx;
   const newY = goob.position.y + dy;
@@ -178,6 +209,7 @@ function moveGoobsRandomly() {
 }
 
 function drawGoobs(timestamp) {
+  updateGoobWaterStatus();
   for (let goob of goobData) {
     let { x, y } = goob.position;
 
