@@ -878,19 +878,27 @@ function movePlacedItem(item, newX, newY) {
   const gridCols = Math.floor(canvas.width / cellSize);
   const gridRows = Math.floor(canvas.height / cellSize);
 
-  // Check if out of bounds
+  // Check boundaries
   if (newX < 0 || newY < 0 || newX + 1 >= gridCols || newY + 1 >= gridRows) {
     showConfirmation("Too close to edge!");
     return;
   }
 
-  // Check if new position is occupied (excluding the item itself)
-  if (isTileOccupied(newX, newY, { checkGoobs: true, checkItems: true, exclude: item })) {
+  // Determine what to check based on item type
+  const checkGoobs = item.type !== 'water';
+  const checkItems = true;
+
+  // Check for overlap (excluding itself)
+  if (isTileOccupied(newX, newY, {
+    checkGoobs,
+    checkItems,
+    exclude: item
+  })) {
     showConfirmation("Can't move item here!");
     return;
   }
 
-  // If checks pass, move item
+  // Move is valid
   item.x = newX;
   item.y = newY;
   savePlacedItems();
