@@ -777,6 +777,20 @@ function movePlacedItem(item, newX, newY) {
   drawGoobs();
 }
 
+function getBlockedTilesFromPlacedItems() {
+  const blocked = new Set();
+  for (const item of placedItems) {
+    if (item.type === 'tree') {
+      // Trees take up 2x2 tiles
+      blocked.add(`${item.x},${item.y}`);
+      blocked.add(`${item.x + 1},${item.y}`);
+      blocked.add(`${item.x},${item.y + 1}`);
+      blocked.add(`${item.x + 1},${item.y + 1}`);
+    }
+  }
+  return blocked;
+}
+
 
 
 setInterval(moveGoobsRandomly, 1000); // every 10 seconds
