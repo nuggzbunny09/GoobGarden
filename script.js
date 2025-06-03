@@ -147,8 +147,7 @@ function updateGoobWaterStatus() {
   }
 }
 
-function isTileOccupied(x, y, { checkGoobs = true, checkItems = true } = {}) {
-  // Collect tiles the new item will occupy
+function isTileOccupied(x, y, { checkGoobs = true, checkItems = true, exclude = null } = {}) {
   const newItemTiles = [
     [x, y],
     [x + 1, y],
@@ -156,15 +155,17 @@ function isTileOccupied(x, y, { checkGoobs = true, checkItems = true } = {}) {
     [x + 1, y + 1],
   ];
 
-  // Check against placed items
   if (checkItems) {
     for (const item of placedItems) {
+      if (exclude && item === exclude) continue; // Skip the current item if excluded
+
       const itemTiles = [
         [item.x, item.y],
         [item.x + 1, item.y],
         [item.x, item.y + 1],
         [item.x + 1, item.y + 1],
       ];
+
       for (const [tx, ty] of newItemTiles) {
         for (const [ix, iy] of itemTiles) {
           if (tx === ix && ty === iy) return true;
@@ -173,7 +174,6 @@ function isTileOccupied(x, y, { checkGoobs = true, checkItems = true } = {}) {
     }
   }
 
-  // Check against Goobs
   if (checkGoobs) {
     for (const goob of goobData) {
       const goobTiles = [
@@ -875,7 +875,22 @@ document.addEventListener('mouseup', (e) => {
 }); // ← 🧩 this was missing
 
 function movePlacedItem(item, newX, newY) {
-  // Optional: Add boundary check for 2x2 items here
+  const gridCols = Math.floor(canvas.width / cellSize);
+  const gridRows = Math.floor(canvas.height / cellSize);
+
+  // Check if out of bounds
+  if (newX < 0 || newY < 0 || newX + 1 >= gridCols || newY + 1 >= gridRows) {
+    showConfirmation("Too close to edge!");
+    return;
+  }
+
+  // Check if new position is occupied (excluding the item itself)
+  if (isTileOccupied(newX, newY, { checkGoobs: true, checkItems: true, exclude: item })) {
+    showConfirmation("Can't move item here!");
+    return;
+  }
+
+  // If checks pass, move item
   item.x = newX;
   item.y = newY;
   savePlacedItems();
