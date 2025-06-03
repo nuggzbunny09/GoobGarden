@@ -696,7 +696,7 @@ function updateInventoryDisplay() {
           tooltip.innerHTML = `
             <strong>${itemData.name}</strong><br>
             ${itemData.description}<br>
-            <em>Owned: ${count}</em>
+            <em>x${count}</em>
           `;
           tooltip.style.display = 'block';
         });
