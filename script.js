@@ -226,13 +226,15 @@ function drawGoobs(timestamp) {
       }
     }
 
-    ctx.drawImage(
-      goobImage,
-      x * cellSize,
-      y * cellSize,
-      cellSize * 2,
-      cellSize * 2
-    );
+    const image = goob.isInWater ? goobWaterImage : goobImage;
+
+ctx.drawImage(
+  image,
+  x * cellSize,
+  y * cellSize,
+  cellSize * 2,
+  cellSize * 2
+);
   }
 }
 
