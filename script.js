@@ -520,6 +520,9 @@ canvas.addEventListener('mouseleave', () => {
 });
 
 canvas.addEventListener('click', (e) => {
+  // Prevent modal opening if we just finished dragging
+  if (isDragging) return;
+
   const rect = canvas.getBoundingClientRect();
   const gridX = Math.floor((e.clientX - rect.left) / cellSize);
   const gridY = Math.floor((e.clientY - rect.top) / cellSize);
