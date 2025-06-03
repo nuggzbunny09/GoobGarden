@@ -34,6 +34,7 @@ let draggingInventoryItem = null;   // from inventory
 let draggingPlacedItem = null;      // from existing grid
 let dragImage = null;               // visual cursor icon
 let isDragging = false;
+let wasDragging = false;
 
 
 
@@ -520,8 +521,10 @@ canvas.addEventListener('mouseleave', () => {
 });
 
 canvas.addEventListener('click', (e) => {
-  // Prevent modal opening if we just finished dragging
-  if (isDragging) return;
+  if (wasDragging) {
+    wasDragging = false; // Reset it
+    return; // Skip click behavior
+  }
 
   const rect = canvas.getBoundingClientRect();
   const gridX = Math.floor((e.clientX - rect.left) / cellSize);
@@ -862,10 +865,12 @@ document.addEventListener('mouseup', (e) => {
     if (draggingInventoryItem) {
       preloadItemImage(itemType, () => {
         placeItemOnGrid(itemType, tileX, tileY);
+        wasDragging = isDragging;
         cleanupDragging();
       });
     } else if (draggingPlacedItem) {
       movePlacedItem(draggingPlacedItem, tileX, tileY);
+      wasDragging = isDragging;
       cleanupDragging();
     }
 
