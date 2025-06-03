@@ -723,14 +723,12 @@ function placeItemOnGrid(type, x, y) {
     return;
     }
 
-     if (type === 'tree') {
-  // Trees can't overlap Goobs or any placed items
+    if (type === 'tree') {
   if (isTileOccupied(x, y, { checkGoobs: true, checkItems: true })) {
     showConfirmation("Can't place a tree here!");
     return;
   }
 } else if (type === 'water') {
-  // Water can't overlap any placed item (especially trees), but can overlap Goobs
   if (isTileOccupied(x, y, { checkGoobs: false, checkItems: true })) {
     showConfirmation("Can't place water here!");
     return;
