@@ -691,31 +691,30 @@ function updateInventoryDisplay() {
       const tooltip = document.getElementById('itemTooltip');
       const itemData = itemDirectory[item];
 
-      if (itemData) {
-        itemDiv.addEventListener('mouseenter', (e) => {
-          tooltip.innerHTML = `
-            <strong>${itemData.name}</strong><br>
-            ${itemData.description}<br>
-            <em>Owned: ${count}</em>
-          `;
+      itemDiv.addEventListener('mouseenter', () => {
+  tooltip.innerHTML = `
+    <strong>${itemData.name}</strong><br>
+    ${itemData.description}<br>
+    <em>Owned: ${count}</em>
+  `;
+  tooltip.style.display = 'block';
+});
 
-          // Temporarily show tooltip offscreen to measure it
-          tooltip.style.display = 'block';
-          tooltip.style.left = '-9999px';
-          tooltip.style.top = '-9999px';
+itemDiv.addEventListener('mousemove', (e) => {
+  const rect = tooltip.getBoundingClientRect();
+  let left = e.pageX - rect.width - 10;
 
-          requestAnimationFrame(() => {
-            const rect = tooltip.getBoundingClientRect();
-            let left = e.pageX - rect.width - 10;
-            if (left < 0) left = e.pageX + 10; // fallback to right side if too far left
-            tooltip.style.left = `${left}px`;
-            tooltip.style.top = `${e.pageY + 10}px`;
-          });
-        });
+  // Fallback to right side if offscreen
+  if (left < 0) left = e.pageX + 10;
 
-        itemDiv.addEventListener('mouseleave', () => {
-          tooltip.style.display = 'none';
-        });
+  tooltip.style.left = `${left}px`;
+  tooltip.style.top = `${e.pageY + 10}px`;
+});
+
+itemDiv.addEventListener('mouseleave', () => {
+  tooltip.style.display = 'none';
+});
+
       }
     }
   });
