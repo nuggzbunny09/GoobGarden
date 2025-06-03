@@ -692,17 +692,25 @@ function updateInventoryDisplay() {
       const itemData = itemDirectory[item];
 
       if (itemData) {
-        itemDiv.addEventListener('mousemove', (e) => {
+        itemDiv.addEventListener('mouseenter', (e) => {
           tooltip.innerHTML = `
             <strong>${itemData.name}</strong><br>
             ${itemData.description}<br>
             <em>Owned: ${count}</em>
           `;
-          const rect = tooltip.getBoundingClientRect();
-          tooltip.style.left = (e.pageX - rect.width - 10) + 'px';
-          tooltip.style.top = (e.pageY + 10) + 'px'; // slightly below the cursor
 
+          // Temporarily show tooltip offscreen to measure it
           tooltip.style.display = 'block';
+          tooltip.style.left = '-9999px';
+          tooltip.style.top = '-9999px';
+
+          requestAnimationFrame(() => {
+            const rect = tooltip.getBoundingClientRect();
+            let left = e.pageX - rect.width - 10;
+            if (left < 0) left = e.pageX + 10; // fallback to right side if too far left
+            tooltip.style.left = `${left}px`;
+            tooltip.style.top = `${e.pageY + 10}px`;
+          });
         });
 
         itemDiv.addEventListener('mouseleave', () => {
