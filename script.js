@@ -657,47 +657,56 @@ function updateUserGreeting() {
   }
 }
 
-Object.entries(user.inventory).forEach(([item, count]) => {
-  if (count > 0) {
-    const itemDiv = document.createElement('div');
-    itemDiv.className = 'inventory-item';
+function updateInventoryDisplay() {
+  const user = getCurrentUser();
+  const grid = document.getElementById('inventoryGrid');
+  grid.innerHTML = ''; // Clear existing
 
-    const img = document.createElement('img');
-    img.src = `images/${capitalize(item)}.png`;
-    img.alt = item;
-
-    const label = document.createElement('span');
-    label.textContent = `x${count}`;
-
-    itemDiv.appendChild(img);
-    itemDiv.appendChild(label);
-    grid.appendChild(itemDiv);
-
-    // Tooltip logic using itemDirectory from itemData.js
-    const tooltip = document.getElementById('itemTooltip');
-    const itemData = itemDirectory[item];
-
-    if (itemData) {
-      itemDiv.addEventListener('mousemove', (e) => {
-        tooltip.innerHTML = `
-          <strong>${itemData.name}</strong><br>
-          ${itemData.description}<br>
-          <em>Owned: ${count}</em>
-        `;
-        tooltip.style.left = `${e.pageX + 10}px`;
-        tooltip.style.top = `${e.pageY + 10}px`;
-        tooltip.style.display = 'block';
-      });
-
-      itemDiv.addEventListener('mouseleave', () => {
-        tooltip.style.display = 'none';
-      });
-    }
+  if (!user || !user.inventory) {
+    console.warn("No user or user inventory found.");
+    return;
   }
-});
 
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  Object.entries(user.inventory).forEach(([item, count]) => {
+    if (count > 0) {
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'inventory-item';
+
+      const img = document.createElement('img');
+      img.src = `images/${capitalize(item)}.png`;
+      img.alt = item;
+
+      const label = document.createElement('span');
+      label.textContent = `x${count}`;
+
+      itemDiv.appendChild(img);
+      itemDiv.appendChild(label);
+      grid.appendChild(itemDiv);
+
+      // Tooltip logic using itemDirectory
+      const tooltip = document.getElementById('itemTooltip');
+      const itemData = itemDirectory[item];
+
+      if (itemData) {
+        itemDiv.addEventListener('mousemove', (e) => {
+          tooltip.innerHTML = `
+            <strong>${itemData.name}</strong><br>
+            ${itemData.description}<br>
+            <em>Owned: ${count}</em>
+          `;
+          tooltip.style.left = `${e.pageX + 10}px`;
+          tooltip.style.top = `${e.pageY + 10}px`;
+          tooltip.style.display = 'block';
+        });
+
+        itemDiv.addEventListener('mouseleave', () => {
+          tooltip.style.display = 'none';
+        });
+      }
+    }
+  });
+
+  setupInventoryDraggables();
 }
 
 function setupInventoryDraggables() {
