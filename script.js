@@ -717,7 +717,13 @@ function placeItemOnGrid(type, x, y) {
     if (x < 0 || y < 0 || x + 1 >= gridCols || y + 1 >= gridRows) {
     showConfirmation("Too close to edge!");
     return;
-  }
+    }
+
+     if (type === 'tree' && isTileOccupied(x, y)) {
+      showConfirmation("Can't place a tree here!");
+      return;
+    }
+
     // Deduct item
     user.inventory[type]--;
     setCurrentUser(user);
