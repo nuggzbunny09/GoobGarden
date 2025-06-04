@@ -282,7 +282,7 @@ h1, #mainTitle {
 }
 
 .banner.hidden {
-  display: none
+  display: none;
 }
 
 body.dragging-any {
