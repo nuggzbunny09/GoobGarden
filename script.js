@@ -654,7 +654,7 @@ document.getElementById('userAgeDisplay').textContent = `${days}d ${hours}h ${mi
 
 function closeUserModal() {
   document.getElementById('userModal').style.display = 'none';
-  checkInitialPlacementProgress(); // 🔔 Show warning after user closes modal
+  checkItemPlacementProgress(); // 🔔 Show warning after user closes modal
 }
 
 function saveNewUsername() {
