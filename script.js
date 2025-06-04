@@ -798,7 +798,7 @@ function placeItemOnGrid(type, x, y) {
 
     const gridCols = Math.floor(canvas.width / cellSize);
     const gridRows = Math.floor(canvas.height / cellSize);
-    
+
     if (x < 0 || y < 0 || x + 1 >= gridCols || y + 1 >= gridRows) {
       showConfirmation("Too close to edge!");
       return;
@@ -837,6 +837,9 @@ function placeItemOnGrid(type, x, y) {
         showConfirmation("Garden complete! Goobs are now active.");
       }
     }
+
+    // ✅ Show or hide the bottom banner based on progress
+    checkItemPlacementProgress();
   });
 }
 
