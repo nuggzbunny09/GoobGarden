@@ -265,6 +265,26 @@ h1, #mainTitle {
   background-color: #2C956D; /* Slightly darker on hover */
 }
 
+.banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #222;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  z-index: 9999;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease;
+}
+
+.banner.hidden {
+  transform: translateY(100%);
+}
+
 body.dragging-any {
   cursor: grabbing !important;
 }
