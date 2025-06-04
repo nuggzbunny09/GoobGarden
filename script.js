@@ -740,15 +740,18 @@ function updateInventoryDisplay() {
   setupInventoryDraggables();
 }
 
-function checkInitialPlacementProgress() {
+function checkItemPlacementProgress() {
   const user = getCurrentUser();
-  if (!user) return;
-
   const treesPlaced = placedItems.filter(i => i.type === 'tree').length;
   const waterPlaced = placedItems.filter(i => i.type === 'water').length;
 
+  const banner = document.getElementById('placementBanner');
+
   if (treesPlaced < 10 || waterPlaced < 10) {
-    showConfirmation(`Place all 10 trees and 10 water tiles before Goobs can move.`);
+    banner.classList.remove('hidden');
+  } else {
+    banner.classList.add('hidden');
+    window.goobMovementEnabled = true; // Goobs can now move
   }
 }
 
