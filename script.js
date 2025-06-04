@@ -427,6 +427,9 @@ function newGarden() {
 
   document.getElementById('newGardenBtn').textContent = 'Reset Garden';
 
+  const timerEl = document.getElementById('gameTime');
+  if (timerEl) timerEl.textContent = '00:00:00';
+
   // Reset and show user info
   editGoobName.value = user.username || '';
   goobAge.textContent = '-';
