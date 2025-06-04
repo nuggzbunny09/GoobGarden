@@ -654,6 +654,7 @@ document.getElementById('userAgeDisplay').textContent = `${days}d ${hours}h ${mi
 
 function closeUserModal() {
   document.getElementById('userModal').style.display = 'none';
+  checkInitialPlacementProgress(); // 🔔 Show warning after user closes modal
 }
 
 function saveNewUsername() {
@@ -737,6 +738,18 @@ function updateInventoryDisplay() {
   });
 
   setupInventoryDraggables();
+}
+
+function checkInitialPlacementProgress() {
+  const user = getCurrentUser();
+  if (!user) return;
+
+  const treesPlaced = placedItems.filter(i => i.type === 'tree').length;
+  const waterPlaced = placedItems.filter(i => i.type === 'water').length;
+
+  if (treesPlaced < 10 || waterPlaced < 10) {
+    showConfirmation(`Place all 10 trees and 10 water tiles before Goobs can move.`);
+  }
 }
 
 function setupInventoryDraggables() {
