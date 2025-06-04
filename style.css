@@ -275,7 +275,7 @@ h1, #mainTitle {
   text-align: center;
   padding: 10px;
   font-family: 'Arial', sans-serif;
-  font-size: 16px;
+  font-size: 25px;
   z-index: 9999;
   box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
   transition: transform 0.3s ease;
