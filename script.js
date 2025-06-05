@@ -817,57 +817,59 @@ function checkItemPlacementProgress() {
   }
 }
 
-document.getElementById('autoPlaceBtn').addEventListener('click', autoPlaceItems);
+document.getElementById('autoPlaceBtn').addEventListener('click', () => {
+  const totalTrees = 10;
+  const totalWaters = 10;
+  const positionsTaken = new Set();
 
-function autoPlaceItems() {
+  // Make sure to avoid Goob starting positions
+  const goobPositions = goobData.map(g => `${g.position.x},${g.position.y}`);
+
+  function getRandomAvailablePosition() {
+    let x, y, key;
+    let attempts = 0;
+
+    do {
+      x = Math.floor(Math.random() * (canvas.width / cellSize));
+      y = Math.floor(Math.random() * (canvas.height / cellSize));
+      key = `${x},${y}`;
+      attempts++;
+    } while (
+      positionsTaken.has(key) ||
+      goobPositions.includes(key) ||
+      attempts > 1000
+    );
+
+    positionsTaken.add(key);
+    return { x, y };
+  }
+
+  // Auto-place trees
+  for (let i = 0; i < totalTrees; i++) {
+    const pos = getRandomAvailablePosition();
+    placedItems.push({ type: 'tree', x: pos.x, y: pos.y });
+  }
+
+  // Auto-place water
+  for (let i = 0; i < totalWaters; i++) {
+    const pos = getRandomAvailablePosition();
+    placedItems.push({ type: 'water', x: pos.x, y: pos.y });
+  }
+
+  // 🔁 Update counts and re-check banner logic
+  placedCounts.tree = 10;
+  placedCounts.water = 10;
+
+  // ✅ Save & redraw immediately
   const user = getCurrentUser();
-  if (!user) return;
-
-  const gridWidth = canvas.width / cellSize;
-  const gridHeight = canvas.height / cellSize;
-
-  // Collect occupied positions (Goobs + current placed items)
-  const occupied = new Set();
-
-  for (const goob of goobData) {
-    occupied.add(`${goob.position.x},${goob.position.y}`);
-  }
-  for (const item of placedItems) {
-    occupied.add(`${item.x},${item.y}`);
-  }
-
-  const allPositions = [];
-  for (let x = 0; x < gridWidth; x++) {
-    for (let y = 0; y < gridHeight; y++) {
-      const key = `${x},${y}`;
-      if (!occupied.has(key)) {
-        allPositions.push({ x, y });
-      }
-    }
-  }
-
-  // Shuffle available positions
-  for (let i = allPositions.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [allPositions[i], allPositions[j]] = [allPositions[j], allPositions[i]];
-  }
-
-  // Place 10 trees and 10 water
-  const types = ['tree', 'water'];
-  for (const type of types) {
-    for (let i = 0; i < 10; i++) {
-      const pos = allPositions.pop();
-      if (!pos) break;
-      placedItems.push({ type, x: pos.x, y: pos.y });
-    }
-  }
-
   user.placedItems = placedItems;
   setCurrentUser(user);
-  updateInventoryDisplay();
-  checkItemPlacementProgress();
-  drawGrid();
-}
+
+  drawGrid(); // Draw placed items
+  drawGoobs(); // In case needed
+
+  checkItemPlacementProgress(); // Hide banner, enable goobs
+});
 
 function setupInventoryDraggables() {
   const grid = document.getElementById('inventoryGrid');
