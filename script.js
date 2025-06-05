@@ -872,6 +872,7 @@ function moveDragImage(x, y) {
 function placeItemOnGrid(type, x, y) {
   preloadItemImage();
     const user = getCurrentUser();
+    const placedItems = user?.placeItems || [];
     const inventory = user.inventory || {};
     if (!inventory[type] || inventory[type] <= 0) return;
 
