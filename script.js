@@ -462,16 +462,35 @@ document.getElementById('gameTime').textContent = '00:00:00';
 }
 
 function getCurrentUser() {
-  const userJSON = localStorage.getItem('currentUser');
-  if (!userJSON) return null;
-  try {
-    const user = JSON.parse(userJSON);
-    // Basic validation to ensure it's an object
-    if (user && typeof user === 'object') return user;
-    return null;
-  } catch {
-    return null;
+  const userData = localStorage.getItem('currentUser');
+  if (!userData) return null;
+
+  const user = JSON.parse(userData);
+
+  // Ensure placedItems exists
+  if (!Array.isArray(user.placedItems)) {
+    user.placedItems = [];
   }
+
+  // Count placed trees and water
+  const placedCounts = user.placedItems.reduce((counts, item) => {
+    if (item.type === 'tree') counts.tree++;
+    if (item.type === 'water') counts.water++;
+    return counts;
+  }, { tree: 0, water: 0 });
+
+  // If user hasn't completed required placements, pause game logic
+  if (placedCounts.tree < 10 || placedCounts.water < 10) {
+    window.placingRequired = true;
+    window.gameStartTime = null;
+    if (window.timerInterval) {
+      clearInterval(window.timerInterval);
+      window.timerInterval = null;
+    }
+    document.getElementById('gameTime').textContent = '00:00:00';
+  }
+
+  return user;
 }
 
 
