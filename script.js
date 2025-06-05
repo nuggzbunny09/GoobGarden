@@ -73,19 +73,12 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function preloadAllItemImages(callback = () => {}) {
+function preloadAllItemImages() {
   const types = ['Tree', 'Water', 'GoobWater'];
-  let loaded = 0;
 
   for (const type of types) {
-    const img = itemImages[type] || new Image();
+    const img = new Image();
     img.src = `images/${type}.png`;
-    img.onload = () => {
-      loaded++;
-      if (loaded === types.length) {
-        callback(); // will always be a function, even if empty
-      }
-    };
     itemImages[type] = img;
   }
 }
