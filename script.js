@@ -1084,7 +1084,7 @@ document.getElementById('autoPlaceBtn').addEventListener('click', () => {
 const inventory = user?.inventory || {};
 const availableTrees = inventory.tree || 0;
 const availableWaters = inventory.water || 0;
-
+const placedItems = user.placedItems || [];
 
   const treesToPlace = Math.min(10, availableTrees);
   const watersToPlace = Math.min(10, availableWaters);
@@ -1115,8 +1115,8 @@ const availableWaters = inventory.water || 0;
   placedCounts.water += watersPlaced;
 
   // Deduct from inventory (set to 0 only what was used)
-  if (inventory.tree) inventory.tree.count = Math.max(0, inventory.tree.count - treesPlaced);
-  if (inventory.water) inventory.water.count = Math.max(0, inventory.water.count - watersPlaced);
+  if (inventory.tree !== undefined) inventory.tree = Math.max(0, inventory.tree - treesPlaced);
+  if (inventory.water !== undefined) inventory.water = Math.max(0, inventory.water - watersPlaced);
 
   // Save and update display
   user.placedItems = placedItems;
