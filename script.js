@@ -409,6 +409,7 @@ user.inventory = {
 // ⛔ Disable goob movement until required items are placed
 placingRequired = true;
 placedCounts = { tree: 0, water: 0 };
+localStorage.setItem('placingRequired', 'true');
 
 // ✅ Persist this in user data
 user.placingRequired = placingRequired;
