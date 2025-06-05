@@ -536,7 +536,7 @@ if (shouldShowBanner) {
 }
 
     for (const type of typesToLoad) {
-      preloadItemImage(type, () => {
+      preloadAllItemImages(type, () => {
         loadedCount++;
         if (loadedCount === typesToLoad.length) {
           // Only draw once ALL images are ready
