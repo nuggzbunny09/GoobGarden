@@ -31,17 +31,17 @@ function getInventory() {
 }
 
 function setInventory(newInventory) {
-  const userData = getUserData();
+  const userData = getCurrentUser();
   userData.inventory = newInventory;
   saveUserData(userData);
 }
 
 function getPlacedItems() {
-  return getUserData().placedItems || [];
+  return getCurrentUser().placedItems || [];
 }
 
 function setPlacedItems(items) {
-  const userData = getUserData();
+  const userData = getCurrentUser();
   userData.placedItems = items;
   saveUserData(userData);
 }
