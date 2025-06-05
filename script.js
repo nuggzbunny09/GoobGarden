@@ -791,27 +791,37 @@ function updateInventoryDisplay() {
 }
 
 function checkItemPlacementProgress() {
-  const placedItems = getPlacedItems(); // ✅ Use new helper
+  const placedItems = getPlacedItems(); // Use your helper that returns the current placedItems array
+
   const treesPlaced = placedItems.filter(i => i.type === 'tree').length;
   const waterPlaced = placedItems.filter(i => i.type === 'water').length;
 
   const banner = document.getElementById('placementBanner');
 
   if (treesPlaced < 10 || waterPlaced < 10) {
+    // Requirements NOT met
     banner.classList.remove('hidden');
     localStorage.setItem('showPlacementBanner', 'true');
+
+    placingRequired = true;
+    localStorage.setItem('placingRequired', 'true');
+
+    window.goobMovementEnabled = false; // Stop goob movement
+
   } else {
+    // Requirements met
     banner.classList.add('hidden');
     localStorage.setItem('showPlacementBanner', 'false');
-    
-    // ✅ Requirements met — start the game
-    placingRequired = false;
-    localStorage.setItem('placingRequired', 'false');
-    startGameTimer();
-    window.goobMovementEnabled = true; // Goobs can now move
+
+    // Only start game timer if not already started
+    if (placingRequired) {
+      placingRequired = false;
+      localStorage.setItem('placingRequired', 'false');
+      startGameTimer();
+      window.goobMovementEnabled = true; // Enable goob movement
+    }
   }
 }
-
 
 function setupInventoryDraggables() {
   const grid = document.getElementById('inventoryGrid');
