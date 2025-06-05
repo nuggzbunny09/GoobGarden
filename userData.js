@@ -27,7 +27,7 @@ function saveUserData(userData) {
 // Add these to handle inventory and placed items:
 
 function getInventory() {
-  return getUserData().inventory || {};
+  return getCurrentUser().inventory || {};
 }
 
 function setInventory(newInventory) {
