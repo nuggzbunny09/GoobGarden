@@ -714,8 +714,7 @@ function saveNewUsername() {
   const user = getCurrentUser();
   user.username = newName;
   setCurrentUser(user);
-
-
+  updateUserGreeting();
   closeUserModal();
 }
 
