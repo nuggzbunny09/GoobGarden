@@ -550,6 +550,7 @@ if (shouldShowBanner) {
   updateInventoryDisplay();
   setupInventoryDraggables();
   updateUserGreeting();
+  checkItemPlacementProgress();
 }
 
 goobImage.onload = () => {
