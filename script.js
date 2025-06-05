@@ -392,16 +392,24 @@ function newGarden() {
   }
 
   // Reset garden
-  user.goobs = [];
-  user.gardenCreated = Date.now();
-  user.placedItems = [];
+user.goobs = [];
+user.gardenCreated = Date.now();
+user.placedItems = [];
 
-  // 👇 Give starting items
-  user.inventory = {
-    tree: 10,
-    water: 10,
-    redBerry: 10
-  };
+// 👇 Give starting items
+user.inventory = {
+  tree: 10,
+  water: 10,
+  redBerry: 10
+};
+
+// ⛔ Disable goob movement until required items are placed
+placingRequired = true;
+placedCounts = { tree: 0, water: 0 };
+
+// ✅ Persist this in user data
+user.placingRequired = placingRequired;
+user.placedCounts = placedCounts;
 
   // Save updated user to localStorage
   setCurrentUser(user);
