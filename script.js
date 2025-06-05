@@ -309,6 +309,8 @@ function updateGameTimeDisplay() {
 }
 
 function startGameTimer() {
+  if (placingRequired) return; // ⛔ Don't start timer if user hasn't placed required items
+
   gameStartTime = Date.now();
   localStorage.setItem('goobStartTime', gameStartTime);
   clearInterval(timerInterval);
