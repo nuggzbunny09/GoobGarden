@@ -1110,7 +1110,7 @@ const placedItems = user.placedItems || [];
 
   // Save and update display
   user.placedItems = placedItems;
-  savePlacedItems(pacedItems);
+  savePlacedItems(placedItems);
   setCurrentUser(user);
   updateInventoryDisplay();
 
