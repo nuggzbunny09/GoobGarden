@@ -28,7 +28,6 @@ let lastAnimationTime = 0;
 let selectedGoob = null;
 let timerInterval;
 let gameStartTime = null;
-let placedItems = [];
 let draggingItem= null;
 let draggingInventoryItem = null;   // from inventory
 let draggingPlacedItem = null;      // from existing grid
