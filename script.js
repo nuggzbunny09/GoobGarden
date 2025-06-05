@@ -391,7 +391,19 @@ function createInitialGoobs() {
 function newGarden() {
   if (!confirm("Are you sure you want to start a new Goob Garden?")) return;
 
-  const user = getCurrentUser();
+  let user = getCurrentUser();
+
+  // If no user, create a new one with defaults
+  if (!user) {
+    user = {
+      username: '',
+      goobs: [],
+      inventory: {},
+      gardenCreated: Date.now(),
+      achievements: [],
+      placedItems: []
+    };
+  }
 
   // Reset user garden-related data
   user.goobs = [];
