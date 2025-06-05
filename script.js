@@ -329,8 +329,16 @@ function getOrCreateUser() {
     user = {
       username: 'Player',
       goobs: [],
-      inventory: {},
-      gardenCreated: Date.now()
+      inventory: {
+        tree: 10,
+        water: 10,
+        redBerry: 10
+      },
+      gardenCreated: Date.now(),
+      placedItems: [],
+      placedCounts: { tree: 0, water: 0 },
+      placingRequired: true,
+      achievements: []
     };
     setCurrentUser(user);
   }
