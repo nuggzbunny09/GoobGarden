@@ -1,8 +1,13 @@
-// userData.js
-
 const defaultUserData = {
   name: "New Player",
-  goobs: []
+  goobs: [],
+  inventory: {
+    tree: 10,
+    water: 10
+  },
+  placedItems: [],
+  gardenCreated: Date.now(),
+  achievements: []
 };
 
 function createNewUserData() {
@@ -19,18 +24,24 @@ function saveUserData(userData) {
   localStorage.setItem('userData', JSON.stringify(userData));
 }
 
-function updateUserName(newName) {
+// Add these to handle inventory and placed items:
+
+function getInventory() {
+  return getUserData().inventory || {};
+}
+
+function setInventory(newInventory) {
   const userData = getUserData();
-  userData.name = newName;
+  userData.inventory = newInventory;
   saveUserData(userData);
 }
 
-function getUserGoobs() {
-  return getUserData().goobs || [];
+function getPlacedItems() {
+  return getUserData().placedItems || [];
 }
 
-function saveUserGoobs(goobs) {
+function setPlacedItems(items) {
   const userData = getUserData();
-  userData.goobs = goobs;
+  userData.placedItems = items;
   saveUserData(userData);
 }
