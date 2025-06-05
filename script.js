@@ -795,6 +795,10 @@ function checkItemPlacementProgress() {
     banner.classList.remove('hidden');
   } else {
     banner.classList.add('hidden');
+    
+    // ✅ Requirements met — start the game
+    placingRequired = false;
+    startGameTimer();
     window.goobMovementEnabled = true; // Goobs can now move
   }
 }
