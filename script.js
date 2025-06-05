@@ -393,16 +393,24 @@ function newGarden() {
 
   let user = getCurrentUser();
 
-  // If no user, create a new one with defaults
+  // If no user, create a new one with defaults and a default username
   if (!user) {
     user = {
-      username: '',
+      username: 'Player',  // <-- set default username here
       goobs: [],
       inventory: {},
       gardenCreated: Date.now(),
       achievements: [],
       placedItems: []
     };
+
+    // Save the username as the current active user
+    localStorage.setItem('currentUsername', user.username);
+
+    // Add user to allUsers object and save
+    let allUsers = JSON.parse(localStorage.getItem('allUsers') || '{}');
+    allUsers[user.username] = user;
+    localStorage.setItem('allUsers', JSON.stringify(allUsers));
   }
 
   // Reset user garden-related data
@@ -423,8 +431,14 @@ function newGarden() {
   user.placingRequired = placingRequired;
   user.placedCounts = placedCounts;
 
-  // Save user changes
+  // Save updated user data in allUsers object
+  let allUsers = JSON.parse(localStorage.getItem('allUsers') || '{}');
+  allUsers[user.username] = user;
+  localStorage.setItem('allUsers', JSON.stringify(allUsers));
+
+  // Save user changes via setCurrentUser as well (optional)
   setCurrentUser(user);
+
   placedItems = []; // Only needed if you still rely on this global
 
   // Create starter Goobs
