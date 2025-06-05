@@ -323,22 +323,15 @@ function loadGameTimer() {
   }
 }
 
+
 function getOrCreateUser() {
   let user = getCurrentUser();
   if (!user) {
     user = {
       username: 'Player',
       goobs: [],
-      inventory: {
-        tree: 10,
-        water: 10,
-        redBerry: 10
-      },
-      gardenCreated: Date.now(),
-      placedItems: [],
-      placedCounts: { tree: 0, water: 0 },
-      placingRequired: true,
-      achievements: []
+      inventory: {},
+      gardenCreated: Date.now()
     };
     setCurrentUser(user);
   }
