@@ -1021,16 +1021,13 @@ document.addEventListener('mouseup', (e) => {
 }); // ← 🧩 this was missing
 
 document.getElementById('autoPlaceBtn').addEventListener('click', () => {
-  const totalTrees = 10;
-  const totalWaters = 10;
-  const itemSize = 2; // assuming 2x2 size for all items
-
+  const itemSize = 2;
   const gridCols = canvas.width / cellSize;
   const gridRows = canvas.height / cellSize;
 
   const occupied = new Set();
 
-  // Mark Goob positions as occupied (assuming Goobs are 2x2)
+  // Mark Goob positions as occupied
   for (let goob of goobData) {
     for (let dx = 0; dx < itemSize; dx++) {
       for (let dy = 0; dy < itemSize; dy++) {
@@ -1039,22 +1036,11 @@ document.getElementById('autoPlaceBtn').addEventListener('click', () => {
     }
   }
 
-  // Mark already placed items (from previous attempts)
-  for (let item of placedItems) {
-    for (let dx = 0; dx < itemSize; dx++) {
-      for (let dy = 0; dy < itemSize; dy++) {
-        occupied.add(`${item.x + dx},${item.y + dy}`);
-      }
-    }
-  }
-
   function findValidPosition() {
     let attempts = 0;
-
     while (attempts < 1000) {
       const x = Math.floor(Math.random() * (gridCols - itemSize + 1));
       const y = Math.floor(Math.random() * (gridRows - itemSize + 1));
-
       let fits = true;
 
       for (let dx = 0; dx < itemSize; dx++) {
@@ -1068,7 +1054,6 @@ document.getElementById('autoPlaceBtn').addEventListener('click', () => {
       }
 
       if (fits) {
-        // Mark space as used
         for (let dx = 0; dx < itemSize; dx++) {
           for (let dy = 0; dy < itemSize; dy++) {
             occupied.add(`${x + dx},${y + dy}`);
@@ -1084,29 +1069,49 @@ document.getElementById('autoPlaceBtn').addEventListener('click', () => {
     return null;
   }
 
+  // Get user and inventory counts
+  const user = getCurrentUser();
+  const treeItem = user?.inventory?.find(i => i.type === 'tree');
+  const waterItem = user?.inventory?.find(i => i.type === 'water');
+  const availableTrees = treeItem?.count || 0;
+  const availableWaters = waterItem?.count || 0;
+
+  const treesToPlace = Math.min(10, availableTrees);
+  const watersToPlace = Math.min(10, availableWaters);
+
+  let treesPlaced = 0;
+  let watersPlaced = 0;
+
   // Place trees
-  for (let i = 0; i < totalTrees; i++) {
+  for (let i = 0; i < treesToPlace; i++) {
     const pos = findValidPosition();
     if (pos) {
       placedItems.push({ type: 'tree', x: pos.x, y: pos.y });
+      treesPlaced++;
     }
   }
 
   // Place waters
-  for (let i = 0; i < totalWaters; i++) {
+  for (let i = 0; i < watersToPlace; i++) {
     const pos = findValidPosition();
     if (pos) {
       placedItems.push({ type: 'water', x: pos.x, y: pos.y });
+      watersPlaced++;
     }
   }
 
-  // Save to user
-  const user = getCurrentUser();
+  // Update placed counts
+  placedCounts.tree += treesPlaced;
+  placedCounts.water += watersPlaced;
+
+  // Deduct from inventory (set to 0 only what was used)
+  if (treeItem) treeItem.count = Math.max(0, treeItem.count - treesPlaced);
+  if (waterItem) waterItem.count = Math.max(0, waterItem.count - watersPlaced);
+
+  // Save and update display
   user.placedItems = placedItems;
   setCurrentUser(user);
-
-  placedCounts.tree = 10;
-  placedCounts.water = 10;
+  updateInventoryDisplay();
 
   drawGrid();
   drawGoobs();
