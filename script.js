@@ -530,7 +530,9 @@ if (shouldShowBanner) {
 }
 
   
-         preloadAllItemImages();
+          for (const type of typesToLoad) {
+          preloadAllItemImages(type);
+  }
           drawGrid();
           drawGoobs();
   }
