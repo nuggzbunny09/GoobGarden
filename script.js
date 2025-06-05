@@ -85,6 +85,9 @@ function preloadAllItemImages() {
 
 
 function drawGrid() {
+  const user = getCurrentUser(); // ✅ Pull fresh user data
+  const userPlacedItems = user?.placedItems || [];
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = '#e0ffe0';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -103,8 +106,8 @@ function drawGrid() {
     ctx.stroke();
   }
 
-  // ✅ Draw placed items only here
-  for (const item of placedItems) {
+  // ✅ Draw only this user's placed items
+  for (const item of userPlacedItems) {
     const img = itemImages[item.type];
     if (img && img.complete) {
       ctx.drawImage(
