@@ -328,17 +328,27 @@ function loadGameTimer() {
 
 
 function getOrCreateUser() {
-  let user = getCurrentUser();
-  if (!user) {
-    user = {
-      username: 'Player',
+  const currentUsername = localStorage.getItem('currentUsername');
+  if (!currentUsername) {
+    console.warn("No current username found.");
+    return null;
+  }
+
+  const allUsers = JSON.parse(localStorage.getItem('allUsers') || '{}');
+
+  if (!allUsers[currentUsername]) {
+    allUsers[currentUsername] = {
+      username: currentUsername,
       goobs: [],
       inventory: {},
-      gardenCreated: Date.now()
+      placedItems: [],
+      gardenCreated: Date.now(),
+      achievements: []
     };
-    setCurrentUser(user);
+    localStorage.setItem('allUsers', JSON.stringify(allUsers));
   }
-  return user;
+
+  return allUsers[currentUsername];
 }
 
 
@@ -381,129 +391,94 @@ function createInitialGoobs() {
 function newGarden() {
   if (!confirm("Are you sure you want to start a new Goob Garden?")) return;
 
-  let user = getCurrentUser();
-  const isNewUser = !user;
+  const user = getCurrentUser();
 
-  if (!user) {
-    user = {
-      username: '',
-      goobs: [],
-      inventory: {},
-      gardenCreated: Date.now(),
-      achievements: [],
-      placedItems: []
-    };
-  }
+  // Reset user garden-related data
+  user.goobs = [];
+  user.gardenCreated = Date.now();
+  user.placedItems = [];
 
-  // Reset garden
-user.goobs = [];
-user.gardenCreated = Date.now();
-user.placedItems = [];
+  // Give starting items
+  user.inventory = {
+    tree: 10,
+    water: 10,
+    redBerry: 10
+  };
 
-// 👇 Give starting items
-user.inventory = {
-  tree: 10,
-  water: 10,
-  redBerry: 10
-};
-
-// ⛔ Disable goob movement until required items are placed
-placingRequired = true;
-placedCounts = { tree: 0, water: 0 };
-localStorage.setItem('placingRequired', 'true');
-
-// ✅ Persist this in user data
-user.placingRequired = placingRequired;
-user.placedCounts = placedCounts;
-
-  // Save updated user to localStorage
-  setCurrentUser(user);
-  placedItems = [];
-
-  // ⛔ Disable goob movement until required items are placed
+  // Reset placement requirements
   placingRequired = true;
   placedCounts = { tree: 0, water: 0 };
+  user.placingRequired = placingRequired;
+  user.placedCounts = placedCounts;
 
-  // ✅ Create starter Goobs (but don't start moving them yet!)
+  // Save user changes
+  setCurrentUser(user);
+  placedItems = []; // Only needed if you still rely on this global
+
+  // Create starter Goobs
   createInitialGoobs();
 
-  // Redraw game world
+  // Redraw visuals
   drawGrid();
-
   if (goobImage.complete) {
     drawGoobs();
   } else {
-    goobImage.onload = () => {
-      drawGoobs();
-    };
+    goobImage.onload = () => drawGoobs();
   }
 
+  // Update button text
   document.getElementById('newGardenBtn').textContent = 'Reset Garden';
 
-  // 🛑 Stop the current timer
-if (timerInterval) {
-  clearInterval(timerInterval);
-  timerInterval = null;
-}
+  // Reset game timer
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
 
-// 🔄 Reset start time to null
-gameStartTime = null;
-document.getElementById('gameTime').textContent = '00:00:00';
-localStorage.removeItem('goobStartTime');
+  gameStartTime = null;
+  localStorage.removeItem('goobStartTime');
+  document.getElementById('gameTime').textContent = '00:00:00';
 
-// ⏱ Reset display immediately
-document.getElementById('gameTime').textContent = '00:00:00';
-
-  // Reset and show user info
+  // Reset user modal info
   editGoobName.value = user.username || '';
   goobAge.textContent = '-';
   if (goobHunger) goobHunger.textContent = '-';
   selectedGoob = null;
 
-  // 📌 Ensure user modal opens immediately
+  // Open modal and refresh displays
   openUserModal();
-
   updateInventoryDisplay();
   updateUserGreeting();
 }
 
 function getCurrentUser() {
-  const userData = localStorage.getItem('currentUser');
-  if (!userData) return null;
+  const currentUsername = localStorage.getItem('currentUsername');
+  if (!currentUsername) return null;
 
-  const user = JSON.parse(userData);
+  const allUsers = JSON.parse(localStorage.getItem('allUsers') || '{}');
+  const user = allUsers[currentUsername];
 
-  // Ensure placedItems exists
+  if (!user) return null;
+
+  // Ensure placedItems exists to prevent errors
   if (!Array.isArray(user.placedItems)) {
     user.placedItems = [];
-  }
-
-  // Count placed trees and water
-  const placedCounts = user.placedItems.reduce((counts, item) => {
-    if (item.type === 'tree') counts.tree++;
-    if (item.type === 'water') counts.water++;
-    return counts;
-  }, { tree: 0, water: 0 });
-
-  // If user hasn't completed required placements, pause game logic
-  if (placedCounts.tree < 10 || placedCounts.water < 10) {
-    window.placingRequired = true;
-    window.gameStartTime = null;
-    if (window.timerInterval) {
-      clearInterval(window.timerInterval);
-      window.timerInterval = null;
-    }
-    document.getElementById('gameTime').textContent = '00:00:00';
   }
 
   return user;
 }
 
-
 function setCurrentUser(user) {
-  localStorage.setItem('currentUser', JSON.stringify(user));
-}
+  const currentUsername = localStorage.getItem('currentUsername');
+  if (!currentUsername) {
+    console.warn("No current username found in localStorage.");
+    return;
+  }
 
+  const allUsers = JSON.parse(localStorage.getItem('allUsers') || '{}');
+  allUsers[currentUsername] = user;
+  localStorage.setItem('allUsers', JSON.stringify(allUsers));
+}
 
 function restoreStateFromLocalStorage() {
   const user = getCurrentUser();
@@ -729,16 +704,16 @@ function updateUserGreeting() {
 }
 
 function updateInventoryDisplay() {
-  const user = getCurrentUser();
+  const inventory = getInventory();
   const grid = document.getElementById('inventoryGrid');
   grid.innerHTML = ''; // Clear existing
 
-  if (!user || !user.inventory) {
-    console.warn("No user or user inventory found.");
+  if (!inventory) {
+    console.warn("No inventory found.");
     return;
   }
 
-  Object.entries(user.inventory).forEach(([item, count]) => {
+  Object.entries(inventory).forEach(([item, count]) => {
     if (count > 0) {
       const itemDiv = document.createElement('div');
       itemDiv.className = 'inventory-item';
@@ -790,7 +765,7 @@ function updateInventoryDisplay() {
 }
 
 function checkItemPlacementProgress() {
-  const user = getCurrentUser();
+  const placedItems = getPlacedItems(); // ✅ Use new helper
   const treesPlaced = placedItems.filter(i => i.type === 'tree').length;
   const waterPlaced = placedItems.filter(i => i.type === 'water').length;
 
@@ -850,8 +825,8 @@ function moveDragImage(x, y) {
 
 function placeItemOnGrid(type, x, y) {
   preloadItemImage(type, () => {
-    const user = getCurrentUser();
-    if (!user || !user.inventory[type] || user.inventory[type] <= 0) return;
+    const inventory = getUserInventory();
+    if (!inventory[type] || inventory[type] <= 0) return;
 
     const gridCols = Math.floor(canvas.width / cellSize);
     const gridRows = Math.floor(canvas.height / cellSize);
@@ -873,18 +848,20 @@ function placeItemOnGrid(type, x, y) {
       }
     }
 
-    // Deduct item
-    user.inventory[type]--;
-    setCurrentUser(user);
+    // ✅ Deduct item from inventory
+    inventory[type]--;
+    saveUserInventory(inventory);
     updateInventoryDisplay();
 
-    // Place item visually
+    // ✅ Place item visually and persist
+    const placedItems = getPlacedItems();
     placedItems.push({ type, x, y });
-    savePlacedItems();
+    savePlacedItems(placedItems);
+
     drawGrid();
     drawGoobs();
 
-    // ✅ Step 3: Track placed counts and check readiness
+    // ✅ Track placed counts
     if (placingRequired && (type === 'tree' || type === 'water')) {
       placedCounts[type]++;
 
@@ -900,18 +877,11 @@ function placeItemOnGrid(type, x, y) {
   });
 }
 
-function savePlacedItems() {
+function savePlacedItems(items) {
   const user = getCurrentUser();
   if (user) {
-    user.placedItems = placedItems;
+    user.placedItems = items;
     setCurrentUser(user);
-  }
-}
-
-function loadPlacedItems() {
-  const user = getCurrentUser();
-  if (user && Array.isArray(user.placedItems)) {
-    placedItems = user.placedItems;
   }
 }
 
