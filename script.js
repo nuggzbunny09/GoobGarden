@@ -73,7 +73,7 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function preloadAllImages(callback) {
+function preloadItemImage(callback) {
   const types = ['Tree', 'Water', 'Goob', 'GoobWater'];
   let loaded = 0;
   for (const type of types) {
