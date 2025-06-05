@@ -1071,10 +1071,10 @@ document.getElementById('autoPlaceBtn').addEventListener('click', () => {
 
   // Get user and inventory counts
   const user = getCurrentUser();
-  const treeItem = user?.inventory?.find(i => i.type === 'tree');
-  const waterItem = user?.inventory?.find(i => i.type === 'water');
-  const availableTrees = treeItem?.count || 0;
-  const availableWaters = waterItem?.count || 0;
+const inventory = user?.inventory || {};
+const availableTrees = inventory.tree || 0;
+const availableWaters = inventory.water || 0;
+
 
   const treesToPlace = Math.min(10, availableTrees);
   const watersToPlace = Math.min(10, availableWaters);
