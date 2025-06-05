@@ -799,6 +799,7 @@ function checkItemPlacementProgress() {
     
     // ✅ Requirements met — start the game
     placingRequired = false;
+    localStorage.setItem('placingRequired', 'false');
     startGameTimer();
     window.goobMovementEnabled = true; // Goobs can now move
   }
