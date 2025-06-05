@@ -529,16 +529,10 @@ if (shouldShowBanner) {
   banner.classList.add('hidden');
 }
 
-    for (const type of typesToLoad) {
-      preloadAllItemImages(type, () => {
-        loadedCount++;
-        if (loadedCount === typesToLoad.length) {
-          // Only draw once ALL images are ready
+  
+         preloadAllItemImages();
           drawGrid();
           drawGoobs();
-        }
-      });
-    }
   }
 
   loadGameTimer();
