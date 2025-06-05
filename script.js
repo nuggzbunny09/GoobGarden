@@ -904,7 +904,6 @@ function placeItemOnGrid(type, x, y) {
 
     // ✅ Show or hide the bottom banner based on progress
     checkItemPlacementProgress();
-  });
 }
 
 function savePlacedItems(items) {
