@@ -523,6 +523,15 @@ function restoreStateFromLocalStorage() {
     const typesToLoad = [...new Set(placedItems.map(item => item.type))];
     let loadedCount = 0;
 
+    // 🌟 Restore placement banner visibility
+const banner = document.getElementById('placementBanner');
+const shouldShowBanner = localStorage.getItem('showPlacementBanner') === 'true';
+if (shouldShowBanner) {
+  banner.classList.remove('hidden');
+} else {
+  banner.classList.add('hidden');
+}
+
     for (const type of typesToLoad) {
       preloadItemImage(type, () => {
         loadedCount++;
