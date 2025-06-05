@@ -703,9 +703,24 @@ function saveNewUsername() {
   const newName = document.getElementById('userModalName').value.trim();
   if (!newName) return;
 
-  const user = getCurrentUser();
+  const allUsers = JSON.parse(localStorage.getItem('allUsers') || '{}');
+  const oldUsername = localStorage.getItem('currentUsername');
+  const user = allUsers[oldUsername];
+
+  if (!user) {
+    console.error("Old user data not found.");
+    return;
+  }
+
+  // Move data under new name
   user.username = newName;
-  setCurrentUser(user);
+  allUsers[newName] = user;
+  delete allUsers[oldUsername];
+
+  // Save to localStorage
+  localStorage.setItem('allUsers', JSON.stringify(allUsers));
+  localStorage.setItem('currentUsername', newName);
+
   updateUserGreeting();
   closeUserModal();
 }
