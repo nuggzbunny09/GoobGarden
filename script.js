@@ -817,59 +817,6 @@ function checkItemPlacementProgress() {
   }
 }
 
-document.getElementById('autoPlaceBtn').addEventListener('click', () => {
-  const totalTrees = 10;
-  const totalWaters = 10;
-  const positionsTaken = new Set();
-
-  // Make sure to avoid Goob starting positions
-  const goobPositions = goobData.map(g => `${g.position.x},${g.position.y}`);
-
-  function getRandomAvailablePosition() {
-    let x, y, key;
-    let attempts = 0;
-
-    do {
-      x = Math.floor(Math.random() * (canvas.width / cellSize));
-      y = Math.floor(Math.random() * (canvas.height / cellSize));
-      key = `${x},${y}`;
-      attempts++;
-    } while (
-      positionsTaken.has(key) ||
-      goobPositions.includes(key) ||
-      attempts > 1000
-    );
-
-    positionsTaken.add(key);
-    return { x, y };
-  }
-
-  // Auto-place trees
-  for (let i = 0; i < totalTrees; i++) {
-    const pos = getRandomAvailablePosition();
-    placedItems.push({ type: 'tree', x: pos.x, y: pos.y });
-  }
-
-  // Auto-place water
-  for (let i = 0; i < totalWaters; i++) {
-    const pos = getRandomAvailablePosition();
-    placedItems.push({ type: 'water', x: pos.x, y: pos.y });
-  }
-
-  // 🔁 Update counts and re-check banner logic
-  placedCounts.tree = 10;
-  placedCounts.water = 10;
-
-  // ✅ Save & redraw immediately
-  const user = getCurrentUser();
-  user.placedItems = placedItems;
-  setCurrentUser(user);
-
-  drawGrid(); // Draw placed items
-  drawGoobs(); // In case needed
-
-  checkItemPlacementProgress(); // Hide banner, enable goobs
-});
 
 function setupInventoryDraggables() {
   const grid = document.getElementById('inventoryGrid');
@@ -1078,6 +1025,99 @@ document.addEventListener('mouseup', (e) => {
     cleanupDragging();
   }
 }); // ← 🧩 this was missing
+
+document.getElementById('autoPlaceBtn').addEventListener('click', () => {
+  const totalTrees = 10;
+  const totalWaters = 10;
+  const itemSize = 2; // assuming 2x2 size for all items
+
+  const gridCols = canvas.width / cellSize;
+  const gridRows = canvas.height / cellSize;
+
+  const occupied = new Set();
+
+  // Mark Goob positions as occupied (assuming Goobs are 2x2)
+  for (let goob of goobData) {
+    for (let dx = 0; dx < itemSize; dx++) {
+      for (let dy = 0; dy < itemSize; dy++) {
+        occupied.add(`${goob.position.x + dx},${goob.position.y + dy}`);
+      }
+    }
+  }
+
+  // Mark already placed items (from previous attempts)
+  for (let item of placedItems) {
+    for (let dx = 0; dx < itemSize; dx++) {
+      for (let dy = 0; dy < itemSize; dy++) {
+        occupied.add(`${item.x + dx},${item.y + dy}`);
+      }
+    }
+  }
+
+  function findValidPosition() {
+    let attempts = 0;
+
+    while (attempts < 1000) {
+      const x = Math.floor(Math.random() * (gridCols - itemSize + 1));
+      const y = Math.floor(Math.random() * (gridRows - itemSize + 1));
+
+      let fits = true;
+
+      for (let dx = 0; dx < itemSize; dx++) {
+        for (let dy = 0; dy < itemSize; dy++) {
+          if (occupied.has(`${x + dx},${y + dy}`)) {
+            fits = false;
+            break;
+          }
+        }
+        if (!fits) break;
+      }
+
+      if (fits) {
+        // Mark space as used
+        for (let dx = 0; dx < itemSize; dx++) {
+          for (let dy = 0; dy < itemSize; dy++) {
+            occupied.add(`${x + dx},${y + dy}`);
+          }
+        }
+        return { x, y };
+      }
+
+      attempts++;
+    }
+
+    console.warn("No valid position found after 1000 attempts");
+    return null;
+  }
+
+  // Place trees
+  for (let i = 0; i < totalTrees; i++) {
+    const pos = findValidPosition();
+    if (pos) {
+      placedItems.push({ type: 'tree', x: pos.x, y: pos.y });
+    }
+  }
+
+  // Place waters
+  for (let i = 0; i < totalWaters; i++) {
+    const pos = findValidPosition();
+    if (pos) {
+      placedItems.push({ type: 'water', x: pos.x, y: pos.y });
+    }
+  }
+
+  // Save to user
+  const user = getCurrentUser();
+  user.placedItems = placedItems;
+  setCurrentUser(user);
+
+  placedCounts.tree = 10;
+  placedCounts.water = 10;
+
+  drawGrid();
+  drawGoobs();
+  checkItemPlacementProgress();
+});
 
 function movePlacedItem(item, newX, newY) {
   const gridCols = Math.floor(canvas.width / cellSize);
