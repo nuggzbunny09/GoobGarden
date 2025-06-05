@@ -886,20 +886,20 @@ function placeItemOnGrid(type, x, y) {
       }
     }
 
-    // ✅ Deduct item from inventory
+    // Deduct from inventory
     inventory[type]--;
     user.inventory = inventory;
     setCurrentUser(user);
 
     updateInventoryDisplay();
 
-    // ✅ Place item visually and persist
-    const placedItems = getPlacedItems();
+    // Update global placedItems *and* save
     placedItems.push({ type, x, y });
     savePlacedItems(placedItems);
 
+    // Redraw immediately with up-to-date placedItems
     drawGrid();
-    drawGoobs();
+    drawGoobs(performance.now());
 
     // ✅ Track placed counts
     if (placingRequired && (type === 'tree' || type === 'water')) {
