@@ -446,6 +446,8 @@ if (timerInterval) {
 
 // 🔄 Reset start time to null
 gameStartTime = null;
+document.getElementById('gameTime').textContent = '00:00:00';
+localStorage.removeItem('goobStartTime');
 
 // ⏱ Reset display immediately
 document.getElementById('gameTime').textContent = '00:00:00';
