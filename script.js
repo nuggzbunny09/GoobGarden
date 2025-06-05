@@ -1115,8 +1115,8 @@ const availableWaters = inventory.water || 0;
   placedCounts.water += watersPlaced;
 
   // Deduct from inventory (set to 0 only what was used)
-  if (inventory.tree) tree.count = Math.max(0, treeItem.count - treesPlaced);
-  if (inventory.water) water.count = Math.max(0, waterItem.count - watersPlaced);
+  if (inventory.tree) inventory.tree.count = Math.max(0, inventory.tree.count - treesPlaced);
+  if (inventory.water) inventory.water.count = Math.max(0, inventory.water.count - watersPlaced);
 
   // Save and update display
   user.placedItems = placedItems;
