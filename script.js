@@ -83,6 +83,7 @@ function preloadAllItemImages() {
   }
 }
 
+
 function drawGrid() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = '#e0ffe0';
