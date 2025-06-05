@@ -795,8 +795,10 @@ function checkItemPlacementProgress() {
 
   if (treesPlaced < 10 || waterPlaced < 10) {
     banner.classList.remove('hidden');
+    localStorage.setItem('showPlacementBanner', 'true');
   } else {
     banner.classList.add('hidden');
+    localStorage.setItem('showPlacementBanner', 'false');
     
     // ✅ Requirements met — start the game
     placingRequired = false;
