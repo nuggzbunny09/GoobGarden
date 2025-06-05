@@ -817,6 +817,58 @@ function checkItemPlacementProgress() {
   }
 }
 
+document.getElementById('autoPlaceBtn').addEventListener('click', autoPlaceItems);
+
+function autoPlaceItems() {
+  const user = getCurrentUser();
+  if (!user) return;
+
+  const gridWidth = canvas.width / cellSize;
+  const gridHeight = canvas.height / cellSize;
+
+  // Collect occupied positions (Goobs + current placed items)
+  const occupied = new Set();
+
+  for (const goob of goobData) {
+    occupied.add(`${goob.position.x},${goob.position.y}`);
+  }
+  for (const item of placedItems) {
+    occupied.add(`${item.x},${item.y}`);
+  }
+
+  const allPositions = [];
+  for (let x = 0; x < gridWidth; x++) {
+    for (let y = 0; y < gridHeight; y++) {
+      const key = `${x},${y}`;
+      if (!occupied.has(key)) {
+        allPositions.push({ x, y });
+      }
+    }
+  }
+
+  // Shuffle available positions
+  for (let i = allPositions.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [allPositions[i], allPositions[j]] = [allPositions[j], allPositions[i]];
+  }
+
+  // Place 10 trees and 10 water
+  const types = ['tree', 'water'];
+  for (const type of types) {
+    for (let i = 0; i < 10; i++) {
+      const pos = allPositions.pop();
+      if (!pos) break;
+      placedItems.push({ type, x: pos.x, y: pos.y });
+    }
+  }
+
+  user.placedItems = placedItems;
+  setCurrentUser(user);
+  updateInventoryDisplay();
+  checkItemPlacementProgress();
+  drawGrid();
+}
+
 function setupInventoryDraggables() {
   const grid = document.getElementById('inventoryGrid');
   const images = grid.querySelectorAll('.inventory-item img');
