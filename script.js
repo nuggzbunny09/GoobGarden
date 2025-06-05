@@ -888,7 +888,9 @@ function placeItemOnGrid(type, x, y) {
 
     // ✅ Deduct item from inventory
     inventory[type]--;
-    saveUserInventory(inventory);
+    user.inventory = inventory;
+    setCurrentUser(user);
+
     updateInventoryDisplay();
 
     // ✅ Place item visually and persist
