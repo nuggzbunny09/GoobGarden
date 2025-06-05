@@ -74,7 +74,7 @@ function capitalize(str) {
 }
 
 function preloadAllItemImages(callback) {
-  const types = ['Tree', 'Water', 'Goob', 'GoobWater'];
+  const types = ['Tree', 'Water', 'GoobWater'];
   let loaded = 0;
 
   for (const type of types) {
