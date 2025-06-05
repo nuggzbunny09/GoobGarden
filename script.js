@@ -632,12 +632,6 @@ closeModalBtn.addEventListener('click', () => {
   goobModal.style.display = 'none';
 });
 
-window.addEventListener('click', (e) => {
-  if (e.target === goobModal) {
-    goobModal.style.display = 'none';
-  }
-});
-
 saveGoobBtn.addEventListener('click', () => {
   if (selectedGoob) {
     selectedGoob.name = editGoobName.value;
