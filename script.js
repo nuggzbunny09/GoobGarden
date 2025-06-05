@@ -549,6 +549,7 @@ if (shouldShowBanner) {
   updateGameTimeDisplay();
   updateInventoryDisplay();
   setupInventoryDraggables();
+  updateUserGreeting();
 }
 
 goobImage.onload = () => {
