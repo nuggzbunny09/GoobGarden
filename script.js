@@ -73,17 +73,18 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function preloadItemImage(type, callback) {
-  if (itemImages[type]) {
-    if (itemImages[type].complete) {
-      callback();
-    } else {
-      itemImages[type].addEventListener('load', callback);
-    }
-  } else {
-    const img = new Image();
-    img.src = `images/${capitalize(type)}.png`;
-    img.addEventListener('load', callback);
+function preloadAllImages(callback) {
+  const types = ['Tree', 'Water', 'Goob', 'GoobWater'];
+  let loaded = 0;
+  for (const type of types) {
+    const img = itemImages[type] || new Image();
+    img.src = `images/${type}.png`;
+    img.onload = () => {
+      loaded++;
+      if (loaded === types.length) {
+        callback();
+      }
+    };
     itemImages[type] = img;
   }
 }
