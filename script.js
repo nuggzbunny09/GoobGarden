@@ -36,6 +36,7 @@ let dragImage = null;               // visual cursor icon
 let isDragging = false;
 let wasDragging = false;
 let placingRequired = false;
+placingRequired = localStorage.getItem('placingRequired') === 'true';
 let requiredPlacement = {
   tree: 10,
   water: 10
