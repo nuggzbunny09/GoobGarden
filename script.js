@@ -849,10 +849,14 @@ function moveDragImage(x, y) {
 }
 
 function placeItemOnGrid(type, x, y) {
+  type = type.toLowerCase(); // ✅ Normalize early
+
   const user = getCurrentUser();
   const placedItems = user?.placedItems || [];
   const inventory = user.inventory || {};
   if (!inventory[type] || inventory[type] <= 0) return;
+
+  // ... (rest is good and can stay unchanged)
 
   const gridCols = Math.floor(canvas.width / cellSize);
   const gridRows = Math.floor(canvas.height / cellSize);
