@@ -718,25 +718,23 @@ function saveNewUsername() {
   const newName = document.getElementById('userModalName').value.trim();
   if (!newName) return;
 
-  const allUsers = JSON.parse(localStorage.getItem('allUsers') || '{}');
-  const oldUsername = localStorage.getItem('currentUsername');
-  const user = allUsers[oldUsername];
-
+  // Get current user object directly
+  const user = JSON.parse(localStorage.getItem('currentUser'));
   if (!user) {
-    console.error("Old user data not found.");
+    console.error("User data not found.");
     return;
   }
 
-  // Move data under new name
+  // Update username property
   user.username = newName;
-  allUsers[newName] = user;
-  delete allUsers[oldUsername];
 
-  // Save to localStorage
-  localStorage.setItem('allUsers', JSON.stringify(allUsers));
-  localStorage.setItem('currentUsername', newName);
+  // Save updated user object back to localStorage
+  localStorage.setItem('currentUser', JSON.stringify(user));
 
+  // Update greeting display
   updateUserGreeting();
+
+  // Close modal
   closeUserModal();
 }
 
