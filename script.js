@@ -87,6 +87,8 @@ function drawGrid() {
   const user = getCurrentUser(); // ✅ Pull fresh user data
   const userPlacedItems = user?.placedItems || [];
 
+  placedItems = userPlacedItems;
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = '#e0ffe0';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
