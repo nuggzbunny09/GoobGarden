@@ -402,60 +402,40 @@ function createInitialGoobs() {
 function newGarden() {
   if (!confirm("Are you sure you want to start a new Goob Garden?")) return;
 
-  let user = getCurrentUser();
+  // Default username (will be editable later)
+  const defaultUsername = 'Player';
 
-  // If no user, create a new one with defaults and a default username
-  if (!user) {
-    user = {
-      username: 'Player',  // <-- set default username here
-      goobs: [],
-      inventory: {},
-      gardenCreated: Date.now(),
-      achievements: [],
-      placedItems: []
-    };
+  // Set current user (new or overwrite existing one)
+  localStorage.setItem('currentUsername', defaultUsername);
 
-    // Save the username as the current active user
-    localStorage.setItem('currentUsername', user.username);
-
-    // Add user to allUsers object and save
-    let allUsers = JSON.parse(localStorage.getItem('allUsers') || '{}');
-    allUsers[user.username] = user;
-    localStorage.setItem('allUsers', JSON.stringify(allUsers));
-  }
-
-  // Reset user garden-related data
-  user.goobs = [];
-  user.gardenCreated = Date.now();
-  user.placedItems = [];
-
-  // Give starting items
-  user.inventory = {
-    tree: 10,
-    water: 10,
-    redBerry: 10
+  // Create fresh user object
+  const user = {
+    username: defaultUsername,
+    goobs: [],
+    inventory: {
+      tree: 10,
+      water: 10,
+      redBerry: 10
+    },
+    gardenCreated: Date.now(),
+    achievements: [],
+    placedItems: [],
+    placingRequired: true,
+    placedCounts: { tree: 0, water: 0 }
   };
 
-  // Reset placement requirements
-  placingRequired = true;
+  // Save only this user (no duplicate allUsers logic)
+  localStorage.setItem('currentUserData', JSON.stringify(user));
+
+  // Update runtime state
+  placedItems = [];
   placedCounts = { tree: 0, water: 0 };
-  user.placingRequired = placingRequired;
-  user.placedCounts = placedCounts;
+  placingRequired = true;
 
-  // Save updated user data in allUsers object
-  let allUsers = JSON.parse(localStorage.getItem('allUsers') || '{}');
-  allUsers[user.username] = user;
-  localStorage.setItem('allUsers', JSON.stringify(allUsers));
-
-  // Save user changes via setCurrentUser as well (optional)
-  setCurrentUser(user);
-
-  placedItems = []; // Only needed if you still rely on this global
-
-  // Create starter Goobs
+  // Create starter goobs
   createInitialGoobs();
 
-  // Redraw visuals
+  // Draw visuals
   drawGrid();
   if (goobImage.complete) {
     drawGoobs();
@@ -463,30 +443,25 @@ function newGarden() {
     goobImage.onload = () => drawGoobs();
   }
 
-  // Update button text
-  document.getElementById('newGardenBtn').textContent = 'Reset Garden';
-
-  // Reset game timer
-  if (timerInterval) {
-    clearInterval(timerInterval);
-    timerInterval = null;
-  }
-
+  // Reset timer and UI
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = null;
   gameStartTime = null;
   localStorage.removeItem('goobStartTime');
   document.getElementById('gameTime').textContent = '00:00:00';
 
-  // Reset user modal info
+  // Update modal
   editGoobName.value = user.username || '';
   goobAge.textContent = '-';
   if (goobHunger) goobHunger.textContent = '-';
   selectedGoob = null;
 
-  // Open modal and refresh displays
   openUserModal();
   updateInventoryDisplay();
   updateUserGreeting();
+  document.getElementById('newGardenBtn').textContent = 'Reset Garden';
 }
+
 
 function getCurrentUser() {
   const userJson = localStorage.getItem('currentUser');
