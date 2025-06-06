@@ -5,7 +5,7 @@ const goobImage = new Image();
 goobImage.src = 'Goob.png';
 
 const goobWaterImage = new Image();
-goobWaterImage.src = 'images/GoobWater.png'; // adjust path if needed
+goobWaterImage.src = 'images/goobwater.png'; // adjust path if needed
 
 const goobModal = document.getElementById('goobModal');
 const editGoobName = document.getElementById('editGoobName');
