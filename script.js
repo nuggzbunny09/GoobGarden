@@ -105,7 +105,7 @@ function drawGrid() {
   }
 
   for (const item of userPlacedItems) {
-    const img = itemImages[item.type.toLowerCase()];
+    const img = itemImages[item.type()];
     if (img && img.complete) {
       ctx.drawImage(
         img,
