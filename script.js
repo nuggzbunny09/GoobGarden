@@ -73,20 +73,12 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function preloadAllItemImages(callback) {
+function preloadAllItemImages() {
   const types = ['Tree', 'Water', 'GoobWater'];
-  let loaded = 0;
-
   for (const type of types) {
     const img = new Image();
-    img.onload = () => {
-      loaded++;
-      if (loaded === types.length) {
-        if (callback) callback();
-      }
-    };
     img.src = `images/${type}.png`;
-    itemImages[type] = img;
+    itemImages[type.toLowerCase()] = img;  // store with lowercase key
   }
 }
 
@@ -117,7 +109,7 @@ function drawGrid() {
 
   // ✅ Draw only this user's placed items
   for (const item of userPlacedItems) {
-    const img = itemImages[item.type];
+    const img = itemImages[item.type.toLowerCase()];  // ✅ matches preloaded key
     if (img && img.complete) {
       ctx.drawImage(
         img,
@@ -856,9 +848,8 @@ function moveDragImage(x, y) {
 }
 
 function placeItemOnGrid(type, x, y) {
-  preloadItemImage();
     const user = getCurrentUser();
-    const placedItems = user?.placeItems || [];
+    const placedItems = user?.placedItems || [];
     const inventory = user.inventory || {};
     if (!inventory[type] || inventory[type] <= 0) return;
 
