@@ -74,14 +74,13 @@ function capitalize(str) {
 }
 
 function preloadAllItemImages() {
-  const types = ['Tree', 'Water', 'GoobWater'];
+  const types = ['tree', 'water', 'goobwater', 'redberry'];
   for (const type of types) {
     const img = new Image();
     img.src = `images/${type}.png`;
-    itemImages[type.toLowerCase()] = img;  // store with lowercase key
+    itemImages[type] = img;
   }
 }
-
 
 function drawGrid() {
   const user = getCurrentUser(); // ✅ Always pull fresh
