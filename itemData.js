@@ -13,7 +13,7 @@ const itemDirectory = {
     imageCenter: { x: 20, y: 20 },
     placeable: true
   },
-  redBerry: {
+  redberry: {
     name: "Red Berry",
     image: "images/RedBerry.png",
     description: "Fills Goob's Tummy 8 points",
