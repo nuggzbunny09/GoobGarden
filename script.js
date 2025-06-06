@@ -1155,7 +1155,9 @@ function movePlacedItem(item, newX, newY) {
   }
 
   // 🧠 Actually update the matching item from user data
-  const target = placedItems.find(i => i === item);
+  const target = placedItems.find(i =>
+  i.type === item.type && i.x === item.x && i.y === item.y
+);
   if (target) {
     target.x = newX;
     target.y = newY;
