@@ -718,23 +718,18 @@ function saveNewUsername() {
   const newName = document.getElementById('userModalName').value.trim();
   if (!newName) return;
 
-  // Get current user object directly
-  const user = JSON.parse(localStorage.getItem('currentUser'));
+  const user = getCurrentUser();
   if (!user) {
-    console.error("User data not found.");
+    console.error("No current user found.");
     return;
   }
 
-  // Update username property
+  // Update and resave the user
   user.username = newName;
-
-  // Save updated user object back to localStorage
   localStorage.setItem('currentUser', JSON.stringify(user));
 
-  // Update greeting display
   updateUserGreeting();
-
-  // Close modal
+  updateInventoryDisplay(); // optional, if sidebar includes username
   closeUserModal();
 }
 
