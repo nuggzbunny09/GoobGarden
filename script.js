@@ -406,7 +406,7 @@ function newGarden() {
   const defaultUsername = 'Player';
 
   // Set current user (new or overwrite existing one)
-  localStorage.setItem('currentUsername', defaultUsername);
+  localStorage.setItem('currentUser', defaultUsername);
 
   // Create fresh user object
   const user = {
