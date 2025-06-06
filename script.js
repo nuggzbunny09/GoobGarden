@@ -329,27 +329,34 @@ function loadGameTimer() {
 
 
 function getOrCreateUser() {
-  const currentUsername = localStorage.getItem('currentUsername');
-  if (!currentUsername) {
-    console.warn("No current username found.");
-    return null;
+  const userJson = localStorage.getItem('currentUser');
+  if (userJson) {
+    try {
+      const user = JSON.parse(userJson);
+      // Ensure user has required properties
+      if (!Array.isArray(user.goobs)) user.goobs = [];
+      if (typeof user.inventory !== 'object' || user.inventory === null) user.inventory = {};
+      if (!Array.isArray(user.placedItems)) user.placedItems = [];
+      if (!user.gardenCreated) user.gardenCreated = Date.now();
+      if (!Array.isArray(user.achievements)) user.achievements = [];
+      return user;
+    } catch (e) {
+      console.warn("Error parsing user from localStorage, creating new user.");
+    }
   }
 
-  const allUsers = JSON.parse(localStorage.getItem('allUsers') || '{}');
+  // If no user found or parsing error, create new
+  const newUser = {
+    username: 'player',
+    goobs: [],
+    inventory: {},
+    placedItems: [],
+    gardenCreated: Date.now(),
+    achievements: []
+  };
 
-  if (!allUsers[currentUsername]) {
-    allUsers[currentUsername] = {
-      username: currentUsername,
-      goobs: [],
-      inventory: {},
-      placedItems: [],
-      gardenCreated: Date.now(),
-      achievements: []
-    };
-    localStorage.setItem('allUsers', JSON.stringify(allUsers));
-  }
-
-  return allUsers[currentUsername];
+  setCurrentUser(newUser);
+  return newUser;
 }
 
 
@@ -479,32 +486,30 @@ function newGarden() {
 }
 
 function getCurrentUser() {
-  const currentUsername = localStorage.getItem('currentUsername');
-  if (!currentUsername) return null;
+  const userJson = localStorage.getItem('currentUser');
+  if (!userJson) return null;
+  const user = JSON.parse(userJson);
 
-  const allUsers = JSON.parse(localStorage.getItem('allUsers') || '{}');
-  const user = allUsers[currentUsername];
-
-  if (!user) return null;
-
-  // Ensure placedItems exists to prevent errors
+  // Ensure placedItems is an array to avoid errors
   if (!Array.isArray(user.placedItems)) {
     user.placedItems = [];
+  }
+  if (!Array.isArray(user.goobs)) {
+    user.goobs = [];
+  }
+  if (typeof user.inventory !== 'object' || user.inventory === null) {
+    user.inventory = {};
   }
 
   return user;
 }
 
 function setCurrentUser(user) {
-  const currentUsername = localStorage.getItem('currentUsername');
-  if (!currentUsername) {
-    console.warn("No current username found in localStorage.");
+  if (!user || typeof user !== 'object') {
+    console.warn("Invalid user object passed to setCurrentUser.");
     return;
   }
-
-  const allUsers = JSON.parse(localStorage.getItem('allUsers') || '{}');
-  allUsers[currentUsername] = user;
-  localStorage.setItem('allUsers', JSON.stringify(allUsers));
+  localStorage.setItem('currentUser', JSON.stringify(user));
 }
 
 function restoreStateFromLocalStorage() {
