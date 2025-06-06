@@ -73,11 +73,18 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function preloadAllItemImages() {
+function preloadAllItemImages(callback) {
   const types = ['Tree', 'Water', 'GoobWater'];
+  let loaded = 0;
 
   for (const type of types) {
     const img = new Image();
+    img.onload = () => {
+      loaded++;
+      if (loaded === types.length) {
+        if (callback) callback();
+      }
+    };
     img.src = `images/${type}.png`;
     itemImages[type] = img;
   }
@@ -1116,6 +1123,14 @@ placedItems = user.placedItems || [];
   drawGoobs();
   checkItemPlacementProgress();
 });
+
+window.onload = function () {
+  preloadAllItemImages(() => {
+    restoreStateFromLocalStorage();
+    drawGrid();
+    drawGoobs(performance.now());
+  });
+};
 
 function movePlacedItem(item, newX, newY) {
   const gridCols = Math.floor(canvas.width / cellSize);
