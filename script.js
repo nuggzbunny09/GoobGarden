@@ -972,7 +972,7 @@ document.addEventListener('mousemove', (e) => {
     const itemType = draggingInventoryItem || draggingPlacedItem.type;
 
     dragImage = document.createElement('img');
-    dragImage.src = `images/${capitalize(itemType)}.png`;
+    dragImage.src = `images/${(itemType)}.png`;
     dragImage.style.position = 'absolute';
     dragImage.style.width = '40px';
     dragImage.style.height = '40px';
