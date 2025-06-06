@@ -1116,11 +1116,10 @@ placedItems = user.placedItems || [];
 });
 
 window.onload = function () {
-  preloadAllItemImages(() => {
-    restoreStateFromLocalStorage();
-    drawGrid();
-    drawGoobs(performance.now());
-  });
+  preloadAllItemImages();
+  restoreStateFromLocalStorage();
+  drawGrid();
+  drawGoobs(performance.now());
 };
 
 function movePlacedItem(item, newX, newY) {
