@@ -1120,8 +1120,8 @@ const placedItems = user.placedItems || [];
   }
 
   // Update placed counts
-  placedCounts.Tree += treesPlaced;
-  placedCounts.Water += watersPlaced;
+  placedCounts.tree += treesPlaced;
+  placedCounts.water += watersPlaced;
 
   // Deduct from inventory (set to 0 only what was used)
   if (inventory.tree !== undefined) inventory.tree = Math.max(0, inventory.tree - treesPlaced);
