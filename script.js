@@ -425,7 +425,7 @@ function newGarden() {
   };
 
   // Save only this user (no duplicate allUsers logic)
-  localStorage.setItem('currentUserData', JSON.stringify(user));
+  localStorage.setItem('currentUser', JSON.stringify(user));
 
   // Update runtime state
   placedItems = [];
