@@ -4,7 +4,7 @@ const defaultUserData = {
   inventory: {
     tree: 10,
     water: 10,
-    redberry: 10
+    redBerry: 10
   },
   placedItems: [],
   gardenCreated: Date.now(),
@@ -31,7 +31,7 @@ function getUserData() {
   if (!Array.isArray(user.goobs)) user.goobs = [];
   if (!Array.isArray(user.placedItems)) user.placedItems = [];
   if (typeof user.inventory !== 'object' || user.inventory === null) {
-    user.inventory = { tree: 10, water: 10, redberry: 10 };
+    user.inventory = { tree: 10, water: 10, redBerry: 10 };
   }
   if (!user.placedCounts) user.placedCounts = { tree: 0, water: 0 };
   if (typeof user.placingRequired !== 'boolean') user.placingRequired = true;
