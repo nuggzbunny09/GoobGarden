@@ -733,7 +733,7 @@ function updateInventoryDisplay() {
       itemDiv.className = 'inventory-item';
 
       const img = document.createElement('img');
-      img.src = `images/${capitalize(item)}.png`;
+      img.src = `images/${(item)}.png`;
       img.alt = item;
 
       const label = document.createElement('span');
