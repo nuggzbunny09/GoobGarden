@@ -1165,7 +1165,7 @@ function movePlacedItem(item, newX, newY) {
   // Move is valid
   item.x = newX;
   item.y = newY;
-  savePlacedItems();
+  savePlacedItems(placedItems);
   drawGrid();
   drawGoobs();
 }
