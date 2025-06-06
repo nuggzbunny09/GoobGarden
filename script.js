@@ -69,10 +69,6 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 });
 
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
 function preloadAllItemImages() {
   const types = ['tree', 'water', 'goobwater', 'redberry'];
   for (const type of types) {
