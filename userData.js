@@ -4,7 +4,7 @@ const defaultUserData = {
   inventory: {
     tree: 10,
     water: 10,
-    redBerry: 10
+    redberry: 10
   },
   placedItems: [],
   gardenCreated: Date.now(),
