@@ -1123,6 +1123,9 @@ window.onload = function () {
 };
 
 function movePlacedItem(item, newX, newY) {
+  const user = getCurrentUser();
+  const placedItems = user?.placedItems || [];
+
   const gridCols = Math.floor(canvas.width / cellSize);
   const gridRows = Math.floor(canvas.height / cellSize);
 
@@ -1132,11 +1135,9 @@ function movePlacedItem(item, newX, newY) {
     return;
   }
 
-  // Determine what to check based on item type
   const checkGoobs = item.type !== 'water';
   const checkItems = true;
 
-  // Check for overlap (excluding itself)
   if (isTileOccupied(newX, newY, {
     checkGoobs,
     checkItems,
@@ -1146,9 +1147,16 @@ function movePlacedItem(item, newX, newY) {
     return;
   }
 
-  // Move is valid
-  item.x = newX;
-  item.y = newY;
+  // 🧠 Actually update the matching item from user data
+  const target = placedItems.find(i => i === item);
+  if (target) {
+    target.x = newX;
+    target.y = newY;
+  }
+
+  // ✅ Save to user and refresh visuals
+  user.placedItems = placedItems;
+  setCurrentUser(user);
   savePlacedItems(placedItems);
   drawGrid();
   drawGoobs();
