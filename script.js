@@ -1005,6 +1005,7 @@ document.addEventListener('mouseup', (e) => {
 
     if (draggingInventoryItem) {
         placeItemOnGrid(itemType, tileX, tileY);
+        wasDragging = isDragging;
         cleanupDragging();
       
     } else if (draggingPlacedItem) {
