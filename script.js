@@ -884,7 +884,7 @@ function placeItemOnGrid(type, x, y) {
   user.inventory = inventory;
 
   // Add new item to placedItems array
-  placedItems.push({ type, x, y });
+  placedItems.push({ type: type.toLowerCase(), x, y });
 
   // Sync placedItems back to user object
   user.placedItems = placedItems;
