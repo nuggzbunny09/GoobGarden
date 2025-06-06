@@ -84,10 +84,8 @@ function preloadAllItemImages() {
 
 
 function drawGrid() {
-  const user = getCurrentUser(); // ✅ Pull fresh user data
+  const user = getCurrentUser(); // ✅ Always pull fresh
   const userPlacedItems = user?.placedItems || [];
-
-  placedItems = getCurrentUser()?.placedItems || [];
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = '#e0ffe0';
@@ -107,9 +105,8 @@ function drawGrid() {
     ctx.stroke();
   }
 
-  // ✅ Draw only this user's placed items
   for (const item of userPlacedItems) {
-    const img = itemImages[item.type.toLowerCase()];  // ✅ matches preloaded key
+    const img = itemImages[item.type.toLowerCase()];
     if (img && img.complete) {
       ctx.drawImage(
         img,
