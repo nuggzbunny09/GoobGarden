@@ -814,10 +814,10 @@ function setupInventoryDraggables() {
   images.forEach(img => {
     img.addEventListener('mousedown', (e) => {
       e.preventDefault();
-      draggingInventoryItem = img.alt;
+      draggingInventoryItem = img.alt.toLowerCase(); // ✅ Normalize here
       isDragging = false;
       dragOffsetX = e.offsetX;
-  dragOffsetY = e.offsetY;
+      dragOffsetY = e.offsetY;
     });
   });
 }
