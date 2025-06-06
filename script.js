@@ -1096,7 +1096,7 @@ document.getElementById('autoPlaceBtn').addEventListener('click', () => {
 const inventory = user?.inventory || {};
 const availableTrees = inventory.tree || 0;
 const availableWaters = inventory.water || 0;
-const placedItems = user.placedItems || [];
+placedItems = user.placedItems || [];
 
   const treesToPlace = Math.min(10, availableTrees);
   const watersToPlace = Math.min(10, availableWaters);
