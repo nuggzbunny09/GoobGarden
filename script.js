@@ -131,6 +131,9 @@ function getRandomDirection() {
 }
 
 function isGoobInWater(goob) {
+  const user = getCurrentUser();
+  const placedItems = user?.placedItems || [];
+
   for (const item of placedItems) {
     if (item.type !== 'water') continue;
 
@@ -149,6 +152,7 @@ function isGoobInWater(goob) {
       }
     }
   }
+
   return false;
 }
 
