@@ -827,15 +827,20 @@ function setupInventoryDraggables() {
 }
 
 function cleanupDragging() {
-  if (dragImage) {
-    document.body.removeChild(dragImage);
-    dragImage = null;
+  if (dragImage && dragImage.parentNode) {
+    dragImage.parentNode.removeChild(dragImage);
   }
+  dragImage = null;
+
   draggingInventoryItem = null;
   draggingPlacedItem = null;
   isDragging = false;
+  wasDragging = false;
 
-   document.body.classList.remove('dragging-any');
+  dragOffsetX = 0;
+  dragOffsetY = 0;
+
+  document.body.classList.remove('dragging-any');
   canvas.classList.remove('grabbing');
   canvas.classList.remove('grab');
 }
