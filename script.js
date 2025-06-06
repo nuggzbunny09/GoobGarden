@@ -347,14 +347,17 @@ function getOrCreateUser() {
 
   // If no user found or parsing error, create new
   const newUser = {
-    username: 'player',
-    goobs: [],
-    inventory: {},
-    placedItems: [],
-    gardenCreated: Date.now(),
-    achievements: []
-  };
-
+  username: 'player',
+  goobs: [],
+  inventory: {
+    tree: 10,
+    water: 10,
+    redBerry: 10
+  },
+  placedItems: [],
+  gardenCreated: Date.now(),
+  achievements: []
+};
   setCurrentUser(newUser);
   return newUser;
 }
