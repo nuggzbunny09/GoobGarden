@@ -854,69 +854,67 @@ function moveDragImage(x, y) {
 }
 
 function placeItemOnGrid(type, x, y) {
-    const user = getCurrentUser();
-    const placedItems = user?.placedItems || [];
-    const inventory = user.inventory || {};
-    if (!inventory[type] || inventory[type] <= 0) return;
+  const user = getCurrentUser();
+  const placedItems = user?.placedItems || [];
+  const inventory = user.inventory || {};
+  if (!inventory[type] || inventory[type] <= 0) return;
 
-    const gridCols = Math.floor(canvas.width / cellSize);
-    const gridRows = Math.floor(canvas.height / cellSize);
+  const gridCols = Math.floor(canvas.width / cellSize);
+  const gridRows = Math.floor(canvas.height / cellSize);
 
-    if (x < 0 || y < 0 || x + 1 >= gridCols || y + 1 >= gridRows) {
-      showConfirmation("Too close to edge!");
+  if (x < 0 || y < 0 || x + 1 >= gridCols || y + 1 >= gridRows) {
+    showConfirmation("Too close to edge!");
+    return;
+  }
+
+  if (type === 'tree') {
+    if (isTileOccupied(x, y, { checkGoobs: true, checkItems: true })) {
+      showConfirmation("Can't place a tree here!");
       return;
     }
-
-    if (type === 'tree') {
-      if (isTileOccupied(x, y, { checkGoobs: true, checkItems: true })) {
-        showConfirmation("Can't place a tree here!");
-        return;
-      }
-    } else if (type === 'water') {
-      if (isTileOccupied(x, y, { checkGoobs: false, checkItems: true })) {
-        showConfirmation("Can't place water here!");
-        return;
-      }
+  } else if (type === 'water') {
+    if (isTileOccupied(x, y, { checkGoobs: false, checkItems: true })) {
+      showConfirmation("Can't place water here!");
+      return;
     }
+  }
 
-    // Deduct from inventory
-    inventory[type]--;
-    user.inventory = inventory;
-    setCurrentUser(user);
+  // Deduct from inventory
+  inventory[type]--;
+  user.inventory = inventory;
 
-    updateInventoryDisplay();
+  // Add new item to placedItems array
+  placedItems.push({ type, x, y });
 
-    // Update global placedItems *and* save
-    placedItems.push({ type, x, y });
+  // Sync placedItems back to user object
+  user.placedItems = placedItems;
 
-// Sync placedItems back to user object
-user.placedItems = placedItems;
+  // Save full updated user object (inventory + placedItems)
+  setCurrentUser(user);
 
-// Save full updated user object, including inventory and placedItems
-setCurrentUser(user);
+  // If you keep savePlacedItems, keep it here for compatibility
+  savePlacedItems(placedItems);
+  placedItemsGlobal = getCurrentUser().placedItems; // If you use this global elsewhere
 
-// If savePlacedItems saves placedItems separately, ensure it syncs or remove redundancy
-savePlacedItems(placedItems);
+  updateInventoryDisplay();
 
+  // Redraw immediately with up-to-date placedItems
+  drawGrid();
+  drawGoobs(performance.now());
 
+  // ✅ Track placed counts
+  if (placingRequired && (type === 'tree' || type === 'water')) {
+    placedCounts[type]++;
 
-    // Redraw immediately with up-to-date placedItems
-    drawGrid();
-    drawGoobs(performance.now());
-
-    // ✅ Track placed counts
-    if (placingRequired && (type === 'tree' || type === 'water')) {
-      placedCounts[type]++;
-
-      if (placedCounts.tree >= 10 && placedCounts.water >= 10) {
-        placingRequired = false;
-        startGameTimer(); // Start goobs only after both conditions met
-        showConfirmation("Garden complete! Goobs are now active.");
-      }
+    if (placedCounts.tree >= 10 && placedCounts.water >= 10) {
+      placingRequired = false;
+      startGameTimer(); // Start goobs only after both conditions met
+      showConfirmation("Garden complete! Goobs are now active.");
     }
+  }
 
-    // ✅ Show or hide the bottom banner based on progress
-    checkItemPlacementProgress();
+  // ✅ Show or hide the bottom banner based on progress
+  checkItemPlacementProgress();
 }
 
 function savePlacedItems(items) {
