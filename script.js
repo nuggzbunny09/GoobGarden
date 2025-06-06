@@ -888,8 +888,16 @@ function placeItemOnGrid(type, x, y) {
 
     // Update global placedItems *and* save
     placedItems.push({ type, x, y });
-    savePlacedItems(placedItems);
-    placedItemsGlobal = getCurrentUser().placedItems; // If you have a global used elsewhere
+
+// Sync placedItems back to user object
+user.placedItems = placedItems;
+
+// Save full updated user object, including inventory and placedItems
+setCurrentUser(user);
+
+// If savePlacedItems saves placedItems separately, ensure it syncs or remove redundancy
+savePlacedItems(placedItems);
+
 
 
     // Redraw immediately with up-to-date placedItems
