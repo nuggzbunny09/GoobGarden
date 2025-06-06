@@ -888,6 +888,8 @@ function placeItemOnGrid(type, x, y) {
     // Update global placedItems *and* save
     placedItems.push({ type, x, y });
     savePlacedItems(placedItems);
+    placedItemsGlobal = getCurrentUser().placedItems; // If you have a global used elsewhere
+
 
     // Redraw immediately with up-to-date placedItems
     drawGrid();
