@@ -1004,11 +1004,9 @@ document.addEventListener('mouseup', (e) => {
     const tileY = intersectionY - 1;
 
     if (draggingInventoryItem) {
-      preloadItemImage(itemType, () => {
         placeItemOnGrid(itemType, tileX, tileY);
-        wasDragging = isDragging;
         cleanupDragging();
-      });
+      
     } else if (draggingPlacedItem) {
       movePlacedItem(draggingPlacedItem, tileX, tileY);
       wasDragging = isDragging;
