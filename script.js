@@ -1142,7 +1142,6 @@ function movePlacedItem(item, newX, newY) {
   const gridCols = Math.floor(canvas.width / cellSize);
   const gridRows = Math.floor(canvas.height / cellSize);
 
-  // Check boundaries
   if (newX < 0 || newY < 0 || newX + 1 >= gridCols || newY + 1 >= gridRows) {
     showConfirmation("Too close to edge!");
     return;
@@ -1154,22 +1153,17 @@ function movePlacedItem(item, newX, newY) {
   if (isTileOccupied(newX, newY, {
     checkGoobs,
     checkItems,
-    exclude: item
+    exclude: item  // Good: prevent false collision with self
   })) {
     showConfirmation("Can't move item here!");
     return;
   }
 
-  // 🧠 Actually update the matching item from user data
-  const target = placedItems.find(i =>
-  i.type === item.type && i.x === item.x && i.y === item.y
-);
-  if (target) {
-    target.x = newX;
-    target.y = newY;
-  }
+  // ✅ Directly update — item is already a reference in placedItems
+  item.x = newX;
+  item.y = newY;
 
-  // ✅ Save to user and refresh visuals
+  // ✅ Save and redraw
   user.placedItems = placedItems;
   setCurrentUser(user);
   drawGrid();
