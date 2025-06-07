@@ -913,14 +913,6 @@ function placeItemOnGrid(type, x, y) {
   checkItemPlacementProgress();
 }
 
-function savePlacedItems(items) {
-  const user = getCurrentUser();
-  if (user) {
-    user.placedItems = items;
-    setCurrentUser(user);
-  }
-}
-
 canvas.addEventListener('mousedown', (e) => {
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
