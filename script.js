@@ -925,13 +925,15 @@ function placeItemOnGrid(type, x, y) {
 }
 
 canvas.addEventListener('mousedown', (e) => {
+  const user = getCurrentUser();
+  const placedItems = user?.placedItems || [];
+
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
   const tileX = Math.floor(mouseX / cellSize);
   const tileY = Math.floor(mouseY / cellSize);
 
-  // Find the item that includes this tile within its 2x2 area
   const item = placedItems.find(obj =>
     tileX >= obj.x &&
     tileX < obj.x + 2 &&
@@ -944,7 +946,6 @@ canvas.addEventListener('mousedown', (e) => {
     draggingItem = item;
     isDragging = false;
 
-    const rect = canvas.getBoundingClientRect();
     dragOffsetX = e.clientX - rect.left - item.x * cellSize;
     dragOffsetY = e.clientY - rect.top - item.y * cellSize;
 
