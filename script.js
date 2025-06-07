@@ -890,11 +890,7 @@ function placeItemOnGrid(type, x, y) {
   user.placedItems = placedItems;
 
   // Save full updated user object (inventory + placedItems)
-  setCurrentUser(user);
-
-  // If you keep savePlacedItems, keep it here for compatibility
-  savePlacedItems(placedItems);
-  placedItemsGlobal = getCurrentUser().placedItems; // If you use this global elsewhere
+  setCurrentUser(user); // Saves all updates at once
 
   updateInventoryDisplay();
 
