@@ -959,8 +959,8 @@ canvas.addEventListener('mousemove', (e) => {
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
 
-  const gridX = Math.floor(mouseX / cellSize) - dragOffset.x;
-  const gridY = Math.floor(mouseY / cellSize) - dragOffset.y;
+  const gridX = Math.floor(mouseX / cellSize) - dragOffsetX;
+  const gridY = Math.floor(mouseY / cellSize) - dragOffsetY;
 
   // Temporarily update the item's position
   draggingItem.x = gridX;
