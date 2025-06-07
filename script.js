@@ -784,8 +784,6 @@ function checkItemPlacementProgress() {
 
   const userExists = localStorage.getItem('currentUser');
 
-const userExists = localStorage.getItem('currentUser');
-
 if (userExists) {
   if (treesPlaced < 10 || waterPlaced < 10) {
     // Requirements NOT met
