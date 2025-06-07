@@ -784,23 +784,23 @@ function checkItemPlacementProgress() {
 
   const userExists = localStorage.getItem('currentUser');
 
-if (userExists && (treesPlaced < 10 || waterPlaced < 10)) {
-  // Requirements NOT met
-  banner.classList.remove('hidden');
-  localStorage.setItem('showPlacementBanner', 'true');
+const userExists = localStorage.getItem('currentUser');
 
-  placingRequired = true;
-  localStorage.setItem('placingRequired', 'true');
+if (userExists) {
+  if (treesPlaced < 10 || waterPlaced < 10) {
+    // Requirements NOT met
+    banner.classList.remove('hidden');
+    localStorage.setItem('showPlacementBanner', 'true');
 
-  window.goobMovementEnabled = false; // Stop goob movement
-}
+    placingRequired = true;
+    localStorage.setItem('placingRequired', 'true');
 
+    window.goobMovementEnabled = false; // Stop goob movement
   } else {
     // Requirements met
     banner.classList.add('hidden');
     localStorage.setItem('showPlacementBanner', 'false');
 
-    // Only start game timer if not already started
     if (placingRequired) {
       placingRequired = false;
       localStorage.setItem('placingRequired', 'false');
