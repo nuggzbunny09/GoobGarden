@@ -410,7 +410,7 @@ function newGarden() {
     inventory: {
       tree: 10,
       water: 10,
-      redBerry: 10
+      redberry: 10
     },
     gardenCreated: Date.now(),
     achievements: [],
