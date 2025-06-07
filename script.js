@@ -1172,7 +1172,6 @@ function movePlacedItem(item, newX, newY) {
   // ✅ Save to user and refresh visuals
   user.placedItems = placedItems;
   setCurrentUser(user);
-  savePlacedItems(placedItems);
   drawGrid();
   drawGoobs();
 }
