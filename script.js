@@ -843,11 +843,22 @@ function cleanupDragging() {
 }
 
 function moveDragImage(x, y) {
-  if (dragImage) {
-    dragImage.style.left = `${x - 10}px`;
-    dragImage.style.top = `${y - 10}px`;
+  if (!dragImage) {
+    dragImage = document.createElement("img");
+    const type = draggingInventoryItem || draggingPlacedItem?.type;
+    dragImage.src = `images/${type}.png`;
+    dragImage.classList.add("dragging-image");
+    dragImage.style.position = "fixed";
+    dragImage.style.pointerEvents = "none";
+    dragImage.style.width = "40px";
+    dragImage.style.height = "40px";
+    document.body.appendChild(dragImage);
   }
+
+  dragImage.style.left = `${x - 10}px`;
+  dragImage.style.top = `${y - 10}px`;
 }
+
 
 function placeItemOnGrid(type, x, y) {
   type = type.toLowerCase(); // ✅ Normalize early
