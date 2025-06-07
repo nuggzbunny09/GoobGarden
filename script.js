@@ -1124,7 +1124,6 @@ placedItems = user.placedItems || [];
 
   // Save and update display
   user.placedItems = placedItems;
-  savePlacedItems(placedItems);
   setCurrentUser(user);
   updateInventoryDisplay();
 
