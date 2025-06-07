@@ -782,15 +782,18 @@ function checkItemPlacementProgress() {
 
   const banner = document.getElementById('placementBanner');
 
-  if (treesPlaced < 10 || waterPlaced < 10) {
-    // Requirements NOT met
-    banner.classList.remove('hidden');
-    localStorage.setItem('showPlacementBanner', 'true');
+  const userExists = localStorage.getItem('currentUser');
 
-    placingRequired = true;
-    localStorage.setItem('placingRequired', 'true');
+if (userExists && (treesPlaced < 10 || waterPlaced < 10)) {
+  // Requirements NOT met
+  banner.classList.remove('hidden');
+  localStorage.setItem('showPlacementBanner', 'true');
 
-    window.goobMovementEnabled = false; // Stop goob movement
+  placingRequired = true;
+  localStorage.setItem('placingRequired', 'true');
+
+  window.goobMovementEnabled = false; // Stop goob movement
+}
 
   } else {
     // Requirements met
