@@ -941,6 +941,7 @@ canvas.addEventListener('mousedown', (e) => {
 
   if (item) {
     draggingPlacedItem = item;
+    draggingItem = item;
     isDragging = false;
 
     const rect = canvas.getBoundingClientRect();
