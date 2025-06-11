@@ -1169,6 +1169,9 @@ function movePlacedItem(item, newX, newY) {
   item.y = newY;
 
   // ✅ Save and redraw
+  placedItems.push({ type: type.toLowerCase(), x, y });
+
+  // Sync placedItems back to user object
   user.placedItems = placedItems;
   setCurrentUser(user);
   drawGrid();
