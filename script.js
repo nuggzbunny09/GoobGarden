@@ -1174,6 +1174,7 @@ if (index !== -1) {
   setCurrentUser(user);
   drawGrid();
   drawGoobs();
+   }
 } 
 
 function getBlockedTilesFromPlacedItems() {
