@@ -1167,13 +1167,14 @@ function movePlacedItem(item, newX, newY) {
   item.x = newX;
   item.y = newY;
 
-  // ✅ Make sure user object is updated and saved
-  user.placedItems = placedItems; // 🔑 Rebind the edited array to user
-
-  setCurrentUser(user);           // 🔐 Save updated user to localStorage
-  drawGrid();                     // 🔁 Redraw visuals
+  const index = placedItems.findIndex(i => i === item || (i.id && i.id === item.id)); // or another unique identifier
+if (index !== -1) {
+  placedItems[index] = { ...placedItems[index], x: newX, y: newY };
+  user.placedItems = placedItems;
+  setCurrentUser(user);
+  drawGrid();
   drawGoobs();
-}
+} 
 
 function getBlockedTilesFromPlacedItems() {
   const blocked = new Set();
