@@ -1167,14 +1167,10 @@ function movePlacedItem(item, newX, newY) {
   item.x = newX;
   item.y = newY;
 
-  const index = placedItems.findIndex(i => i === item || (i.id && i.id === item.id)); // or another unique identifier
-if (index !== -1) {
-  placedItems[index] = { ...placedItems[index], x: newX, y: newY };
-  user.placedItems = placedItems;
+  
   setCurrentUser(user);
   drawGrid();
   drawGoobs();
-   }
 } 
 
 function getBlockedTilesFromPlacedItems() {
