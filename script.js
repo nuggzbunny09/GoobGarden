@@ -906,7 +906,7 @@ function placeItemOnGrid(type, x, y) {
 
   // Redraw immediately with up-to-date placedItems
   drawGrid();
-  drawGoobs(performance.now());
+  drawGoobs();
 
   // ✅ Track placed counts
   if (placingRequired && (type === 'tree' || type === 'water')) {
