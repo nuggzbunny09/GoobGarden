@@ -861,7 +861,6 @@ function moveDragImage(x, y) {
 
 
 function placeItemOnGrid(type, x, y) {
-  type = type.toLowerCase(); // ✅ Normalize early
 
   const user = getCurrentUser();
   const placedItems = user?.placedItems || [];
