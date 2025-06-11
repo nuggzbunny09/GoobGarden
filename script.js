@@ -1158,22 +1158,21 @@ function movePlacedItem(item, newX, newY) {
   if (isTileOccupied(newX, newY, {
     checkGoobs,
     checkItems,
-    exclude: item  // ✅ Prevents colliding with itself
+    exclude: item
   })) {
     showConfirmation("Can't move item here!");
     return;
   }
 
-  // ✅ Update existing item in-place
+  // ✅ Actually move the item
   item.x = newX;
   item.y = newY;
 
-  // ❌ Do NOT push a new object — that duplicates it
-  // placedItems.push({ type: type.toLowerCase(), x, y }); ← REMOVE THIS
+  // ✅ Make sure user object is updated and saved
+  user.placedItems = placedItems; // 🔑 Rebind the edited array to user
 
-  // ✅ Save updated user
-  setCurrentUser(user);
-  drawGrid();
+  setCurrentUser(user);           // 🔐 Save updated user to localStorage
+  drawGrid();                     // 🔁 Redraw visuals
   drawGoobs();
 }
 
