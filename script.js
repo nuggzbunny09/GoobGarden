@@ -34,6 +34,8 @@ let draggingPlacedItem = null;      // from existing grid
 let dragImage = null;               // visual cursor icon
 let isDragging = false;
 let wasDragging = false;
+let tempDragX = null;
+let tempDragY = null;
 let placingRequired = false;
 placingRequired = localStorage.getItem('placingRequired') === 'true';
 let requiredPlacement = {
@@ -968,8 +970,9 @@ canvas.addEventListener('mousemove', (e) => {
   const gridY = Math.floor(mouseY / cellSize - tileOffsetY);
 
   // Update the draggingItem position visually (temporarily)
-  draggingItem.x = gridX;
-  draggingItem.y = gridY;
+  // Store visual-only drag coordinates
+tempDragX = gridX;
+tempDragY = gridY;
 
   drawGrid();
   drawGoobs();
@@ -1021,8 +1024,10 @@ document.addEventListener('mouseup', (e) => {
         cleanupDragging();
       
     } else if (draggingPlacedItem) {
-      movePlacedItem(draggingPlacedItem, tileX, tileY);
+      movePlacedItem(draggingPlacedItem, tempDragX, tempDragY);
       wasDragging = isDragging;
+      tempDragX = null;
+      tempDragY = null;
       cleanupDragging();
     }
 
