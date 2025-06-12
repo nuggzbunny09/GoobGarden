@@ -80,7 +80,7 @@ function preloadAllItemImages() {
 }
 
 function drawGrid() {
-  const user = getCurrentUser(); // ✅ Always pull fresh
+  const user = getCurrentUser();
   const userPlacedItems = user?.placedItems || [];
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -103,18 +103,20 @@ function drawGrid() {
 
   for (const item of userPlacedItems) {
     const img = itemImages[item.type];
-    if (img && img.complete) {
-      ctx.drawImage(
-        img,
-        item.x * cellSize,
-        item.y * cellSize,
-        cellSize * 2,
-        cellSize * 2
-      );
+    if (!img || !img.complete) continue;
+
+    let drawX = item.x;
+    let drawY = item.y;
+
+    // 👇 Override position if currently dragging this item
+    if (item === draggingPlacedItem && tempDragX !== null && tempDragY !== null) {
+      drawX = tempDragX;
+      drawY = tempDragY;
     }
+
+    ctx.drawImage(img, drawX * cellSize, drawY * cellSize, cellSize * 2, cellSize * 2);
   }
 }
-
 
 function getRandomDirection() {
   const directions = [
