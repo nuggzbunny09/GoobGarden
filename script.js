@@ -970,9 +970,6 @@ canvas.addEventListener('mousemove', (e) => {
 
   tempDragX = Math.floor(mouseX / cellSize - tileOffsetX);
   tempDragY = Math.floor(mouseY / cellSize - tileOffsetY);
-
-  drawGrid();
-  drawGoobs();
 });
 
 document.addEventListener('mousemove', (e) => {
