@@ -963,18 +963,11 @@ canvas.addEventListener('mousemove', (e) => {
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
 
-  // Convert pixel offset dragOffsetX/Y to tile offset (divide by cellSize)
   const tileOffsetX = dragOffsetX / cellSize;
   const tileOffsetY = dragOffsetY / cellSize;
 
-  // Calculate grid position corrected for offset
-  const gridX = Math.floor(mouseX / cellSize - tileOffsetX);
-  const gridY = Math.floor(mouseY / cellSize - tileOffsetY);
-
-  // Update the draggingItem position visually (temporarily)
-  // Store visual-only drag coordinates
-tempDragX = gridX;
-tempDragY = gridY;
+  tempDragX = Math.floor(mouseX / cellSize - tileOffsetX);
+  tempDragY = Math.floor(mouseY / cellSize - tileOffsetY);
 
   drawGrid();
   drawGoobs();
