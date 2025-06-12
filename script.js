@@ -160,11 +160,7 @@ function updateGoobWaterStatus() {
   }
 }
 
-function isTileOccupied(x, y, {
-  checkGoobs = true,
-  checkItems = true,
-  exclude = null
-} = {}) {
+function isTileOccupied(x, y, { checkGoobs = true, checkItems = true, exclude = null } = {}) {
   const newItemTiles = [
     [x, y],
     [x + 1, y],
@@ -172,7 +168,8 @@ function isTileOccupied(x, y, {
     [x + 1, y + 1],
   ];
 
-  const itemsToCheck = placedItemsOverride || placedItems;
+  const user = getCurrentUser(); // ✅ Always fresh
+  const itemsToCheck = user?.placedItems || [];
 
   if (checkItems) {
     for (const item of itemsToCheck) {
@@ -211,7 +208,6 @@ function isTileOccupied(x, y, {
 
   return false;
 }
-
 function canMove(goob, dx, dy, allGoobs) {
   const newX = goob.position.x + dx;
   const newY = goob.position.y + dy;
