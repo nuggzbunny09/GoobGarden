@@ -1163,15 +1163,20 @@ function movePlacedItem(item, newX, newY) {
     return;
   }
 
-  // ✅ Actually move the item
-  item.x = newX;
-  item.y = newY;
+  // ✅ Actually update the item inside user.placedItems
+  const index = placedItems.findIndex(p =>
+    p.type === item.type && p.x === item.x && p.y === item.y
+  );
 
-  
-  setCurrentUser(user);
+  if (index !== -1) {
+    placedItems[index].x = newX;
+    placedItems[index].y = newY;
+  }
+
+  setCurrentUser(user); // ✅ Persist the change
   drawGrid();
   drawGoobs();
-} 
+}
 
 function getBlockedTilesFromPlacedItems() {
   const blocked = new Set();
