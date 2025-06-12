@@ -1019,7 +1019,7 @@ document.addEventListener('mouseup', (e) => {
         cleanupDragging();
       
     } else if (draggingPlacedItem) {
-      movePlacedItem(draggingPlacedItem, tempDragX, tempDragY);
+      movePlacedItem(draggingPlacedItem, tileX, tileY);
       wasDragging = isDragging;
       tempDragX = null;
       tempDragY = null;
