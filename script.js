@@ -160,7 +160,11 @@ function updateGoobWaterStatus() {
   }
 }
 
-function isTileOccupied(x, y, { checkGoobs = true, checkItems = true, exclude = null } = {}) {
+function isTileOccupied(x, y, {
+  checkGoobs = true,
+  checkItems = true,
+  exclude = null
+} = {}) {
   const newItemTiles = [
     [x, y],
     [x + 1, y],
@@ -168,9 +172,11 @@ function isTileOccupied(x, y, { checkGoobs = true, checkItems = true, exclude = 
     [x + 1, y + 1],
   ];
 
+  const itemsToCheck = placedItemsOverride || placedItems;
+
   if (checkItems) {
-    for (const item of placedItems) {
-      if (exclude && item === exclude) continue; // Skip the current item if excluded
+    for (const item of itemsToCheck) {
+      if (exclude && item === exclude) continue;
 
       const itemTiles = [
         [item.x, item.y],
