@@ -272,6 +272,7 @@ function moveGoobsRandomly() {
 }
 
 function drawGoobs(timestamp) {
+   updateGoobWaterStatus();
   for (let goob of goobData) {
     let { x, y } = goob.position;
 
@@ -288,8 +289,7 @@ function drawGoobs(timestamp) {
       }
     }
 
-    const image = itemImages[goob.isInWater ? 'goobwater' : 'goob'];
-if (!image || !image.complete) continue; // Prevent flicker if not ready
+     const image = goob.isInWater ? goobWaterImage : goobImage;
 
 ctx.drawImage(
   image,
@@ -641,7 +641,6 @@ function showConfirmation(message) {
 
 function animateGarden(timestamp) {
   if (!lastAnimationTime || timestamp - lastAnimationTime > 16) {
-    updateGoobWaterStatus();
     drawGrid();
     drawGoobs(timestamp);
     lastAnimationTime = timestamp;
