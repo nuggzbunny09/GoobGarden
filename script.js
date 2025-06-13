@@ -1002,6 +1002,11 @@ document.addEventListener('mouseup', (e) => {
     e.clientY >= rect.top &&
     e.clientY <= rect.bottom;
 
+  // ✅ PREVENT click from triggering modal by marking drag here:
+  if (draggingInventoryItem || draggingPlacedItem) {
+    wasDragging = true; // 👈 SET THIS EARLY — works with click guard
+  }
+
   if ((draggingInventoryItem || draggingPlacedItem) && isInsideCanvas) {
     const itemType = draggingInventoryItem || draggingPlacedItem?.type;
 
@@ -1013,25 +1018,20 @@ document.addEventListener('mouseup', (e) => {
     const tileY = intersectionY - 1;
 
     if (draggingInventoryItem) {
-        placeItemOnGrid(itemType, tileX, tileY);
-        wasDragging = isDragging;
-        cleanupDragging();
-      
+      placeItemOnGrid(itemType, tileX, tileY);
     } else if (draggingPlacedItem) {
       movePlacedItem(draggingPlacedItem, tileX, tileY);
-      wasDragging = isDragging;
       tempDragX = null;
       tempDragY = null;
-      cleanupDragging();
     }
 
-    // Do NOT run cleanupDragging() here anymore
+    cleanupDragging();
   }
 
   if (!isInsideCanvas) {
     cleanupDragging();
   }
-}); // ← 🧩 this was missing
+});
 
 document.getElementById('autoPlaceBtn').addEventListener('click', () => {
   const itemSize = 2;
