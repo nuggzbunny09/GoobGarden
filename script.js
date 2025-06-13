@@ -975,9 +975,10 @@ canvas.addEventListener('mousemove', (e) => {
 document.addEventListener('mousemove', (e) => {
   if ((draggingInventoryItem || draggingPlacedItem) && !dragImage && !isDragging) {
     isDragging = true;
+    wasDragging = true; // ✅ Set this HERE as soon as dragging begins
     document.body.classList.add('dragging-any');
-    const itemType = draggingInventoryItem || draggingPlacedItem.type;
 
+    const itemType = draggingInventoryItem || draggingPlacedItem.type;
     dragImage = document.createElement('img');
     dragImage.src = `images/${(itemType)}.png`;
     dragImage.style.position = 'absolute';
@@ -988,8 +989,8 @@ document.addEventListener('mousemove', (e) => {
     document.body.appendChild(dragImage);
   }
 
-   if (dragImage) {
-    dragImage.style.left = (e.pageX - 20) + 'px'; // 40px / 2
+  if (dragImage) {
+    dragImage.style.left = (e.pageX - 20) + 'px';
     dragImage.style.top = (e.pageY - 20) + 'px';
   }
 });
