@@ -1180,7 +1180,7 @@ function movePlacedItem(item, newX, newY) {
 
 function getBlockedTilesFromPlacedItems() {
   const blocked = new Set();
-  for (const item of user.placedItems) {
+  for (const item of user?.placedItems) {
     if (item.type === 'tree') {
       // Trees take up 2x2 tiles
       blocked.add(`${item.x},${item.y}`);
