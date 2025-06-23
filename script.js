@@ -380,12 +380,14 @@ function createInitialGoobs() {
       name: "Goob1",
       position: { x: 5, y: 5 },
       hunger: 24,
+      lastHungerUpdate: Date.now()
       createdAt: now
     },
     {
       name: "Goob2",
       position: { x: 43, y: 43 },
       hunger: 24,
+      lastHungerUpdate: Date.now()
       createdAt: now
     }
   ];
