@@ -809,6 +809,7 @@ if (userExists) {
       localStorage.setItem('placingRequired', 'false');
       startGameTimer();
       window.goobMovementEnabled = true; // Enable goob movement
+      showConfirmation("Garden complete! Goobs are now active.");
       }
     }
   }
