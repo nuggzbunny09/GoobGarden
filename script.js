@@ -1170,34 +1170,25 @@ function movePlacedItem(item, newX, newY) {
   const gridCols = Math.floor(canvas.width / cellSize);
   const gridRows = Math.floor(canvas.height / cellSize);
 
+  // Prevent edge placement
   if (newX < 0 || newY < 0 || newX + 1 >= gridCols || newY + 1 >= gridRows) {
-    showConfirmation("Too close to edge!");
+    if (wasDragging) showConfirmation("Too close to edge!");
     return;
   }
 
   const checkGoobs = item.type !== 'water';
   const checkItems = true;
 
-  if (isTileOccupied(newX, newY, {
-    checkGoobs,
-    checkItems,
-    exclude: item
-  })) {
-    showConfirmation("Can't move item here!");
+  if (isTileOccupied(newX, newY, { checkGoobs, checkItems, exclude: item })) {
+    if (wasDragging) showConfirmation("Can't move item here!");
     return;
   }
 
-  // ✅ Actually update the item inside user.placedItems
-  const index = placedItems.findIndex(p =>
-    p.type === item.type && p.x === item.x && p.y === item.y
-  );
+  // ✅ Actually move the item
+  item.x = newX;
+  item.y = newY;
 
-  if (index !== -1) {
-    placedItems[index].x = newX;
-    placedItems[index].y = newY;
-  }
-
-  setCurrentUser(user); // ✅ Persist the change
+  setCurrentUser(user);
   drawGrid();
   drawGoobs();
 }
