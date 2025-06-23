@@ -380,7 +380,7 @@ function createInitialGoobs() {
       name: "Goob1",
       position: { x: 5, y: 5 },
       hunger: 24,
-      lastHungerUpdate: Date.now()
+      lastHungerUpdateTime: gameStartTime,
       createdAt: now
     },
     {
@@ -733,6 +733,24 @@ function updateUserGreeting() {
     greeting.textContent = `${user.username}'s Garden`;
   } else {
     greeting.textContent = `Your Garden`;
+  }
+}
+
+function updateGoobHungerByGameTime() {
+  const now = Date.now();
+
+  for (const goob of goobData) {
+    if (!goob.lastHungerUpdateTime) {
+      goob.lastHungerUpdateTime = gameStartTime;
+    }
+
+    const elapsedMs = now - goob.lastHungerUpdateTime;
+    const hoursPassed = Math.floor(elapsedMs / (60 * 60 * 1000)); // every hour
+
+    if (hoursPassed >= 1) {
+      goob.hunger = Math.max(0, goob.hunger - hoursPassed);
+      goob.lastHungerUpdateTime += hoursPassed * 60 * 60 * 1000; // move update marker
+    }
   }
 }
 
