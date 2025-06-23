@@ -304,6 +304,7 @@ ctx.drawImage(
 
 function updateGameTimeDisplay() {
   if (!gameStartTime) return;
+  updateGoobHungerByGameTime();
   const elapsed = Math.floor((Date.now() - gameStartTime) / 1000);
   const hours = String(Math.floor(elapsed / 3600)).padStart(2, '0');
   const minutes = String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0');
