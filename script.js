@@ -580,9 +580,11 @@ canvas.addEventListener('mouseleave', () => {
 });
 
 canvas.addEventListener('click', (e) => {
-  if (wasDragging) {
-    wasDragging = false; // Reset it
-    return; // Skip click behavior
+  // Prevent accidental goob clicks after dragging
+  if (isDragging || wasDragging) {
+    isDragging = false;
+    wasDragging = false;
+    return;
   }
 
   const rect = canvas.getBoundingClientRect();
