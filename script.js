@@ -37,6 +37,7 @@ let wasDragging = false;
 let tempDragX = null;
 let tempDragY = null;
 let placingRequired = false;
+let initialClickTile = null;
 placingRequired = localStorage.getItem('placingRequired') === 'true';
 let requiredPlacement = {
   tree: 10,
@@ -580,24 +581,30 @@ canvas.addEventListener('mouseleave', () => {
 });
 
 canvas.addEventListener('click', (e) => {
+  if (wasDragging) {
+    wasDragging = false;
+    return;
+  }
+
   const rect = canvas.getBoundingClientRect();
-  const gridX = Math.floor((e.clientX - rect.left) / cellSize);
-  const gridY = Math.floor((e.clientY - rect.top) / cellSize);
+  const clickX = Math.floor((e.clientX - rect.left) / cellSize);
+  const clickY = Math.floor((e.clientY - rect.top) / cellSize);
+
+  // Make sure initialClickTile is within the same 2x2 goob region as final click
+  const same2x2Region = (goob) => {
+    return initialClickTile &&
+      initialClickTile.x >= goob.position.x &&
+      initialClickTile.x < goob.position.x + 2 &&
+      initialClickTile.y >= goob.position.y &&
+      initialClickTile.y < goob.position.y + 2 &&
+      clickX >= goob.position.x &&
+      clickX < goob.position.x + 2 &&
+      clickY >= goob.position.y &&
+      clickY < goob.position.y + 2;
+  };
 
   for (const goob of goobData) {
-    const { x, y } = goob.position;
-
-    if (
-      gridX >= x &&
-      gridX < x + 2 &&
-      gridY >= y &&
-      gridY < y + 2
-    ) {
-      if (wasDragging) {
-        wasDragging = false;
-        return; // ✅ Skip opening modal if it was a drag
-      }
-
+    if (same2x2Region(goob)) {
       selectedGoob = goob;
       editGoobName.value = goob.name;
 
@@ -613,9 +620,11 @@ canvas.addEventListener('click', (e) => {
       document.getElementById("hungerText").textContent = `${goob.hunger}/24`;
 
       goobModal.style.display = 'block';
-      return;
+      break;
     }
   }
+
+  initialClickTile = null;
 });
 
 closeModalBtn.addEventListener('click', () => {
@@ -927,14 +936,16 @@ function placeItemOnGrid(type, x, y) {
 }
 
 canvas.addEventListener('mousedown', (e) => {
-  const user = getCurrentUser();
-  const placedItems = user?.placedItems || [];
-
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
   const tileX = Math.floor(mouseX / cellSize);
   const tileY = Math.floor(mouseY / cellSize);
+
+  initialClickTile = { x: tileX, y: tileY }; // Track the tile the click began on
+
+  const user = getCurrentUser();
+  const placedItems = user?.placedItems || [];
 
   const item = placedItems.find(obj =>
     tileX >= obj.x &&
@@ -948,8 +959,8 @@ canvas.addEventListener('mousedown', (e) => {
     draggingItem = item;
     isDragging = false;
 
-    dragOffsetX = e.clientX - rect.left - item.x * cellSize;
-    dragOffsetY = e.clientY - rect.top - item.y * cellSize;
+    dragOffsetX = mouseX - item.x * cellSize;
+    dragOffsetY = mouseY - item.y * cellSize;
 
     e.preventDefault();
   }
