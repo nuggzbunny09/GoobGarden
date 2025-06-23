@@ -995,11 +995,6 @@ document.addEventListener('mouseup', (e) => {
     e.clientY >= rect.top &&
     e.clientY <= rect.bottom;
 
-  // ✅ PREVENT click from triggering modal by marking drag here:
-  if (draggingInventoryItem || draggingPlacedItem) {
-    wasDragging = true; // 👈 SET THIS EARLY — works with click guard
-  }
-
   if ((draggingInventoryItem || draggingPlacedItem) && isInsideCanvas) {
     const itemType = draggingInventoryItem || draggingPlacedItem?.type;
 
