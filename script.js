@@ -1179,18 +1179,21 @@ function movePlacedItem(item, newX, newY) {
 }
 
 function getBlockedTilesFromPlacedItems() {
+  const user = getCurrentUser(); // ✅ Always fetch fresh user data
   const blocked = new Set();
-  for (const item of user?.placedItems) {
+
+  for (const item of user?.placedItems || []) {
     if (item.type === 'tree') {
-      // Trees take up 2x2 tiles
       blocked.add(`${item.x},${item.y}`);
       blocked.add(`${item.x + 1},${item.y}`);
       blocked.add(`${item.x},${item.y + 1}`);
       blocked.add(`${item.x + 1},${item.y + 1}`);
     }
   }
+
   return blocked;
 }
+
 
 
 
