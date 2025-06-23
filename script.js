@@ -388,7 +388,7 @@ function createInitialGoobs() {
       name: "Goob2",
       position: { x: 43, y: 43 },
       hunger: 24,
-      lastHungerUpdate: Date.now()
+      lastHungerUpdate: gameStartTime,
       createdAt: now
     }
   ];
