@@ -580,20 +580,24 @@ canvas.addEventListener('mouseleave', () => {
 });
 
 canvas.addEventListener('click', (e) => {
-  // Prevent accidental goob clicks after dragging
-  if (isDragging || wasDragging) {
-    isDragging = false;
-    wasDragging = false;
-    return;
-  }
-
   const rect = canvas.getBoundingClientRect();
   const gridX = Math.floor((e.clientX - rect.left) / cellSize);
   const gridY = Math.floor((e.clientY - rect.top) / cellSize);
 
   for (const goob of goobData) {
     const { x, y } = goob.position;
-    if (gridX >= x && gridX < x + 2 && gridY >= y && gridY < y + 2) {
+
+    if (
+      gridX >= x &&
+      gridX < x + 2 &&
+      gridY >= y &&
+      gridY < y + 2
+    ) {
+      if (wasDragging) {
+        wasDragging = false;
+        return; // ✅ Skip opening modal if it was a drag
+      }
+
       selectedGoob = goob;
       editGoobName.value = goob.name;
 
@@ -607,6 +611,7 @@ canvas.addEventListener('click', (e) => {
       const hungerBar = document.getElementById("hungerBar");
       hungerBar.value = goob.hunger;
       document.getElementById("hungerText").textContent = `${goob.hunger}/24`;
+
       goobModal.style.display = 'block';
       return;
     }
