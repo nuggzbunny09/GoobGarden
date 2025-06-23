@@ -915,17 +915,6 @@ function placeItemOnGrid(type, x, y) {
   drawGrid();
   drawGoobs();
 
-  // ✅ Track placed counts
-  if (placingRequired && (type === 'tree' || type === 'water')) {
-    placedCounts[type]++;
-
-    if (placedCounts.tree >= 10 && placedCounts.water >= 10) {
-      placingRequired = false;
-      startGameTimer(); // Start goobs only after both conditions met
-      showConfirmation("Garden complete! Goobs are now active.");
-    }
-  }
-
   // ✅ Show or hide the bottom banner based on progress
   checkItemPlacementProgress();
 }
