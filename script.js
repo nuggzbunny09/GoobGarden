@@ -905,13 +905,10 @@ function moveDragImage(x, y) {
 
 
 function placeItemOnGrid(type, x, y) {
-
   const user = getCurrentUser();
   const placedItems = user?.placedItems || [];
   const inventory = user.inventory || {};
   if (!inventory[type] || inventory[type] <= 0) return;
-
-  // ... (rest is good and can stay unchanged)
 
   const gridCols = Math.floor(canvas.width / cellSize);
   const gridRows = Math.floor(canvas.height / cellSize);
@@ -921,39 +918,58 @@ function placeItemOnGrid(type, x, y) {
     return;
   }
 
+  // 🍓 SPECIAL CASE: Feed a RedBerry to a goob
+  if (type === 'redberry') {
+    const goob = goobData.find(g =>
+      x >= g.position.x &&
+      x < g.position.x + 2 &&
+      y >= g.position.y &&
+      y < g.position.y + 2
+    );
+
+    if (goob) {
+      goob.hunger = Math.min(24, goob.hunger + 8);
+      inventory[type]--;
+      user.inventory = inventory;
+      setCurrentUser(user);
+      updateInventoryDisplay();
+      drawGoobs();
+      showConfirmation(`${goob.name} ate a berry! 🍓`);
+    } else {
+      showConfirmation("No goob here to feed!");
+    }
+
+    return; // ✅ Skip placement logic
+  }
+
+  // 🌳 TREE
   if (type === 'tree') {
     if (isTileOccupied(x, y, { checkGoobs: true, checkItems: true })) {
       showConfirmation("Can't place a tree here!");
       return;
     }
-  } else if (type === 'water') {
+  }
+
+  // 💧 WATER
+  if (type === 'water') {
     if (isTileOccupied(x, y, { checkGoobs: false, checkItems: true })) {
       showConfirmation("Can't place water here!");
       return;
     }
   }
 
-  // Deduct from inventory
+  // ✅ Place regular item
   inventory[type]--;
   user.inventory = inventory;
-
-  // Add new item to placedItems array
   placedItems.push({ type: type.toLowerCase(), x, y });
-
-  // Sync placedItems back to user object
   user.placedItems = placedItems;
 
-  // Save full updated user object (inventory + placedItems)
-  setCurrentUser(user); // Saves all updates at once
-
+  setCurrentUser(user);
   updateInventoryDisplay();
-
-  // Redraw immediately with up-to-date placedItems
   drawGrid();
   drawGoobs();
 
-  // ✅ Show or hide the bottom banner based on progress
-  checkItemPlacementProgress();
+  checkItemPlacementProgress(); // Banner + game state
 }
 
 canvas.addEventListener('mousedown', (e) => {
