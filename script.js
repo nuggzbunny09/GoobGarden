@@ -708,6 +708,10 @@ function closeUserModal() {
   checkItemPlacementProgress(); // 🔔 Show warning after user closes modal
 }
 
+document.getElementById('openUserInfoBtn').addEventListener('click', () => {
+  openUserModal();
+});
+
 function saveNewUsername() {
   const newName = document.getElementById('userModalName').value.trim();
   if (!newName) return;
