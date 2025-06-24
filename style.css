@@ -289,6 +289,28 @@ h1, #mainTitle {
   display: none;
 }
 
+.player-info-section {
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+#openUserInfoBtn {
+  background-color: #004d99;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-top: 0.5rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#openUserInfoBtn:hover {
+  background-color: #0066cc;
+}
+
+
 body.dragging-any {
   cursor: grabbing !important;
 }
