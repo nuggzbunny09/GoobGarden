@@ -827,6 +827,11 @@ function updateInventoryDisplay() {
   setupInventoryDraggables();
 }
 
+function updateGoobCoinDisplay() {
+  const user = getCurrentUser();
+  document.getElementById('goobCoins').textContent = user.goobCoins;
+}
+
 function checkItemPlacementProgress() {
   const placedItems = getPlacedItems(); // Use your helper that returns the current placedItems array
 
