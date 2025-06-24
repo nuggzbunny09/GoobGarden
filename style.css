@@ -296,14 +296,13 @@ h1, #mainTitle {
 
 #openUserInfoBtn {
   background-color: #00FFFF;
-  color: black;
-  border: 10px;
+  border: none;
+  border-radius: 10px;
   padding: 12px 24px;
-  margin-top: 0.5rem;
-  border-radius: 5px;
   font-size: 18px;
+  font-weight: bold;
   cursor: pointer;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease;
 }
 
 #openUserInfoBtn:hover {
