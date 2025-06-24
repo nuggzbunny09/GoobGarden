@@ -9,6 +9,7 @@ const defaultUserData = {
   placedItems: [],
   gardenCreated: Date.now(),
   achievements: [],
+  goobCoins: 3
   placingRequired: true,
   placedCounts: { tree: 0, water: 0 }
 };
