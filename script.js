@@ -423,6 +423,7 @@ function newGarden() {
     },
     gardenCreated: Date.now(),
     achievements: [],
+    goobCoins: 3,
     placedItems: [],
     placingRequired: true,
     placedCounts: { tree: 0, water: 0 }
@@ -482,6 +483,12 @@ function getCurrentUser() {
   if (typeof user.inventory !== 'object' || user.inventory === null) {
     user.inventory = {};
   }
+
+    // Ensure defaults
+  user.placedItems = Array.isArray(user.placedItems) ? user.placedItems : [];
+  user.goobs = Array.isArray(user.goobs) ? user.goobs : [];
+  user.inventory = typeof user.inventory === 'object' && user.inventory !== null ? user.inventory : {};
+  user.goobCoins = typeof user.goobCoins === 'number' ? user.goobCoins : 0;
 
   return user;
 }
