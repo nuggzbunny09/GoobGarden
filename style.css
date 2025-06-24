@@ -201,7 +201,12 @@ h1, #mainTitle {
     2px 2px 0 #000,
     4px 4px 0 #004d99,
     6px 6px 5px rgba(0, 0, 0, 0.4);
-  color: #ffffff; /* or any color you want */
+  color: #ffffff;
+
+  word-wrap: break-word;       /* 💥 Wrap long words to fit */
+  overflow-wrap: break-word;   /* 🛡 More modern + safer */
+  max-width: 100%;             /* ✅ Prevent it from going wider than container */
+  white-space: normal;         /* 🔁 Allow wrapping (not single-line) */
 }
 
 .inventory-grid {
