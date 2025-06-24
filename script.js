@@ -934,7 +934,7 @@ function placeItemOnGrid(type, x, y) {
       setCurrentUser(user);
       updateInventoryDisplay();
       drawGoobs();
-      showConfirmation(`${goob.name} ate a berry! 🍓`);
+      showConfirmation(`${goob.name} ate a berry!`);
     } else {
       showConfirmation("No goob here to feed!");
     }
