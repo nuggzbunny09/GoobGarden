@@ -295,7 +295,7 @@ h1, #mainTitle {
 }
 
 #openUserInfoBtn {
-  background-color: #004d99;
+  background-color: #00FFFF;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -307,7 +307,7 @@ h1, #mainTitle {
 }
 
 #openUserInfoBtn:hover {
-  background-color: #0066cc;
+  background-color: #91c890;
 }
 
 
