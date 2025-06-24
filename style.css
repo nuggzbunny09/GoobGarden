@@ -301,6 +301,7 @@ h1, #mainTitle {
   padding: 12px 24px;
   font-size: 18px;
   font-weight: bold;
+  color: #33AB7D;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
