@@ -832,6 +832,12 @@ function updateGoobCoinDisplay() {
   document.getElementById('goobCoins').textContent = user.goobCoins;
 }
 
+function addGoobCoins(amount) {
+  const user = getCurrentUser();
+  user.goobCoins += amount;
+  setCurrentUser(user);
+}
+
 function checkItemPlacementProgress() {
   const placedItems = getPlacedItems(); // Use your helper that returns the current placedItems array
 
