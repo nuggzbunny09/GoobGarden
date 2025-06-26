@@ -473,27 +473,67 @@ function getCurrentUser() {
   if (!userJson) return null;
 
   const user = JSON.parse(userJson);
+  let patched = false; // Track if any changes are made
 
   // Ensure critical structures exist
-  user.placedItems = Array.isArray(user.placedItems) ? user.placedItems : [];
-  user.goobs = Array.isArray(user.goobs) ? user.goobs : [];
-  user.inventory = typeof user.inventory === 'object' && user.inventory !== null ? user.inventory : {};
-  user.placedCounts = typeof user.placedCounts === 'object' ? user.placedCounts : { tree: 0, water: 0 };
-  user.achievements = Array.isArray(user.achievements) ? user.achievements : [];
-
-  // New fields (e.g., goobCoins)
-  if (typeof user.goobCoins !== 'number') {
-    user.goobCoins = 3;
+  if (!Array.isArray(user.placedItems)) {
+    user.placedItems = [];
+    patched = true;
+  }
+  if (!Array.isArray(user.goobs)) {
+    user.goobs = [];
+    patched = true;
+  }
+  if (typeof user.inventory !== 'object' || user.inventory === null) {
+    user.inventory = {};
+    patched = true;
+  }
+  if (typeof user.placedCounts !== 'object') {
+    user.placedCounts = { tree: 0, water: 0 };
+    patched = true;
+  }
+  if (!Array.isArray(user.achievements)) {
+    user.achievements = [];
+    patched = true;
   }
 
-  // Patch each goob with default values (future-proof)
+  // New field (e.g., goobCoins)
+  if (typeof user.goobCoins !== 'number') {
+    user.goobCoins = 3;
+    patched = true;
+  }
+
+  // Patch each goob with defaults
   for (const goob of user.goobs) {
-    if (!goob.name) goob.name = "Unnamed";
-    if (!goob.position) goob.position = { x: 0, y: 0 };
-    if (typeof goob.hunger !== 'number') goob.hunger = 24;
-    if (!goob.createdAt) goob.createdAt = Date.now();
-    if (typeof goob.isInWater !== 'boolean') goob.isInWater = false;
-    if (!goob.lastHungerUpdateTime) goob.lastHungerUpdateTime = Date.now();
+    if (!goob.name) {
+      goob.name = "Unnamed";
+      patched = true;
+    }
+    if (!goob.position) {
+      goob.position = { x: 0, y: 0 };
+      patched = true;
+    }
+    if (typeof goob.hunger !== 'number') {
+      goob.hunger = 24;
+      patched = true;
+    }
+    if (!goob.createdAt) {
+      goob.createdAt = Date.now();
+      patched = true;
+    }
+    if (typeof goob.isInWater !== 'boolean') {
+      goob.isInWater = false;
+      patched = true;
+    }
+    if (!goob.lastHungerUpdateTime) {
+      goob.lastHungerUpdateTime = Date.now();
+      patched = true;
+    }
+  }
+
+  // ✅ Only save back if any patching occurred
+  if (patched) {
+    localStorage.setItem('currentUser', JSON.stringify(user));
   }
 
   return user;
