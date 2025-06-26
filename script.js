@@ -552,13 +552,14 @@ function restoreStateFromLocalStorage() {
   if (!user) return;
 
   goobData = user.goobs;
-  placedItems = user.placedItems;
 
   for (let goob of goobData) {
     delete goob.startPosition;
     delete goob.targetPosition;
     delete goob.startTime;
   }
+
+  const placedItems = user.placedItems; // Use here locally for preloading only
 
   const typesToLoad = [...new Set(placedItems.map(item => item.type))];
   for (const type of typesToLoad) {
