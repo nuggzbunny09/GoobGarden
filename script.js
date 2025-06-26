@@ -540,6 +540,20 @@ function restoreStateFromLocalStorage() {
   checkItemPlacementProgress();
 }
 
+goobImage.onload = () => {
+  drawGrid();
+  restoreStateFromLocalStorage();
+  updateUserGreeting();
+
+  const user = getCurrentUser();
+  const button = document.getElementById('newGardenBtn');
+  button.textContent = user && user.goobs && user.goobs.length > 0 ? 'Reset Garden' : 'New Garden';
+
+  requestAnimationFrame(animateGarden);
+};
+
+document.getElementById('newGardenBtn').addEventListener('click', newGarden);
+
 canvas.addEventListener('mousemove', (e) => {
   const rect = canvas.getBoundingClientRect();
   const gridX = Math.floor((e.clientX - rect.left) / cellSize);
