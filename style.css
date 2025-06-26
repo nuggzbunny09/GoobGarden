@@ -309,6 +309,13 @@ h1, #mainTitle {
   background-color: #91c890;
 }
 
+#coinDisplay {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: gold;
+  text-align: center;
+  margin-top: 1rem;
+}
 
 body.dragging-any {
   cursor: grabbing !important;
