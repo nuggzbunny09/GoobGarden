@@ -1279,6 +1279,7 @@ function movePlacedItem(item, newX, newY) {
   item.y = newY;
 
   setCurrentUser(user);
+  placedItems = user.placedItems;
   drawGrid();
   drawGoobs();
 }
