@@ -36,7 +36,6 @@ let isDragging = false;
 let wasDragging = false;
 let tempDragX = null;
 let tempDragY = null;
-let placedItems = [];
 let placingRequired = false;
 let initialClickTile = null;
 placingRequired = localStorage.getItem('placingRequired') === 'true';
