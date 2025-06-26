@@ -1279,6 +1279,11 @@ function movePlacedItem(item, newX, newY) {
   item.x = newX;
   item.y = newY;
 
+console.log('Item to move:', item);
+console.log('User placedItems:', user.placedItems);
+console.log('Is item reference included?', user.placedItems.includes(item));
+
+
   setCurrentUser(user);
   drawGrid();
   drawGoobs();
