@@ -882,7 +882,10 @@ function updateInventoryDisplay() {
 
 function updateGoobCoinDisplay() {
   const user = getCurrentUser();
-  document.getElementById('goobCoins').textContent = user.goobCoins;
+  const coinCountEl = document.getElementById('goobCoinCount');
+  if (user && coinCountEl) {
+    coinCountEl.textContent = `× ${user.goobCoins}`;
+  }
 }
 
 function addGoobCoins(amount) {
