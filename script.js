@@ -509,39 +509,29 @@ function setCurrentUser(user) {
 
 function restoreStateFromLocalStorage() {
   const user = getCurrentUser();
-  if (user) {
-    goobData = user.goobs || [];
-    placedItems = user.placedItems || [];
+  if (!user) return;
 
-    // Set default properties on goobs
-    for (let goob of goobData) {
-      goob.position = goob.position || { x: 0, y: 0 };
-      delete goob.startPosition;
-      delete goob.targetPosition;
-      delete goob.startTime;
-    }
+  goobData = user.goobs;
+  placedItems = user.placedItems;
 
-    // ✅ Preload all placed item images before drawing
-    const typesToLoad = [...new Set(placedItems.map(item => item.type))];
-    let loadedCount = 0;
-
-    // 🌟 Restore placement banner visibility
-const banner = document.getElementById('placementBanner');
-const shouldShowBanner = localStorage.getItem('showPlacementBanner') === 'true';
-if (shouldShowBanner) {
-  banner.classList.remove('hidden');
-} else {
-  banner.classList.add('hidden');
-}
-
-  
-          for (const type of typesToLoad) {
-          preloadAllItemImages(type);
-  }
-          drawGrid();
-          drawGoobs();
+  for (let goob of goobData) {
+    delete goob.startPosition;
+    delete goob.targetPosition;
+    delete goob.startTime;
   }
 
+  const typesToLoad = [...new Set(placedItems.map(item => item.type))];
+  for (const type of typesToLoad) {
+    preloadAllItemImages(type);
+  }
+
+  // Placement banner
+  const banner = document.getElementById('placementBanner');
+  const shouldShowBanner = localStorage.getItem('showPlacementBanner') === 'true';
+  banner.classList.toggle('hidden', !shouldShowBanner);
+
+  drawGrid();
+  drawGoobs();
   loadGameTimer();
   updateGameTimeDisplay();
   updateInventoryDisplay();
@@ -549,20 +539,6 @@ if (shouldShowBanner) {
   updateUserGreeting();
   checkItemPlacementProgress();
 }
-
-goobImage.onload = () => {
-  drawGrid();
-  restoreStateFromLocalStorage();
-  updateUserGreeting();
-
-  const user = getCurrentUser();
-  const button = document.getElementById('newGardenBtn');
-  button.textContent = user && user.goobs && user.goobs.length > 0 ? 'Reset Garden' : 'New Garden';
-
-  requestAnimationFrame(animateGarden);
-};
-
-document.getElementById('newGardenBtn').addEventListener('click', newGarden);
 
 canvas.addEventListener('mousemove', (e) => {
   const rect = canvas.getBoundingClientRect();
