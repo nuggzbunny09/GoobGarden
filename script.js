@@ -483,7 +483,7 @@ function getCurrentUser() {
 
   // New fields (e.g., goobCoins)
   if (typeof user.goobCoins !== 'number') {
-    user.goobCoins = 0;
+    user.goobCoins = 3;
   }
 
   // Patch each goob with default values (future-proof)
