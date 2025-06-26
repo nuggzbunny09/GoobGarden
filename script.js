@@ -777,10 +777,26 @@ function saveNewUsername() {
 function updateUserGreeting() {
   const user = getCurrentUser();
   const greeting = document.getElementById('userGreeting');
-  if (user && user.username) {
-    greeting.textContent = `${user.username}'s Garden`;
+  const coinDisplay = document.getElementById('goobCoinsDisplay');
+
+  if (user) {
+    // Update username greeting
+    if (user.username) {
+      greeting.textContent = `${user.username}'s Garden`;
+    } else {
+      greeting.textContent = `Your Garden`;
+    }
+
+    // Update goobCoins display
+    if (coinDisplay) {
+      coinDisplay.textContent = user.goobCoins ?? 0;
+    }
   } else {
+    // Fallbacks
     greeting.textContent = `Your Garden`;
+    if (coinDisplay) {
+      coinDisplay.textContent = '0';
+    }
   }
 }
 
