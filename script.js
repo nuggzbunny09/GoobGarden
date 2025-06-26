@@ -471,24 +471,30 @@ function newGarden() {
 function getCurrentUser() {
   const userJson = localStorage.getItem('currentUser');
   if (!userJson) return null;
+
   const user = JSON.parse(userJson);
 
-  // Ensure placedItems is an array to avoid errors
-  if (!Array.isArray(user.placedItems)) {
-    user.placedItems = [];
-  }
-  if (!Array.isArray(user.goobs)) {
-    user.goobs = [];
-  }
-  if (typeof user.inventory !== 'object' || user.inventory === null) {
-    user.inventory = {};
-  }
-
-    // Ensure defaults
+  // Ensure critical structures exist
   user.placedItems = Array.isArray(user.placedItems) ? user.placedItems : [];
   user.goobs = Array.isArray(user.goobs) ? user.goobs : [];
   user.inventory = typeof user.inventory === 'object' && user.inventory !== null ? user.inventory : {};
-  user.goobCoins = typeof user.goobCoins === 'number' ? user.goobCoins : 0;
+  user.placedCounts = typeof user.placedCounts === 'object' ? user.placedCounts : { tree: 0, water: 0 };
+  user.achievements = Array.isArray(user.achievements) ? user.achievements : [];
+
+  // New fields (e.g., goobCoins)
+  if (typeof user.goobCoins !== 'number') {
+    user.goobCoins = 0;
+  }
+
+  // Patch each goob with default values (future-proof)
+  for (const goob of user.goobs) {
+    if (!goob.name) goob.name = "Unnamed";
+    if (!goob.position) goob.position = { x: 0, y: 0 };
+    if (typeof goob.hunger !== 'number') goob.hunger = 24;
+    if (!goob.createdAt) goob.createdAt = Date.now();
+    if (typeof goob.isInWater !== 'boolean') goob.isInWater = false;
+    if (!goob.lastHungerUpdateTime) goob.lastHungerUpdateTime = Date.now();
+  }
 
   return user;
 }
