@@ -1261,7 +1261,6 @@ function movePlacedItem(item, newX, newY) {
   const gridCols = Math.floor(canvas.width / cellSize);
   const gridRows = Math.floor(canvas.height / cellSize);
 
-  // Prevent edge placement
   if (newX < 0 || newY < 0 || newX + 1 >= gridCols || newY + 1 >= gridRows) {
     if (wasDragging) showConfirmation("Too close to edge!");
     return;
@@ -1275,18 +1274,16 @@ function movePlacedItem(item, newX, newY) {
     return;
   }
 
-  // ✅ Actually move the item
-  item.x = newX;
-  item.y = newY;
+  const originalItem = placedItems.find(pi => pi.type === item.type && pi.x === item.x && pi.y === item.y);
 
-console.log('Item to move:', item);
-console.log('User placedItems:', user.placedItems);
-console.log('Is item reference included?', user.placedItems.includes(item));
+  if (originalItem) {
+    originalItem.x = newX;
+    originalItem.y = newY;
 
-
-  setCurrentUser(user);
-  drawGrid();
-  drawGoobs();
+    setCurrentUser(user);
+    drawGrid();
+    drawGoobs();
+  }
 }
 
 function getBlockedTilesFromPlacedItems() {
