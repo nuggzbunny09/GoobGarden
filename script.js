@@ -790,7 +790,7 @@ function updateUserGreeting() {
 
     // Update goobCoins display
     if (coinDisplay) {
-      coinDisplay.textContent = `× ${user.goobCoins ?? 0}`;
+      coinDisplay.textContent = `×${user.goobCoins ?? 0}`;
     }
   } else {
     // Fallbacks
