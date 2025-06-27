@@ -1394,4 +1394,5 @@ function getElapsedGameSeconds() {
 
 
 setInterval(moveGoobsRandomly, 1000); // every 10 seconds
+setInterval(updateDailyGiftUI, 1000);
 
