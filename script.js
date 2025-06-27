@@ -958,6 +958,7 @@ function claimDailyGift() {
   // Update UI & disable button as needed
   updateInventoryDisplay();
   updateDailyGiftUI();
+  user.lastClaimedGameDay = currentGameDay;
 
   alert("You received 3 redberries!");
 }
