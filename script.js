@@ -884,7 +884,7 @@ function updateGoobCoinDisplay() {
   const user = getCurrentUser();
   const coinCountEl = document.getElementById('goobCoinCount');
   if (user && coinCountEl) {
-    coinCountEl.textContent = `× ${user.goobCoins}`;
+    coinCountEl.textContent = `×${user.goobCoins}`;
   }
 }
 
