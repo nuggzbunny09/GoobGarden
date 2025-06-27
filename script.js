@@ -1176,6 +1176,16 @@ document.getElementById('autoPlaceBtn').addEventListener('click', () => {
     }
   }
 
+  document.getElementById('claimGiftBtn').addEventListener('click', () => {
+  const user = getCurrentUser();
+  user.goobCoins += 1; // or any gift
+  user.lastDailyGiftClaimTime = Date.now();
+  setCurrentUser(user);
+  updateUserGreeting(); // update coins
+  updateDailyGiftUI();  // refresh gift UI
+  showConfirmation("You claimed your daily gift!");
+});
+
   function findValidPosition() {
     let attempts = 0;
     while (attempts < 1000) {
