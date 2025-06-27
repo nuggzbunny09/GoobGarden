@@ -317,6 +317,25 @@ h1, #mainTitle {
   margin-top: 1rem;
 }
 
+.gift-button {
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  margin-top: 8px;
+  width: 100%;
+  cursor: pointer;
+}
+
+#giftCountdown {
+  font-size: 0.9rem;
+  margin-top: 6px;
+  text-align: center;
+  color: #ccc;
+}
+
 body.dragging-any {
   cursor: grabbing !important;
 }
