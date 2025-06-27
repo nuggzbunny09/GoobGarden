@@ -330,10 +330,10 @@ h1, #mainTitle {
 }
 
 #giftCountdown {
-  font-size: 0.9rem;
+  font-size: 1rem;
   margin-top: 6px;
   text-align: center;
-  color: #ccc;
+  color: white;
 }
 
 body.dragging-any {
