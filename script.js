@@ -926,6 +926,7 @@ function updateDailyGiftUI() {
 }
 
 function claimDailyGift() {
+  alert("ClaimDailyGift triggered"); // Test trigger
   const user = getCurrentUser();
   if (!user) return;
 
