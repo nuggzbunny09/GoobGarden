@@ -23,18 +23,6 @@ const confirmation = document.getElementById('saveConfirmation');
 const tooltip = document.getElementById('goobTooltip');
 const itemImages = {}; // cache for item images
 const SECONDS_IN_A_DAY = 86400;
-const currentGameSeconds = getElapsedGameSeconds();
-const currentGameDay = Math.floor(currentGameSeconds / SECONDS_IN_A_DAY);
-const lastClaimedGameDay = user.lastClaimedGameDay ?? -1;
-
-if (lastClaimedGameDay < currentGameDay) {
-  // ✅ Can claim today's gift
-} else {
-  // 🕒 Countdown to next cycle
-  const nextDayTime = (currentGameDay + 1) * SECONDS_IN_A_DAY;
-  const secondsRemaining = nextDayTime - currentGameSeconds;
-  // Use this to show the countdown
-}
 
 let goobData = [];
 let lastAnimationTime = 0;
