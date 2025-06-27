@@ -325,7 +325,10 @@ function loadGameTimer() {
   const savedTime = localStorage.getItem('goobStartTime');
   if (savedTime) {
     gameStartTime = parseInt(savedTime);
-    timerInterval = setInterval(updateGameTimeDisplay, 1000);
+    timerInterval = setInterval(() => {
+      updateGameTimeDisplay();
+      updateDailyGiftUI(); // ⏲️ Added this line
+    }, 1000);
   }
 }
 
