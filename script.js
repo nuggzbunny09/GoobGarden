@@ -588,6 +588,7 @@ function restoreStateFromLocalStorage() {
   setupInventoryDraggables();
   updateUserGreeting();
   checkItemPlacementProgress();
+  updateDailyGiftUI(); 
 }
 
 goobImage.onload = () => {
