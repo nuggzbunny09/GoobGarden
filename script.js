@@ -1236,6 +1236,7 @@ document.getElementById('autoPlaceBtn').addEventListener('click', () => {
 
   const occupied = new Set();
 
+  // Mark Goob positions as occupied
   for (let goob of goobData) {
     for (let dx = 0; dx < itemSize; dx++) {
       for (let dy = 0; dy < itemSize; dy++) {
@@ -1244,9 +1245,7 @@ document.getElementById('autoPlaceBtn').addEventListener('click', () => {
     }
   }
 
-  // Your placement logic continues here...
-});
-
+  // Function to find a valid position on the grid
   function findValidPosition() {
     let attempts = 0;
     while (attempts < 1000) {
@@ -1282,10 +1281,10 @@ document.getElementById('autoPlaceBtn').addEventListener('click', () => {
 
   // Get user and inventory counts
   const user = getCurrentUser();
-const inventory = user?.inventory || {};
-const availableTrees = inventory.tree || 0;
-const availableWaters = inventory.water || 0;
-placedItems = user.placedItems || [];
+  const inventory = user?.inventory || {};
+  const availableTrees = inventory.tree || 0;
+  const availableWaters = inventory.water || 0;
+  const placedItems = user.placedItems || [];
 
   const treesToPlace = Math.min(10, availableTrees);
   const watersToPlace = Math.min(10, availableWaters);
@@ -1312,8 +1311,8 @@ placedItems = user.placedItems || [];
   }
 
   // Update placed counts
-  placedCounts.tree += treesPlaced;
-  placedCounts.water += watersPlaced;
+  user.placedCounts.tree = (user.placedCounts.tree || 0) + treesPlaced;
+  user.placedCounts.water = (user.placedCounts.water || 0) + watersPlaced;
 
   // Deduct from inventory (set to 0 only what was used)
   if (inventory.tree !== undefined) inventory.tree = Math.max(0, inventory.tree - treesPlaced);
