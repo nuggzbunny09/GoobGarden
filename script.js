@@ -929,19 +929,23 @@ function claimDailyGift() {
   const user = getCurrentUser();
   if (!user) return;
 
-  // Give the gift: 3 redberries
+  // Add 3 redberries to inventory, create if missing
   if (!user.inventory.redberry) {
     user.inventory.redberry = 0;
   }
   user.inventory.redberry += 3;
 
-  // Save the time the gift was claimed (in game time seconds)
-  const elapsedSeconds = Math.floor((Date.now() - gameStartTime) / 1000);
-  user.lastDailyGiftClaim = elapsedSeconds;
+  // Update last claim time to current game time in seconds
+  user.lastDailyGiftClaim = getElapsedGameSeconds();
 
+  // Save user data back to localStorage
   setCurrentUser(user);
+
+  // Update UI & disable button as needed
   updateInventoryDisplay();
-  updateDailyGiftUI(); // update UI to show countdown
+  updateDailyGiftUI();
+
+  alert("You received 3 redberries!");
 }
 
 function addGoobCoins(amount) {
