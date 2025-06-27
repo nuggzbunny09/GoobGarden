@@ -1213,23 +1213,8 @@ document.addEventListener('mouseup', (e) => {
   }
 });
 
-document.getElementById('autoPlaceBtn').addEventListener('click', () => {
-  const itemSize = 2;
-  const gridCols = canvas.width / cellSize;
-  const gridRows = canvas.height / cellSize;
-
-  const occupied = new Set();
-
-  // Mark Goob positions as occupied
-  for (let goob of goobData) {
-    for (let dx = 0; dx < itemSize; dx++) {
-      for (let dy = 0; dy < itemSize; dy++) {
-        occupied.add(`${goob.position.x + dx},${goob.position.y + dy}`);
-      }
-    }
-  }
-
-  document.getElementById('dailyGiftBtn').addEventListener('click', () => {
+// ✅ Daily Gift button logic (standalone)
+document.getElementById('dailyGiftBtn').addEventListener('click', () => {
   const user = getCurrentUser();
   if (!user) return;
 
@@ -1243,6 +1228,24 @@ document.getElementById('autoPlaceBtn').addEventListener('click', () => {
   showConfirmation("You claimed your daily gift!");
 });
 
+// ✅ Auto Place button logic (separate)
+document.getElementById('autoPlaceBtn').addEventListener('click', () => {
+  const itemSize = 2;
+  const gridCols = canvas.width / cellSize;
+  const gridRows = canvas.height / cellSize;
+
+  const occupied = new Set();
+
+  for (let goob of goobData) {
+    for (let dx = 0; dx < itemSize; dx++) {
+      for (let dy = 0; dy < itemSize; dy++) {
+        occupied.add(`${goob.position.x + dx},${goob.position.y + dy}`);
+      }
+    }
+  }
+
+  // Your placement logic continues here...
+});
 
   function findValidPosition() {
     let attempts = 0;
