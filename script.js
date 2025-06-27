@@ -1371,7 +1371,10 @@ function getBlockedTilesFromPlacedItems() {
   return blocked;
 }
 
-
+function getElapsedGameSeconds() {
+  if (!gameStartTime) return 0;
+  return Math.floor((Date.now() - gameStartTime) / 1000);
+}
 
 
 setInterval(moveGoobsRandomly, 1000); // every 10 seconds
