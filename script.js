@@ -1229,24 +1229,20 @@ document.getElementById('autoPlaceBtn').addEventListener('click', () => {
     }
   }
 
- document.getElementById('dailyGiftBtn').addEventListener('click', () => {
+  document.getElementById('dailyGiftBtn').addEventListener('click', () => {
   const user = getCurrentUser();
   if (!user) return;
 
-  // Add 3 redberries to inventory
   user.inventory.redberry = (user.inventory.redberry || 0) + 3;
-
-  // Use game clock seconds for last claim time
   user.lastDailyGiftClaimTime = getElapsedGameSeconds();
 
   setCurrentUser(user);
-
-  updateInventoryDisplay();  // to show new berries
-  updateDailyGiftUI();       // to update button and countdown
-  updateUserGreeting();      // update coins or other user info if needed
-
+  updateInventoryDisplay();
+  updateDailyGiftUI();
+  updateUserGreeting();
   showConfirmation("You claimed your daily gift!");
 });
+
 
   function findValidPosition() {
     let attempts = 0;
