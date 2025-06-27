@@ -899,30 +899,31 @@ function updateGoobCoinDisplay() {
 
 function updateDailyGiftUI() {
   const user = getCurrentUser();
-  if (!user) return;
+  if (!user || gameStartTime == null) return;
 
-  const elapsedSeconds = getElapsedGameSeconds();
-  const secondsSinceLastClaim = elapsedSeconds - user.lastDailyGiftClaim;
-  const secondsIn24Hours = 86400;
+  const currentGameSeconds = getElapsedGameSeconds();
+  const currentGameDay = Math.floor(currentGameSeconds / SECONDS_IN_A_DAY);
+  const lastClaimedGameDay = user.lastClaimedGameDay ?? -1;
 
   const claimButton = document.getElementById('dailyGiftBtn');
   const countdown = document.getElementById('dailyGiftCountdown');
 
-  if (secondsSinceLastClaim >= secondsIn24Hours) {
+  if (lastClaimedGameDay < currentGameDay) {
     // Gift is available
     claimButton.classList.remove('hidden');
     countdown.classList.add('hidden');
   } else {
-    // Gift not available, show countdown
-    const timeRemaining = secondsIn24Hours - secondsSinceLastClaim;
+    // Gift is not yet available
+    const nextDayTime = (currentGameDay + 1) * SECONDS_IN_A_DAY;
+    const secondsRemaining = nextDayTime - currentGameSeconds;
 
-    const hrs = String(Math.floor(timeRemaining / 3600)).padStart(2, '0');
-    const mins = String(Math.floor((timeRemaining % 3600) / 60)).padStart(2, '0');
-    const secs = String(timeRemaining % 60).padStart(2, '0');
+    const hrs = String(Math.floor(secondsRemaining / 3600)).padStart(2, '0');
+    const mins = String(Math.floor((secondsRemaining % 3600) / 60)).padStart(2, '0');
+    const secs = String(secondsRemaining % 60).padStart(2, '0');
 
-    countdown.textContent = `Daily Gift Available in: ${hrs}:${mins}:${secs}`;
     claimButton.classList.add('hidden');
     countdown.classList.remove('hidden');
+    countdown.textContent = `Daily Gift Available in: ${hrs}:${mins}:${secs}`;
   }
 }
 
