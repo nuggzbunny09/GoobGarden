@@ -503,6 +503,11 @@ function getCurrentUser() {
     patched = true;
   }
 
+  if (!user.lastDailyGiftClaimTime) {
+  user.lastDailyGiftClaimTime = 0; // 0 = never claimed
+  patched = true;
+}
+
   // Patch each goob with defaults
   for (const goob of user.goobs) {
     if (!goob.name) {
