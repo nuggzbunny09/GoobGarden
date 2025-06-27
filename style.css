@@ -299,7 +299,7 @@ h1, #mainTitle {
   border: none;
   border-radius: 10px;
   padding: 12px 24px;
-  font-size: 18px;
+  font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;
