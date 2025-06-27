@@ -904,7 +904,7 @@ function updateDailyGiftUI() {
   const secondsSinceLastClaim = elapsedSeconds - user.lastDailyGiftClaim;
   const secondsIn24Hours = 86400;
 
-  const claimButton = document.getElementById('claimGiftBtn');
+  const claimButton = document.getElementById('dailyGiftBtn');
   const countdown = document.getElementById('dailyGiftCountdown');
 
   if (secondsSinceLastClaim >= secondsIn24Hours) {
