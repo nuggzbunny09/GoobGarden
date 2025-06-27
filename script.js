@@ -920,6 +920,25 @@ function updateDailyGiftUI() {
   }
 }
 
+function claimDailyGift() {
+  const user = getCurrentUser();
+  if (!user) return;
+
+  // Give the gift: 3 redberries
+  if (!user.inventory.redberry) {
+    user.inventory.redberry = 0;
+  }
+  user.inventory.redberry += 3;
+
+  // Save the time the gift was claimed (in game time seconds)
+  const elapsedSeconds = Math.floor((Date.now() - gameStartTime) / 1000);
+  user.lastDailyGiftClaim = elapsedSeconds;
+
+  setCurrentUser(user);
+  updateInventoryDisplay();
+  updateDailyGiftUI(); // update UI to show countdown
+}
+
 function addGoobCoins(amount) {
   const user = getCurrentUser();
   user.goobCoins += amount;
