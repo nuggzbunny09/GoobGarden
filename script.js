@@ -896,6 +896,30 @@ function updateGoobCoinDisplay() {
   }
 }
 
+function updateDailyGiftUI() {
+  const user = getCurrentUser();
+  const now = Date.now();
+  const lastClaim = user.lastDailyGiftClaimTime || 0;
+  const giftBtn = document.getElementById('claimGiftBtn');
+  const countdown = document.getElementById('giftCountdown');
+
+  const elapsed = now - lastClaim;
+  const oneDay = 24 * 60 * 60 * 1000;
+
+  if (elapsed >= oneDay) {
+    giftBtn.classList.remove('hidden');
+    countdown.classList.add('hidden');
+  } else {
+    giftBtn.classList.add('hidden');
+    countdown.classList.remove('hidden');
+    const remaining = oneDay - elapsed;
+    const hours = String(Math.floor(remaining / 3600000)).padStart(2, '0');
+    const minutes = String(Math.floor((remaining % 3600000) / 60000)).padStart(2, '0');
+    const seconds = String(Math.floor((remaining % 60000) / 1000)).padStart(2, '0');
+    countdown.textContent = `Daily Gift Available in: ${hours}:${minutes}:${seconds}`;
+  }
+}
+
 function addGoobCoins(amount) {
   const user = getCurrentUser();
   user.goobCoins += amount;
