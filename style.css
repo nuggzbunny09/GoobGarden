@@ -318,8 +318,8 @@ h1, #mainTitle {
 }
 
 .gift-button {
-  background-color: #00FFFF;
-  color: black;
+  background-color: white;
+  color: gold;
   font-size: 1.5rem;
   font-weight: bold;
   padding: 6px 12px;
