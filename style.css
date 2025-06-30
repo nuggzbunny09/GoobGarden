@@ -337,6 +337,11 @@ h1, #mainTitle {
   color: white;
 }
 
+.spaced-section {
+  margin-bottom: 16px;
+}
+
+
 body.dragging-any {
   cursor: grabbing !important;
 }
